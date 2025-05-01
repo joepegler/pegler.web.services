@@ -5,11 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pegler Web Services | Web3 SDK & DevEx Consulting</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2358a6ff'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <!-- Background Elements -->
+    <div class="bg-dots"></div>
+    <div class="bg-glow"></div>
+
     <header>
         <div class="container">
             <div class="logo">
@@ -27,113 +38,125 @@
         </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="container">
-            <h1>DevEx, SDKs & Web3 Infrastructure,<br>Delivered Simply.</h1>
-            <p>Specialized blockchain development and consulting for Web3 teams.</p>
+            <div class="hero-content">
+                <h1>Web3 Development & Consulting</h1>
+                <p>Specialized SDK development, smart contract integration, and developer experience audits for
+                    blockchain and Web3 projects.</p>
+                <a href="#contact" class="hero-cta">Get in Touch</a>
+            </div>
         </div>
     </section>
 
-    <section id="about" class="about">
+    <section class="about" id="about">
         <div class="container">
-            <h2>About</h2>
+            <h2>About Me</h2>
             <div class="about-content">
                 <div class="profile">
                     <div class="img-container">
                         <img src="assets/profile.jpg" alt="Joe Pegler" class="profile-img"
-                            onerror="this.onerror=null; this.src='https://via.placeholder.com/300x300.png?text=Joe+Pegler'; this.classList.add('placeholder-img');">
+                            onerror="this.src='https://via.placeholder.com/320x420?text=JP';this.classList.add('placeholder-img')">
                     </div>
                 </div>
                 <div class="bio">
                     <h3>Joe Pegler</h3>
-                    <p class="title">Developer & Technical Consultant</p>
-                    <p>I'm an independent developer and consultant with deep experience in DevEx, Account Abstraction,
-                        and SDK design for Web3 teams like Biconomy and Enso.Finance.</p>
-                    <p>With a background in blockchain engineering and smart contract development, I help teams build
-                        better developer experiences and robust infrastructure for decentralized applications.</p>
+                    <span class="title">Web3 Developer & Consultant</span>
+                    <p>I'm a specialized Web3 developer with more than a decade of experience in frontend development
+                        and a
+                        passion for creating excellent developer experiences in the blockchain space.</p>
+                    <p>Previously working at Biconomy and Enso.Finance, I've led SDK development teams, implemented
+                        smart contract integrations, and improved developer experience for complex blockchain products.
+                    </p>
                     <div class="tech-stack">
-                        <span class="tech-tag">Solidity</span>
-                        <span class="tech-tag">TypeScript</span>
                         <span class="tech-tag">React</span>
-                        <span class="tech-tag">Ethereum</span>
-                        <span class="tech-tag">SDK Design</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">Solidity</span>
+                        <span class="tech-tag">Ethers.js</span>
+                        <span class="tech-tag">SDKs</span>
                         <span class="tech-tag">Smart Contracts</span>
+                        <span class="tech-tag">DeFi</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="services" class="services">
+    <section class="services" id="services">
         <div class="container">
             <h2>Services</h2>
             <div class="services-grid">
-                <div class="service-card">
+                <div class="service-card glass-card">
                     <i class="fas fa-code"></i>
                     <h3>SDK Development</h3>
-                    <p>Clean, intuitive SDKs for web3 projects with focus on developer experience and usability.</p>
+                    <p>Custom SDK development for blockchain projects, with a focus on developer experience, clear
+                        documentation, and comprehensive examples.</p>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-file-contract"></i>
+                <div class="service-card glass-card">
+                    <i class="fas fa-link"></i>
                     <h3>Smart Contract Integration</h3>
-                    <p>Secure implementation and integration of smart contracts with front-end applications.</p>
+                    <p>Seamless integration of smart contracts with frontend applications, wallets, and other blockchain
+                        services.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card glass-card">
                     <i class="fas fa-user-check"></i>
-                    <h3>Developer Experience Audits</h3>
-                    <p>Comprehensive analysis and improvements for your developer tools and documentation.</p>
+                    <h3>DevEx Audits</h3>
+                    <p>Comprehensive audits of developer experience for Web3 products, with actionable recommendations
+                        for improvement.</p>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-book-open"></i>
+                <div class="service-card glass-card">
+                    <i class="fas fa-book"></i>
                     <h3>Technical Documentation</h3>
-                    <p>Clear, concise documentation that helps developers implement your solutions quickly.</p>
+                    <p>Clear, concise, and comprehensive technical documentation for blockchain products and services.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="clients" class="clients">
+    <section class="clients" id="clients">
         <div class="container">
-            <h2>Clients</h2>
+            <h2>Past Projects</h2>
             <div class="client-list">
-                <div class="client-item">
+                <div class="client-item glass-card">
                     <h3>Biconomy</h3>
-                    <p class="client-role">SDK & Developer Experience Consultant</p>
-                    <p>Led development of Account Abstraction SDK and developer tools, improving onboarding experience
-                        and increasing adoption of Biconomy's infrastructure.</p>
+                    <div class="client-role">SDK Team Lead</div>
+                    <p>Led the development of cross-chain SDK for Web3 transactions, enabling gasless transactions and
+                        account abstraction for improved user experience.</p>
                 </div>
-                <div class="client-item">
+                <div class="client-item glass-card">
                     <h3>Enso.Finance</h3>
-                    <p class="client-role">DeFi Integration Specialist</p>
-                    <p>Developed integration solutions for decentralized finance applications, implementing secure and
-                        efficient smart contract interactions.</p>
+                    <div class="client-role">Frontend Architect</div>
+                    <p>Designed and implemented complex DeFi interfaces, creating intuitive user experiences for complex
+                        financial products on the blockchain.</p>
                 </div>
-                <div class="client-item">
-                    <h3>Stableworks</h3>
-                    <p class="client-role">Lead Blockchain Engineer</p>
-                    <p>Designed and implemented core infrastructure for decentralized applications with focus on
-                        stability and scalability.</p>
+                <div class="client-item glass-card">
+                    <h3>DeFi.app</h3>
+                    <div class="client-role">Technical Consultant</div>
+                    <p>Provided technical consulting for decentralized finance applications, focusing on integration
+                        patterns and developer tools.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <section class="contact" id="contact">
         <div class="container">
-            <h2>Contact</h2>
-            <p>Interested in working together? Get in touch to discuss your project.</p>
+            <h2>Get in Touch</h2>
+            <p>Interested in working together? I'm always open to discussing new projects, creative ideas, or
+                opportunities to be part of your vision.</p>
             <div class="contact-info">
-                <a href="mailto:pegler.web.services@gmail.com" class="contact-link">
+                <a href="mailto:pegler.web.services@gmail.com" class="contact-link glass-card">
                     <i class="fas fa-envelope"></i>
                     pegler.web.services@gmail.com
                 </a>
-                <a href="https://github.com/joepegler" class="contact-link" target="_blank">
+                <a href="https://github.com/joepegler" target="_blank" class="contact-link glass-card">
                     <i class="fab fa-github"></i>
-                    github.com/joepegler
+                    GitHub
                 </a>
-                <a href="https://linkedin.com/in/joepegler" class="contact-link" target="_blank">
+                <a href="https://www.linkedin.com/in/joepegler/" target="_blank" class="contact-link glass-card">
                     <i class="fab fa-linkedin"></i>
-                    linkedin.com/in/joepegler
+                    LinkedIn
                 </a>
             </div>
         </div>
@@ -141,9 +164,11 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Pegler Web Services. All rights reserved.</p>
+            <p>&copy; <span id="current-year"></span> Pegler Web Services. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
