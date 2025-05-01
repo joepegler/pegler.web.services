@@ -702,23 +702,17 @@ nav ul li a:hover::after {
     z-index: 2;
 }
 
-/* For larger screens, adjust grid for 5 cards - 3 in first row, 2 in second */
-@media (min-width: 1200px) {
+/* For medium-to-large screens, show 2 columns for projects */
+@media (min-width: 768px) {
     .client-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    /* Make the last two cards span 50% each */
-    .client-list .client-item:nth-last-child(-n+2) {
-        grid-column: span 1.5;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* For medium screens, show 2 columns for projects */
-@media (min-width: 768px) and (max-width: 1199px) {
+/* For smaller screens, stack vertically */
+@media (max-width: 767px) {
     .client-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 }
 
