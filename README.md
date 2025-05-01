@@ -28,4 +28,4 @@ The site is automatically deployed to GitHub Pages whenever changes are pushed t
 
 ## Contact
 
-For inquiries, reach out to joe@peglerwebservices.com 
+For inquiries, reach out to pegler.web.services@gmail.com 
