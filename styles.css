@@ -1,20 +1,20 @@
 /* Modern, creative CSS for peglerweb.services */
 :root {
-    /* Streamlined color palette - dark theme */
+    /* Streamlined color palette - dark theme with GitHub green */
     --bg-primary: #0d1117;
     --bg-secondary: #161b22;
     --bg-card: rgba(21, 30, 47, 0.4);
     --text-primary: #f0f6fc;
     --text-secondary: #8b949e;
-    --accent-primary: #58a6ff;
-    --accent-glow: rgba(88, 166, 255, 0.15);
-    --accent-glow-strong: rgba(88, 166, 255, 0.4);
+    --accent-primary: #39d353;
+    --accent-glow: rgba(57, 211, 83, 0.15);
+    --accent-glow-strong: rgba(57, 211, 83, 0.4);
     --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    --card-glow: 0 0 15px rgba(88, 166, 255, 0.1);
+    --card-glow: 0 0 15px rgba(57, 211, 83, 0.1);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --border-radius: 12px;
     --glass-bg: rgba(13, 17, 23, 0.6);
-    --glass-border: 1px solid rgba(88, 166, 255, 0.1);
+    --glass-border: 1px solid rgba(57, 211, 83, 0.1);
 
     /* Animation variables */
     --animation-primary: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -44,6 +44,8 @@ body {
     /* For parallax effect */
     height: 100%;
     transform-style: preserve-3d;
+    padding-top: 6rem;
+    /* Adjust to match initial header height */
 }
 
 a {
@@ -293,6 +295,15 @@ header .container {
 .logo {
     display: flex;
     align-items: center;
+    gap: 0.8rem;
+}
+
+.logo-img {
+    object-fit: cover;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--accent-glow-strong);
 }
 
 .logo h1 {
@@ -348,7 +359,6 @@ nav ul li a:hover::after {
     display: flex;
     align-items: center;
     position: relative;
-    padding-top: 5rem;
     background: var(--bg-primary);
     overflow: hidden;
     transform-style: preserve-3d;
@@ -420,11 +430,116 @@ nav ul li a:hover::after {
 .hero p {
     font-size: 1.25rem;
     max-width: 650px;
-    margin: 0 auto 2.5rem;
+    margin: 0 auto 2rem;
     color: var(--text-secondary);
     animation: fadeInUp 1s var(--animation-primary) forwards;
     opacity: 0;
     animation-delay: 0.4s;
+}
+
+/* GitHub Contributions */
+.github-contributions-wrapper {
+    max-width: 850px;
+    margin: 0 auto 2.5rem;
+    background-color: #0d1117;
+    border-radius: 12px;
+    padding: 1.5rem 1.5rem 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 1s var(--animation-primary) forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.github-contributions-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(57, 211, 83, 0.2);
+}
+
+.github-contributions {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+.contributions-label {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+/* GitHub Profile Card */
+.github-profile-card {
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    animation: fadeInUp 1s var(--animation-primary) forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+}
+
+.github-profile-link {
+    display: flex;
+    align-items: center;
+    background: #0d1117;
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: var(--text-primary);
+    border: 1px solid rgba(57, 211, 83, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.github-profile-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(57, 211, 83, 0.2);
+    border-color: var(--accent-primary);
+    opacity: 1;
+}
+
+.github-icon {
+    font-size: 3rem;
+    color: var(--accent-primary);
+    margin-right: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.github-info {
+    flex: 1;
+}
+
+.github-username {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.github-tagline {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.github-arrow {
+    color: var(--accent-primary);
+    font-size: 1.5rem;
+    opacity: 0.7;
+    margin-left: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.github-profile-link:hover .github-arrow {
+    transform: translateX(5px);
+    opacity: 1;
 }
 
 .hero-cta {
@@ -526,7 +641,7 @@ nav ul li a:hover::after {
     display: inline-block;
     padding: 0.25rem 1rem;
     border-radius: 50px;
-    background: rgba(88, 166, 255, 0.1);
+    background: rgba(57, 211, 83, 0.1);
 }
 
 .bio p {
@@ -555,7 +670,7 @@ nav ul li a:hover::after {
 }
 
 .tech-tag:hover {
-    background: rgba(88, 166, 255, 0.1);
+    background: rgba(57, 211, 83, 0.1);
     transform: translateY(-2px);
 }
 
@@ -804,10 +919,13 @@ nav ul li a:hover::after {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-top: 2.5rem;
     position: relative;
     z-index: 2;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .contact-link {
@@ -815,12 +933,14 @@ nav ul li a:hover::after {
     align-items: center;
     color: var(--text-primary);
     gap: 0.75rem;
-    padding: 1rem 2rem;
+    padding: 0.875rem 1.5rem;
     border-radius: var(--border-radius);
     background: var(--glass-bg);
     border: var(--glass-border);
     transition: var(--transition-smooth);
     transform: perspective(1000px) rotateX(0);
+    min-width: 180px;
+    justify-content: center;
 }
 
 .contact-link:hover {
