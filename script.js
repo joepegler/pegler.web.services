@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     section.classList.add('reveal');
   });
   
-  // Set current year in footer
-  document.getElementById('current-year').textContent = new Date().getFullYear();
+  // Set current year in footer and hero
+  const year = new Date().getFullYear();
+  document.querySelectorAll('.current-year').forEach(el => { el.textContent = year; });
   
   // Initialize animations and effects
   addScrollReveal();
@@ -179,9 +180,11 @@ const setupSmoothScrolling = () => {
 const addHoverEffects = () => {
   const serviceCards = document.querySelectorAll('.service-card');
   const clientItems = document.querySelectorAll('.client-item');
+  const caseStudies = document.querySelectorAll('.case-study');
+  const ninetyCards = document.querySelectorAll('.ninety-card');
   
   // Add subtle 3D rotation effect for cards
-  [...serviceCards, ...clientItems].forEach(card => {
+  [...serviceCards, ...clientItems, ...caseStudies, ...ninetyCards].forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
