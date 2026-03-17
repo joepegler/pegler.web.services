@@ -54,7 +54,8 @@ body {
 #experience,
 #first-90,
 #contact,
-#home {
+#home,
+#systems-built {
     scroll-margin-top: 6rem;
 }
 
@@ -753,7 +754,64 @@ nav ul li a:hover::after {
     opacity: 1;
 }
 
-/* About Section */
+/* Positioning + Selected Impact (replaces portfolio About) */
+.positioning {
+    position: relative;
+    z-index: 2;
+}
+
+.positioning-lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 720px;
+    margin-bottom: 3rem;
+}
+
+.positioning .impact-heading {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.positioning .impact-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    width: 4rem;
+    height: 3px;
+    background: var(--accent-primary);
+    border-radius: 3px;
+}
+
+.impact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 800px;
+}
+
+.impact-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.impact-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 6px;
+    height: 6px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+/* About Section (legacy / resume) */
 .about-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -934,6 +992,28 @@ nav ul li a:hover::after {
 @media (min-width: 1200px) {
     .services-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* What I Build: 4 system pillars in 2x2 on large screens */
+.what-i-build .section-intro {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+}
+
+@media (min-width: 768px) {
+    .system-pillars {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .system-pillars {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 900px;
+        margin-left: 0;
+        margin-right: auto;
     }
 }
 

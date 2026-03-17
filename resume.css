@@ -104,7 +104,8 @@ body.resume-page {
 .resume-contact,
 .resume-job-meta,
 .resume-job-summary,
-.resume-job-highlights {
+.resume-job-highlights,
+.resume-selected-impact-list {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -124,6 +125,34 @@ body.resume-page {
 
 .resume-section h2::after {
   display: none;
+}
+
+/* Selected Impact – punchy executive summary */
+.resume-selected-impact {
+  margin-bottom: 1.5rem;
+}
+
+.resume-selected-impact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resume-selected-impact-list li {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 0.6rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.resume-selected-impact-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: 500;
 }
 
 /* Experience */
@@ -276,6 +305,7 @@ body.resume-page {
 
   .resume-job-meta,
   .resume-job-summary,
+  .resume-selected-impact-list li,
   .resume-job-highlights {
     font-size: 0.85rem;
   }
@@ -366,6 +396,7 @@ body.resume-page {
   .resume-summary,
   .resume-job-meta,
   .resume-job-summary,
+  .resume-selected-impact-list li,
   .resume-job-highlights,
   .resume-skills-list li,
   .resume-edu-meta,

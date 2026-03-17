@@ -157,6 +157,18 @@
     root.insertAdjacentHTML("beforeend", html);
   }
 
+  function renderSelectedImpact(root, items) {
+    if (!Array.isArray(items) || items.length === 0) return;
+    let html =
+      '<section class="resume-section resume-selected-impact" id="resume-selected-impact"><h2>Selected Impact</h2><ul class="resume-selected-impact-list">';
+    items.forEach(function (text) {
+      const t = text && text.trim ? text.trim() : String(text);
+      if (t) html += `<li>${escapeHtml(t)}</li>`;
+    });
+    html += "</ul></section>";
+    root.insertAdjacentHTML("beforeend", html);
+  }
+
   function renderSkills(root, skills) {
     if (!Array.isArray(skills) || skills.length === 0) return;
     let html =
@@ -248,6 +260,8 @@
     root.innerHTML = "";
 
     if (data.basics) renderBasics(root, data.basics);
+    if (data.selectedImpact && data.selectedImpact.length)
+      renderSelectedImpact(root, data.selectedImpact);
     if (data.skills && data.skills.length) renderSkills(root, data.skills);
     if (data.work && data.work.length) renderWork(root, data.work);
     if (data.education && data.education.length)
