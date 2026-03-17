@@ -5,7 +5,7 @@
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "joepegler123@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Infrastructure engineer who owns critical systems end-to-end: transaction pipelines, bundlers, SDKs, and cross-chain execution. Built and shipped ERC-4337 tooling and smart-account platforms at scale; comfortable with ambiguity, 0→1 builds, and decisions without full information. TypeScript, Node.js, EVM/Solana. Cork, Ireland (GMT). Open to founding-engineer roles.",
+    "summary": "Founding-leaning infrastructure engineer building transaction systems end to end: bundlers, SDKs, and execution pipelines. Own ERC-4337 account abstraction and cross-chain infra across EVM and Solana. Operate in 0 to 1 environments with high ambiguity and hard reliability constraints.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -13,11 +13,10 @@
     ]
   },
   "selectedImpact": [
-    "Designed and shipped in-house ERC-4337 bundler with retries, EntryPoint v7 simulation, and structured error decoding—enabling gasless and sponsored flows and reducing transaction friction for users across EVM chains.",
-    "Owned flagship TypeScript SDK for ERC-4337 smart accounts and multi-chain execution at Biconomy; drove architecture, EIP-712/1271/7739/6492 signing (including P-256/passkeys), and developer adoption.",
-    "Built defi.app platform infrastructure: multi-chain quote/route orchestration (LiFi, Jupiter, 1inch, Odos, LayerZero), action providers (Aave, Morpho, Hyperliquid), and EVM + Solana simulation and paymaster flows for a unified cross-chain product.",
-    "Led zero-to-one dApp and intents/solvers framework at Enso; owned full stack from frontend through NestJS backend and reliable execution paths for decentralized trades.",
-    "Shipped production-grade CI/CD and delivery practices for business-critical trading and analytics platforms; established reliability and team velocity (GameAnalytics MVP 2018)."
+    "Shipped an in-house ERC-4337 bundler with retry logic, EntryPoint v0.7 simulation, and structured decoding, enabling stable gasless and sponsored user-op flows.",
+    "Owned the TypeScript smart-account SDK at Biconomy, including EIP-712/1271/7739/6492 signing and P-256 passkeys, to unblock production account abstraction integrations.",
+    "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and paymaster systems.",
+    "Led multiple 0 to 1 product surfaces, from dApp and intents execution at Enso to automated CI/CD for business-critical trading interfaces at CoinFLEX."
   ],
   "work": [
     {
@@ -31,13 +30,12 @@
       "isCurrentRole": true,
       "start": { "year": 2025, "month": 5 },
       "end": {},
-      "summary": "Own infrastructure and developer tooling for the defi.app ecosystem. Ship reliable cross-chain systems and SDKs under ambiguity: in-house ERC-4337 bundling, multi-chain quote/execution orchestration, and DeFi action providers.",
+      "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed and shipped in-house ERC-4337 bundler for latency-sensitive user-operation submission: retries, EntryPoint v7 simulation, and structured error decoding (Sourcify, custom ABIs), improving submission reliability and enabling gasless/sponsored flows.",
-        "Built platform infrastructure for multi-chain transactions: swap/bridge quote and route orchestration (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay), action providers (Aave, Morpho, Hyperliquid, Relay), and EVM + Solana simulation and paymaster flows for a single product surface.",
-        "Designed and own the defi.app TypeScript SDK: account abstraction (ZeroDev/Kernel, session keys), RouteClient and ExecutionManager for quote and execution, and provider integrations (Polymarket, Hyperliquid, Crossmint, Onramper) with backend-proxied APIs and integration tests.",
-        "Shipped DeFi action providers (Aave, Morpho, Aark, Hyperliquid, Relay, Transfer, Airdrop) for validation, gas/execution estimates, source-balance handling, and calldata population—reducing integration time and failure rates in swap and bridge flows.",
-        "Delivered Solana paymaster and EVM+SVM simulation for sponsored transactions and pre-execution validation (slippage, state overrides, Jito), enabling unified cross-chain UX without chain-specific handoffs."
+        "Designed and shipped an internal ERC-4337 bundler with retries, EntryPoint v0.7 simulation, and Sourcify plus ABI-backed error decoding to increase user-op delivery reliability.",
+        "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay to expose one execution surface instead of chain-specific flows.",
+        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for account abstraction, quote, and execution paths, reducing integration load for product teams.",
+        "Delivered EVM plus Solana simulation and paymaster infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
       ]
     },
     {
@@ -52,13 +50,12 @@
       "isCurrentRole": false,
       "start": { "year": 2023, "month": 12 },
       "end": { "year": 2025, "month": 5 },
-      "summary": "Led the core TypeScript SDK for ERC-4337 smart accounts and multi-chain execution. Owned architecture, developer experience, and shipping under evolving EIP standards.",
+      "summary": "Owned the core developer SDK for ERC-4337 smart accounts and multi-chain execution.",
       "highlights": [
-        "Led and shipped the flagship TypeScript SDK for ERC-4337 smart accounts and multi-chain execution; owned architecture and developer-facing API design used by teams building on account abstraction.",
-        "Built modular viem-based client with ERC-7579 decorators and Safe support; reduced integration complexity and improved type safety for smart-account and paymaster flows.",
-        "Implemented EIP-712/1271/7739/6492 signing, including P-256/passkeys, and delivered MEE quote/sign/execute, supertransactions, and session permissions—enabling gasless and keyless UX for end users.",
-        "Optimized gas and latency via bundler/paymaster integrations and concurrency; added composable batching, Cancun checks, and EntryPoint v0.7 support to keep the SDK production-ready as standards evolved.",
-        "Shipped robust HTTP client, typed errors, and documentation; drove CI with Vitest, Bun, GitHub Actions, and Codecov—improving reliability and time-to-ship for SDK consumers."
+        "Led architecture and API design for the flagship TypeScript SDK used by teams building ERC-4337 smart-account products.",
+        "Implemented EIP-712, EIP-1271, EIP-7739, and EIP-6492 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
+        "Shipped viem-based modular clients with ERC-7579 decorators and Safe support, cutting complexity for account, paymaster, and bundler integration paths.",
+        "Hardened production readiness with typed errors, composable batching, EntryPoint v0.7 support, and CI coverage with Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
@@ -73,11 +70,11 @@
       "isCurrentRole": false,
       "start": { "year": 2021, "month": 7 },
       "end": { "year": 2023, "month": 11 },
-      "summary": "Led zero-to-one build of the main client-facing dApp on Ethereum. Owned full stack: frontend, NestJS backend, and intents/solvers framework for decentralized trades and actions.",
+      "summary": "Led 0 to 1 delivery of Enso's client dApp and execution stack.",
       "highlights": [
-        "Led development of the primary client-facing dApp on Ethereum; owned product from frontend through backend and execution layer, shipping under evolving requirements.",
-        "Built and maintained the NestJS backend; owned integration between frontend and backend and reliable execution paths with failure handling and retries.",
-        "Shipped and extended the intents and solvers framework for matching and execution of decentralized trades and actions—enabling intent-based UX and solver competition."
+        "Owned end-to-end delivery of the primary Ethereum dApp, from frontend experience to backend execution, while requirements and product scope were still moving.",
+        "Built and operated the NestJS backend and integration layer with retry and failure handling to keep execution reliable in production.",
+        "Shipped and extended intents plus solver infrastructure for decentralized trade execution, enabling intent-driven UX and competitive solver paths."
       ]
     },
     {
@@ -92,92 +89,27 @@
       "isCurrentRole": false,
       "start": { "year": 2019, "month": 8 },
       "end": { "year": 2021, "month": 7 },
-      "summary": "Owned the trading platform's core interface and delivery pipeline. Led a small team, set standards, and shipped fully automated CI/CD for the business-critical product.",
+      "summary": "Owned the trading interface and deployment system for a business-critical exchange product.",
       "highlights": [
-        "Owned creation and evolution of the platform's trading interface; implemented core features, led code reviews, and raised stability and reusability.",
-        "Designed and ran fully automated CI/CD for the critical trading interface; established operational rigor and reduced deployment risk."
-      ]
-    },
-    {
-      "name": "GameAnalytics",
-      "company": "GameAnalytics",
-      "position": "Lead Frontend Developer",
-      "url": "https://gameanalytics.com",
-      "website": "https://gameanalytics.com",
-      "startDate": "2016-11-01",
-      "endDate": "2019-08-01",
-      "location": "London",
-      "isCurrentRole": false,
-      "start": { "year": 2016, "month": 11 },
-      "end": { "year": 2019, "month": 8 },
-      "summary": "Led frontend platform and team of five: set coding standards, tech stack, and delivery practices. Drove quality via TDD and mentorship; awarded company MVP 2018.",
-      "highlights": [
-        "Owned coding standards and technology stack for a team of five; drove TDD and quality practices—improving platform reliability and delivery predictability.",
-        "Awarded company MVP 2018/19 for impact on product and team velocity."
-      ]
-    },
-    {
-      "name": "FSI",
-      "company": "FSI",
-      "position": "Lead Frontend Developer",
-      "url": "https://fsi.co.uk",
-      "website": "https://fsi.co.uk",
-      "startDate": "2015-10-01",
-      "endDate": "2016-11-01",
-      "location": "London",
-      "isCurrentRole": false,
-      "start": { "year": 2015, "month": 10 },
-      "end": { "year": 2016, "month": 11 },
-      "summary": "Delivered enterprise cross-platform mobile and web solutions; owned the drag-and-drop mobile designer and cross-platform JavaScript API. Led a sub-team as Scrum Master.",
-      "highlights": [
-        "Owned the web-based drag-and-drop mobile designer and cross-platform JavaScript API; drove feature delivery and cross-functional execution."
-      ]
-    },
-    {
-      "name": "Healthcare 21",
-      "company": "Healthcare 21",
-      "position": "Lead Frontend Developer",
-      "url": "https://www.healthcare21.eu",
-      "website": "https://www.healthcare21.eu",
-      "startDate": "2014-08-01",
-      "endDate": "2015-09-01",
-      "location": "Cork, Ireland",
-      "isCurrentRole": false,
-      "start": { "year": 2014, "month": 8 },
-      "end": { "year": 2015, "month": 9 },
-      "summary": "Owned end-to-end build of AssetTrak: mobile dispatch and productivity tracking plus real-time fleet monitoring portal. Shipped from design through full stack.",
-      "highlights": [
-        "Designed and built AssetTrak from scratch: mobile tool for courier dispatch and productivity tracking, plus web portal for real-time fleet monitoring; owned full product delivery."
-      ]
-    },
-    {
-      "name": "Nixatel",
-      "company": "Nixatel",
-      "position": "Frontend Developer",
-      "url": "https://www.rubiconcentre.ie/nixatel-selected-for-it-trade-mission-to-chicago/",
-      "website": "https://www.rubiconcentre.ie/nixatel-selected-for-it-trade-mission-to-chicago/",
-      "startDate": "2013-08-01",
-      "endDate": "2014-08-01",
-      "location": "Cork, Ireland",
-      "isCurrentRole": false,
-      "start": { "year": 2013, "month": 8 },
-      "end": { "year": 2014, "month": 8 },
-      "summary": "Shipped two product builds in a small team: self-service health station app and pickacab (mobile payment and dispatch). Owned frontend and real-time stack (Node.js, Faye).",
-      "highlights": [
-        "Shipped self-service health station app and pickacab (mobile payment and cloud-based dispatch); owned frontend and real-time stack with Node.js and Faye."
+        "Led delivery of the platform's trading UI, owning architecture, core feature rollout, and engineering standards across a small team.",
+        "Built fully automated CI/CD for the interface stack, reducing release risk and supporting faster iteration on a live trading product."
       ]
     }
+  ],
+  "earlierExperience": [
+    "GameAnalytics - Lead Frontend Developer (2016 to 2019): led a team of five, set stack and quality practices, awarded company MVP 2018/19.",
+    "FSI, Healthcare 21, and Nixatel (2013 to 2016): delivered cross-platform enterprise products and 0 to 1 mobile plus web systems in small teams."
   ],
   "education": [
     {
       "institution": "University College Cork",
       "url": "https://www.ucc.ie/en",
       "website": "https://www.ucc.ie/en",
-      "area": "Computer Science (First Class Honours, Grade 1)",
+      "area": "Computer Science (First Class Honours)",
       "studyType": "Masters",
       "startDate": "2012-09-01",
       "endDate": "2014-09-01",
-      "score": "1st",
+      "score": "",
       "gpa": "1st",
       "start": { "year": 2012, "month": 9 },
       "end": { "year": 2014, "month": 9 }
@@ -186,19 +118,11 @@
   "skills": [
     { "name": "TypeScript / Node.js", "level": "Expert", "rating": 5 },
     { "name": "ERC-4337 / smart accounts / account abstraction", "level": "Expert", "rating": 5 },
-    { "name": "SDKs & developer tooling", "level": "Expert", "rating": 5 },
-    { "name": "DeFi / cross-chain infrastructure", "level": "Advanced", "rating": 4 },
+    { "name": "Transaction pipelines / bundlers / paymasters", "level": "Expert", "rating": 5 },
+    { "name": "SDK architecture and developer tooling", "level": "Expert", "rating": 5 },
+    { "name": "Cross-chain infrastructure (EVM + Solana)", "level": "Advanced", "rating": 4 },
     { "name": "viem / ethers.js", "level": "Expert", "rating": 5 },
-    { "name": "NestJS / REST / GraphQL", "level": "Advanced", "rating": 4 },
-    { "name": "PostgreSQL / Redis", "level": "Advanced", "rating": 4 },
+    { "name": "NestJS / PostgreSQL / Redis", "level": "Advanced", "rating": 4 },
     { "name": "CI/CD (GitHub Actions, Vitest, Bun)", "level": "Advanced", "rating": 4 }
-  ],
-  "awards": [
-    {
-      "title": "GameAnalytics MVP 2018/19",
-      "date": "2019-01-01",
-      "awarder": "GameAnalytics & Mobvista",
-      "fullDate": { "year": 2019, "month": 1 }
-    }
   ]
 }

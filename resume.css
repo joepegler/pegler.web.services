@@ -148,7 +148,7 @@ body.resume-page {
 }
 
 .resume-selected-impact-list li::before {
-  content: "—";
+  content: "-";
   position: absolute;
   left: 0;
   color: var(--accent-primary);

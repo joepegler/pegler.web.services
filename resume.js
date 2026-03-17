@@ -60,7 +60,7 @@
       if (aStart && bStart && aStart.year !== bStart.year)
         return bStart.year - aStart.year;
       if (aStart && bStart && aStart.month !== bStart.month)
-        return bStart.month - bStart.month;
+        return bStart.month - aStart.month;
       return 0;
     });
   }
@@ -183,6 +183,7 @@
   }
 
   function renderWork(root, work) {
+    if (!Array.isArray(work) || work.length === 0) return;
     const sorted = sortWork(work);
     if (sorted.length === 0) return;
     let html =
@@ -214,6 +215,18 @@
       html += "</article>";
     });
     html += "</section>";
+    root.insertAdjacentHTML("beforeend", html);
+  }
+
+  function renderEarlierExperience(root, entries) {
+    if (!Array.isArray(entries) || entries.length === 0) return;
+    let html =
+      '<section class="resume-section" id="resume-earlier-experience"><h2>Earlier Experience</h2><ul class="resume-awards-list">';
+    entries.forEach(function (entry) {
+      const text = entry && entry.trim ? entry.trim() : String(entry);
+      if (text) html += `<li>${escapeHtml(text)}</li>`;
+    });
+    html += "</ul></section>";
     root.insertAdjacentHTML("beforeend", html);
   }
 
@@ -262,11 +275,12 @@
     if (data.basics) renderBasics(root, data.basics);
     if (data.selectedImpact && data.selectedImpact.length)
       renderSelectedImpact(root, data.selectedImpact);
-    if (data.skills && data.skills.length) renderSkills(root, data.skills);
     if (data.work && data.work.length) renderWork(root, data.work);
+    if (data.earlierExperience && data.earlierExperience.length)
+      renderEarlierExperience(root, data.earlierExperience);
+    if (data.skills && data.skills.length) renderSkills(root, data.skills);
     if (data.education && data.education.length)
       renderEducation(root, data.education);
-    if (data.awards && data.awards.length) renderAwards(root, data.awards);
   }
 
   function setCurrentYear() {
