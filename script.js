@@ -20,20 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
   addParallaxEffect();
 });
 
-// Background setup
+// Background setup (bg-dots and bg-glow are in HTML; avoid duplicating)
 const setupBackgroundEffects = () => {
-  // Add the background dots and glow effects
-  const bgElements = document.createElement('div');
-  bgElements.innerHTML = `
-    <div class="bg-dots"></div>
-    <div class="bg-glow"></div>
-  `;
-  document.body.prepend(bgElements);
-  
-  // Create stars background
   createStars();
-  
-  // Create parallax elements
   createParallaxBackgrounds();
 };
 
@@ -69,26 +58,22 @@ const createStars = () => {
   document.body.appendChild(starsContainer);
 };
 
-// Create parallax background elements
+// Create parallax background elements (skip hero; it has its own infra visual system)
 const createParallaxBackgrounds = () => {
-  const sections = document.querySelectorAll('section');
+  const sections = document.querySelectorAll('section:not(.hero)');
   
   sections.forEach(section => {
-    // Create parallax container
     const parallaxBg = document.createElement('div');
     parallaxBg.className = 'parallax-bg';
     
-    // Create layers
     for (let i = 1; i <= 3; i++) {
       const layer = document.createElement('div');
       layer.className = `parallax-layer layer-${i}`;
       
-      // Add some random circles to each layer for visual effect
       for (let j = 0; j < 3; j++) {
         const circle = document.createElement('div');
         circle.className = 'parallax-circle';
         
-        // Random position and size
         const size = 50 + Math.random() * 200;
         const posX = Math.random() * 100;
         const posY = Math.random() * 100;
@@ -104,23 +89,15 @@ const createParallaxBackgrounds = () => {
       parallaxBg.appendChild(layer);
     }
     
-    // Insert before the first child of the section
     section.insertBefore(parallaxBg, section.firstChild);
   });
 };
 
-// Parallax effect on scroll
+// Parallax effect on scroll (hero has its own motion; only non-hero layers)
 const addParallaxEffect = () => {
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     
-    // Parallax for hero section
-    const hero = document.querySelector('.hero');
-    if (hero) {
-      hero.style.backgroundPositionY = `${scrollY * 0.5}px`;
-    }
-    
-    // Parallax for layers
     document.querySelectorAll('.parallax-layer').forEach(layer => {
       const speed = layer.classList.contains('layer-1') ? 0.1 : 
                    (layer.classList.contains('layer-2') ? 0.2 : 0.3);
@@ -151,7 +128,7 @@ const addScrollReveal = () => {
 
 // Header scroll effect
 const handleHeaderScroll = () => {
-  const header = document.querySelector('header');
+  const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       header.classList.add('scrolled');

@@ -1,0 +1,212 @@
+{
+  "basics": {
+    "name": "Joe Pegler",
+    "label": "Founding Engineer / Infrastructure Engineer",
+    "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
+    "email": "joepegler123@gmail.com",
+    "url": "https://peglerweb.services",
+    "summary": "Founding engineer and infrastructure engineer specialising in zero-to-one platform builds, smart accounts, account abstraction (ERC-4337), and developer tooling on Ethereum and the EVM stack. Experienced owning SDKs, cross-chain systems, and DeFi infrastructure using TypeScript, Node.js, and React. Open to founding-engineer and infrastructure roles; typically reply within 24–48 hours. Based in Cork, Ireland (GMT).",
+    "website": "https://peglerweb.services",
+    "profiles": [
+      { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
+      { "network": "LinkedIn", "username": "joe-pegler", "url": "https://linkedin.com/in/joe-pegler" }
+    ]
+  },
+  "work": [
+    {
+      "name": "defi.app",
+      "company": "defi.app",
+      "position": "Web3 Infrastructure Engineer",
+      "url": "https://defi.app",
+      "website": "https://defi.app",
+      "startDate": "2025-05-01",
+      "location": "Canada",
+      "isCurrentRole": true,
+      "start": { "year": 2025, "month": 5 },
+      "end": {},
+      "summary": "Own infrastructure and developer tooling powering the defi.app ecosystem. Ship reliable cross-chain systems and SDKs under ambiguity, from in-house ERC-4337 bundling to multi-chain quote/execution orchestration and DeFi action providers.",
+      "highlights": [
+        "Owned and shipped an in-house ERC-4337 bundler for latency-sensitive user-operation submission: retries, EntryPoint v7 simulation, and structured error decoding (Sourcify, custom ABIs).",
+        "Built platform infrastructure for multi-chain transactions: swap/bridge quote and route orchestration (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay), action providers (Aave, Morpho, Hyperliquid, Relay), and EVM + Solana simulation and paymaster flows.",
+        "Designed and own the defi.app TypeScript SDK: account abstraction (ZeroDev/Kernel, session keys), RouteClient and ExecutionManager for quote and execution, and provider integrations (Polymarket, Hyperliquid, Crossmint, Onramper) with backend-proxied APIs and integration tests.",
+        "Shipped DeFi action providers (Aave, Morpho, Aark, Hyperliquid, Relay, Transfer, Airdrop) for validation, gas/execution estimates, source-balance handling, and calldata population in swap and bridge flows.",
+        "Delivered Solana paymaster and EVM+SVM simulation for sponsored transactions and pre-execution validation (slippage, state overrides, Jito integration), enabling a unified cross-chain product experience."
+      ]
+    },
+    {
+      "name": "biconomy",
+      "company": "biconomy",
+      "position": "Lead SDK Engineer",
+      "url": "https://biconomy.io",
+      "website": "https://biconomy.io",
+      "startDate": "2023-12-01",
+      "endDate": "2025-05-01",
+      "location": "Dubai",
+      "isCurrentRole": false,
+      "start": { "year": 2023, "month": 12 },
+      "end": { "year": 2025, "month": 5 },
+      "summary": "Led the core TypeScript SDK for ERC-4337 smart accounts and multi-chain execution. Owned developer experience, platform reliability, and shipping under evolving EIP standards.",
+      "highlights": [
+        "Led and shipped the flagship TypeScript SDK for ERC-4337 smart accounts and multi-chain execution.",
+        "Built modular viem-based client with ERC-7579 decorators and Safe support; owned architecture and developer-facing API design.",
+        "Implemented EIP-712/1271/7739/6492 signing, including P-256/passkeys, and delivered MEE quote/sign/execute, supertransactions, and session permissions.",
+        "Optimized gas and latency via bundler/paymaster integrations and concurrency; added composable batching, Cancun checks, and EntryPoint v0.7 support.",
+        "Shipped robust HTTP client, typed errors, and polished developer documentation; drove CI with Vitest, Bun, GitHub Actions, Codecov and automated funding scripts."
+      ]
+    },
+    {
+      "name": "enso",
+      "company": "enso",
+      "position": "Lead Web3 / dApp Developer",
+      "url": "https://www.enso.build",
+      "website": "https://www.enso.build",
+      "startDate": "2021-07-01",
+      "endDate": "2023-11-01",
+      "location": "Zurich",
+      "isCurrentRole": false,
+      "start": { "year": 2021, "month": 7 },
+      "end": { "year": 2023, "month": 11 },
+      "summary": "Led zero-to-one build of the main client-facing dApp on Ethereum. Owned full-stack platform: frontend, NestJS backend, and intents/solvers framework for decentralized trades and actions.",
+      "highlights": [
+        "Led development of the primary client-facing dApp on Ethereum; owned product from frontend through backend and execution layer.",
+        "Built and maintained the backend with NestJS; owned integration between frontend and backend and reliable execution paths.",
+        "Shipped and extended the intents and solvers framework for matching and execution of decentralized trades and actions."
+      ]
+    },
+    {
+      "name": "coinflex",
+      "company": "coinflex",
+      "position": "Head of UI/UX",
+      "url": "https://coinflex.io",
+      "website": "https://coinflex.io",
+      "startDate": "2019-08-01",
+      "endDate": "2021-07-01",
+      "location": "London",
+      "isCurrentRole": false,
+      "start": { "year": 2019, "month": 8 },
+      "end": { "year": 2021, "month": 7 },
+      "summary": "Owned the trading platform’s core interface and delivery pipeline. Led a small team, set standards, and shipped a fully automated CI/CD lifecycle for the business-critical product.",
+      "highlights": [
+        "Owned creation and evolution of the platform’s trading interface; implemented core features and led code reviews.",
+        "Designed and ran a fully automated CI/CD lifecycle for the critical trading interface; established operational rigor.",
+        "Raised code stability and component reusability; built a collaborative team and consistent delivery of new features."
+      ]
+    },
+    {
+      "name": "GameAnalytics",
+      "company": "GameAnalytics",
+      "position": "Lead Frontend Developer",
+      "url": "https://gameanalytics.com",
+      "website": "https://gameanalytics.com",
+      "startDate": "2016-11-01",
+      "endDate": "2019-08-01",
+      "location": "London",
+      "isCurrentRole": false,
+      "start": { "year": 2016, "month": 11 },
+      "end": { "year": 2019, "month": 8 },
+      "summary": "Led frontend platform and team of five: set coding standards, tech stack, and delivery practices. Drove quality via TDD and mentorship; awarded company MVP 2018.",
+      "highlights": [
+        "Owned coding standards and technology stack for a team of five frontend developers.",
+        "Drove test-driven development (TDD) and quality practices across the frontend platform.",
+        "Built collaborative team culture with leadership and mentorship; awarded company MVP in 2018."
+      ]
+    },
+    {
+      "name": "FSI",
+      "company": "FSI",
+      "position": "Lead Frontend Developer",
+      "url": "https://fsi.co.uk",
+      "website": "https://fsi.co.uk",
+      "startDate": "2015-10-01",
+      "endDate": "2016-11-01",
+      "location": "London",
+      "isCurrentRole": false,
+      "start": { "year": 2015, "month": 10 },
+      "end": { "year": 2016, "month": 11 },
+      "summary": "Delivered enterprise cross-platform mobile and web solutions; owned the drag-and-drop mobile designer and cross-platform JavaScript API. Led a sub-team as Scrum Master in an Agile setup.",
+      "highlights": [
+        "Delivered enterprise-grade cross-platform mobile and web solutions via cloud and native/hybrid stack.",
+        "Owned the web-based drag-and-drop mobile designer and the mobile cross-platform JavaScript API.",
+        "Served as Scrum Master; drove feature delivery and cross-functional execution in an Agile environment."
+      ]
+    },
+    {
+      "name": "Healthcare 21",
+      "company": "Healthcare 21",
+      "position": "Lead Frontend Developer",
+      "url": "https://www.healthcare21.eu",
+      "website": "https://www.healthcare21.eu",
+      "startDate": "2014-08-01",
+      "endDate": "2015-09-01",
+      "location": "Cork, Ireland",
+      "isCurrentRole": false,
+      "start": { "year": 2014, "month": 8 },
+      "end": { "year": 2015, "month": 9 },
+      "summary": "Owned end-to-end build of AssetTrak: mobile dispatch and productivity tracking plus a real-time fleet monitoring portal. Shipped from design through stack (AngularJS, Node/PHP, MySQL).",
+      "highlights": [
+        "Designed and built AssetTrak from scratch: mobile tool for courier dispatch and productivity tracking.",
+        "Shipped a web portal for real-time fleet monitoring; owned full product delivery.",
+        "Stack: PhoneGap, Yeoman, AngularJS, jQuery, JavaScript, CSS/HTML5, PHP, MySQL."
+      ]
+    },
+    {
+      "name": "Nixatel",
+      "company": "Nixatel",
+      "position": "Frontend Developer",
+      "url": "https://www.rubiconcentre.ie/nixatel-selected-for-it-trade-mission-to-chicago/",
+      "website": "https://www.rubiconcentre.ie/nixatel-selected-for-it-trade-mission-to-chicago/",
+      "startDate": "2013-08-01",
+      "endDate": "2014-08-01",
+      "location": "Cork, Ireland",
+      "isCurrentRole": false,
+      "start": { "year": 2013, "month": 8 },
+      "end": { "year": 2014, "month": 8 },
+      "summary": "Shipped two product builds in a small team: a self-service health station app and pickacab (mobile payment and dispatch). Owned frontend and real-time stack (Node.js, Faye, jQuery).",
+      "highlights": [
+        "Co-developed a self-service health station application for workplace health monitoring; built web portal and marketing site.",
+        "Contributed to pickacab: mobile payment and cloud-based dispatch for the taxi industry; real-time stack with Node.js and Faye.",
+        "Technologies: jQuery, Java, CSS/HTML5, Node.js, Faye for real-time solutions."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University College Cork",
+      "url": "https://www.ucc.ie/en",
+      "website": "https://www.ucc.ie/en",
+      "area": "Computer Science (First Class Honours, Grade 1)",
+      "studyType": "Masters",
+      "startDate": "2012-09-01",
+      "endDate": "2014-09-01",
+      "score": "1st",
+      "gpa": "1st",
+      "start": { "year": 2012, "month": 9 },
+      "end": { "year": 2014, "month": 9 }
+    }
+  ],
+  "skills": [
+    { "name": "TypeScript", "level": "Expert", "rating": 5 },
+    { "name": "Node.js", "level": "Expert", "rating": 5 },
+    { "name": "SDKs & developer tooling", "level": "Expert", "rating": 5 },
+    { "name": "ERC-4337 / smart accounts", "level": "Expert", "rating": 5 },
+    { "name": "DeFi / cross-chain infrastructure", "level": "Advanced", "rating": 4 },
+    { "name": "viem", "level": "Expert", "rating": 5 },
+    { "name": "NestJS", "level": "Advanced", "rating": 4 },
+    { "name": "PostgreSQL", "level": "Advanced", "rating": 4 },
+    { "name": "Redis", "level": "Advanced", "rating": 4 },
+    { "name": "ethers.js", "level": "Advanced", "rating": 4 },
+    { "name": "REST / GraphQL", "level": "Advanced", "rating": 4 },
+    { "name": "Git", "level": "Expert", "rating": 5 },
+    { "name": "GitHub Actions", "level": "Advanced", "rating": 4 },
+    { "name": "Jest / Vitest", "level": "Advanced", "rating": 5 },
+    { "name": "Express", "level": "Advanced", "rating": 4 }
+  ],
+  "awards": [
+    {
+      "title": "GameAnalytics MVP 2018/19",
+      "date": "2019-01-01",
+      "awarder": "GameAnalytics & Mobvista",
+      "fullDate": { "year": 2019, "month": 1 }
+    }
+  ]
+}

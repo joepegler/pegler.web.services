@@ -1,0 +1,11 @@
+{
+  "name": "pegler-web-services",
+  "private": true,
+  "description": "Pegler Web Services – personal site and resume",
+  "scripts": {
+    "dev": "serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

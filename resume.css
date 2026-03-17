@@ -1,0 +1,404 @@
+/* Resume page – screen layout and print */
+
+/* Clear fixed site header: enough top padding so content is never covered */
+body.resume-page {
+  padding-top: 9rem;
+}
+
+.resume-page .resume-main {
+  padding: 1.5rem 0 4rem;
+  min-height: 60vh;
+}
+
+/* Override shared section styles: tighter spacing between sections (Skills ↔ Experience, etc.) */
+.resume-section {
+  padding: 0;
+  overflow: visible;
+  margin-bottom: 1.25rem;
+}
+
+.resume-section:last-child {
+  margin-bottom: 0;
+}
+
+.resume-actions {
+  margin-bottom: 1.5rem;
+}
+
+.resume-print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--bg-primary, #0d1117);
+  background: var(--accent-primary, #39d353);
+  border: none;
+  border-radius: var(--border-radius, 12px);
+  cursor: pointer;
+  transition: var(--transition-smooth, all 0.3s ease);
+}
+
+.resume-print-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.resume-error {
+  color: var(--text-secondary);
+  padding: 2rem 0;
+}
+
+/* Resume header */
+.resume-header {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(57, 211, 83, 0.2);
+}
+
+.resume-photo img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.resume-header-text {
+  flex: 1;
+}
+
+.resume-name {
+  font-size: 1.75rem;
+  margin: 0 0 0.25rem;
+  color: var(--text-primary);
+}
+
+.resume-label {
+  font-size: 1rem;
+  color: var(--accent-primary);
+  margin: 0 0 0.75rem;
+  font-weight: 500;
+}
+
+.resume-summary {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  max-width: 72ch;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+.resume-contact a {
+  color: var(--accent-primary);
+}
+
+.resume-contact,
+.resume-job-meta,
+.resume-job-summary,
+.resume-job-highlights {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.resume-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(57, 211, 83, 0.15);
+  color: var(--accent-primary);
+}
+
+.resume-section:first-of-type h2 {
+  margin-top: 0;
+}
+
+.resume-section h2::after {
+  display: none;
+}
+
+/* Experience */
+.resume-job {
+  margin-bottom: 1.5rem;
+  break-inside: avoid;
+}
+
+.resume-job-company {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.resume-job-company a {
+  color: var(--text-primary);
+}
+
+.resume-job-meta {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.5rem;
+}
+
+.resume-job-summary {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+}
+
+.resume-job-highlights {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.resume-job-highlights li {
+  margin-bottom: 0.25rem;
+}
+
+/* Skills */
+.resume-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resume-skills-list li {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.resume-skill-level {
+  color: var(--text-secondary);
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* Education */
+.resume-edu {
+  margin-bottom: 1rem;
+  break-inside: avoid;
+}
+
+.resume-edu-institution {
+  font-size: 1.05rem;
+  margin: 0 0 0.25rem;
+}
+
+.resume-edu-meta {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Awards */
+.resume-awards-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resume-awards-list li {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Logo link on resume page */
+.resume-page .logo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resume-page .logo a:hover {
+  opacity: 1;
+}
+
+/* Responsive: stack header, tighten spacing, prevent overflow */
+@media (max-width: 768px) {
+  body.resume-page {
+    padding-top: 9.5rem;
+  }
+
+  .resume-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .resume-photo img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .resume-name {
+    font-size: 1.4rem;
+  }
+
+  .resume-label {
+    font-size: 0.95rem;
+  }
+
+  .resume-summary {
+    font-size: 0.9rem;
+  }
+
+  .resume-contact {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .resume-print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .resume-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .resume-job-company {
+    font-size: 1rem;
+  }
+
+  .resume-job-meta,
+  .resume-job-summary,
+  .resume-job-highlights {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body.resume-page {
+    padding-top: 10rem;
+  }
+
+  .resume-main .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .resume-name {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .resume-main .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Print – consistent PDF size, margins, and layout */
+@page {
+  size: A4;
+  margin: 1.2cm;
+}
+
+@media print {
+  body.resume-page {
+    background: #fff;
+    color: #1a1a1a;
+    padding-top: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print,
+  .resume-actions,
+  header.site-header,
+  footer,
+  .bg-dots,
+  .bg-glow,
+  .stars {
+    display: none !important;
+  }
+
+  .resume-main {
+    padding: 0 !important;
+    min-height: 0;
+  }
+
+  .resume-main .container {
+    max-width: 100%;
+    padding: 0;
+    width: 100%;
+  }
+
+  #resume-root {
+    max-width: 100%;
+  }
+
+  .resume-header {
+    border-bottom-color: #ccc;
+  }
+
+  .resume-name,
+  .resume-job-company,
+  .resume-job-company a,
+  .resume-edu-institution {
+    color: #1a1a1a !important;
+  }
+
+  .resume-label {
+    color: #333 !important;
+  }
+
+  .resume-section h2 {
+    color: #333 !important;
+  }
+
+  .resume-summary,
+  .resume-job-meta,
+  .resume-job-summary,
+  .resume-job-highlights,
+  .resume-skills-list li,
+  .resume-edu-meta,
+  .resume-awards-list li {
+    color: #444 !important;
+  }
+
+  .resume-contact a {
+    color: #1a1a1a !important;
+  }
+
+  .resume-job {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .resume-edu {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Allow sections to break across pages; only avoid breaking inside jobs/edu */
+  .resume-section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .resume-section h2 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  a[href^="http"]::after {
+    content: none;
+  }
+}

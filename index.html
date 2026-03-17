@@ -39,7 +39,7 @@
         "sameAs": [
             "https://github.com/joepegler",
             "https://www.linkedin.com/in/joe-pegler/",
-            "https://gitconnected.com/joepegler/resume",
+            "https://peglerweb.services/resume.html",
             "https://twitter.com/Joepegler"
         ],
         "address": { "@type": "PostalAddress", "addressLocality": "Cork", "addressCountry": "IE" }
@@ -52,7 +52,7 @@
     <div class="bg-dots"></div>
     <div class="bg-glow"></div>
 
-    <header>
+    <header class="site-header">
         <div class="container">
             <div class="logo">
                 <h1>PWS</h1>
@@ -65,6 +65,7 @@
                     <li><a href="#experience">Experience</a></li>
                     <li><a href="#first-90">First 90 days</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <li><a href="resume.html">Resume</a></li>
                 </ul>
             </nav>
         </div>
@@ -72,25 +73,48 @@
 
     <main>
     <section class="hero" id="home" aria-labelledby="hero-heading">
+        <div class="hero-bg-infra" aria-hidden="true">
+            <div class="hero-bg-grid"></div>
+            <div class="hero-bg-glow-drift"></div>
+            <svg class="hero-route-svg" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="hero-route-path" d="M 10 40 Q 50 20 90 40 T 170 40" stroke="currentColor" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.25"/>
+                <circle class="hero-route-node" cx="10" cy="40" r="2" fill="currentColor" opacity="0.4"/>
+                <circle class="hero-route-node" cx="90" cy="40" r="2" fill="currentColor" opacity="0.4"/>
+                <circle class="hero-route-node" cx="170" cy="40" r="2" fill="currentColor" opacity="0.4"/>
+            </svg>
+        </div>
         <div class="container">
-            <div class="hero-content">
-                <h1 id="hero-heading">I build and scale cross-chain transaction infrastructure from zero to production</h1>
-                <p>Web3 infrastructure engineer: smart accounts, ERC-4337, and developer tooling on Ethereum. SDKs, bundlers, DeFi integrations, sponsored flows.</p>
-                <ul class="operator-summary" aria-label="Key outcomes">
-                    <li><strong>Bundler &amp; reliability</strong>: In-house ERC-4337 bundler, retries, EntryPoint v7 simulation.</li>
-                    <li><strong>Multi-chain</strong>: Quote/route orchestration and action providers across EVM and Solana.</li>
-                    <li><strong>SDK &amp; DevEx</strong>: TypeScript SDKs, docs, typed errors, CI.</li>
-                </ul>
-                <div class="github-contributions-wrapper">
-                    <a href="https://github.com/joepegler" target="_blank" rel="noopener noreferrer">
-                        <img src="https://ghchart.rshah.org/39d353/joepegler"
-                            alt="GitHub contribution activity for joepegler" width="100%" class="github-contributions">
-                    </a>
-                    <div class="contributions-label"> <i class="fab fa-github"></i>
-                        joepegler: <span class="current-year"></span>
+            <div class="hero-layout">
+                <div class="hero-copy">
+                    <h1 id="hero-heading">I build and scale cross-chain transaction infrastructure from zero to production</h1>
+                    <p class="hero-subhead">Web3 infrastructure engineer: smart accounts, ERC-4337, and developer tooling. SDKs, bundlers, DeFi integrations, sponsored flows.</p>
+                    <div class="hero-chips" aria-label="Key focus areas">
+                        <span class="hero-chip">ERC-4337</span>
+                        <span class="hero-chip">EVM + Solana</span>
+                        <span class="hero-chip">SDKs &amp; DevEx</span>
+                        <span class="hero-chip">10+ years</span>
+                    </div>
+                    <div class="hero-ctas">
+                        <a href="#contact" class="hero-cta">Book intro call</a>
+                        <a href="#experience" class="hero-cta hero-cta-secondary">View case studies</a>
                     </div>
                 </div>
-                <a href="#contact" class="hero-cta">Book intro call</a>
+                <div class="hero-panels">
+                    <div class="hero-activity-panel glass-card">
+                        <div class="hero-panel-label"><span class="hero-panel-dot"></span> Live activity</div>
+                        <div class="github-contributions-wrapper hero-github-wrapper">
+                            <a href="https://github.com/joepegler" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ghchart.rshah.org/39d353/joepegler"
+                                    alt="GitHub contribution activity for joepegler" width="100%" class="github-contributions">
+                            </a>
+                            <div class="contributions-label"><i class="fab fa-github" aria-hidden="true"></i> joepegler: <span class="current-year"></span></div>
+                        </div>
+                    </div>
+                    <div class="hero-status-card glass-card">
+                        <div class="hero-panel-label"><span class="hero-panel-dot"></span> Status</div>
+                        <p class="hero-status-text">Cork, Ireland · GMT · Open to founding-engineer and infra roles</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -109,14 +133,15 @@
                     <h3>Joe Pegler</h3>
                     <span class="title">Web3 Infrastructure Engineer · Founding Engineer</span>
                     <p>I'm based in Cork, Ireland (GMT), with over a decade of full-stack and Web3 experience. I focus on owning outcomes: shipping production infrastructure, leading SDK direction, and improving developer experience so teams can move faster.</p>
-                    <p>I've led the TypeScript SDK at Biconomy for ERC-4337 and multi-chain execution, built the DeFi.app SDK and in-house bundler, directed UI/UX and CI/CD at CoinFLEX, and delivered the main client-facing dApp and intents/solvers at Enso. I'm comfortable going from zero to one and scaling systems that users and developers rely on.</p>
+                    <p>I've led the TypeScript SDK at biconomy for ERC-4337 and multi-chain execution, built the defi.app SDK and in-house bundler, directed UI/UX and CI/CD at coinflex, and delivered the main client-facing dApp and intents/solvers at enso. I'm comfortable going from zero to one and scaling systems that users and developers rely on.</p>
                     <div class="tech-stack">
                         <span class="tech-tag">TypeScript</span>
-                        <span class="tech-tag">React</span>
                         <span class="tech-tag">Node</span>
+                        <span class="tech-tag">NestJS</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Redis</span>
                         <span class="tech-tag">viem</span>
                         <span class="tech-tag">ethers.js</span>
-                        <span class="tech-tag">NestJS</span>
                         <span class="tech-tag">ERC-4337</span>
                         <span class="tech-tag">SDKs</span>
                         <span class="tech-tag">DeFi</span>
@@ -178,7 +203,7 @@
             <div class="client-list case-study-list">
                 <article class="case-study glass-card">
                     <div class="case-study-header">
-                        <h3>DeFi.app</h3>
+                        <h3>defi.app</h3>
                         <span class="client-role">Web3 Infrastructure Engineer · Apr 2025 – Present</span>
                     </div>
                     <div class="ownership-tags">
@@ -186,14 +211,14 @@
                         <span class="ownership-tag">Shipped prod infra</span>
                         <span class="ownership-tag">Led SDK</span>
                     </div>
-                    <p><strong>Problem:</strong> DeFi.app needed reliable, low-latency user-operation submission and multi-chain swap/bridge execution with sponsored flows.</p>
+                    <p><strong>Problem:</strong> defi.app needed reliable, low-latency user-operation submission and multi-chain swap/bridge execution with sponsored flows.</p>
                     <p><strong>Built:</strong> In-house ERC-4337 bundler (retries, EntryPoint v7 simulation, Sourcify/custom ABIs). Route orchestration (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero). TypeScript SDK with account abstraction (ZeroDev/Kernel), RouteClient, ExecutionManager. Action providers (Aave, Morpho, Hyperliquid, Relay). Solana paymaster and EVM+SVM simulation for sponsored tx and pre-execution validation.</p>
                     <p><strong>Outcome:</strong> Unified cross-chain UX with reliable submission and pre-execution validation (slippage, state overrides, Jito).</p>
-                    <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </article>
                 <article class="case-study glass-card">
                     <div class="case-study-header">
-                        <h3>Biconomy</h3>
+                        <h3>biconomy</h3>
                         <span class="client-role">Lead SDK Engineer · Nov 2023 – Apr 2025</span>
                     </div>
                     <div class="ownership-tags">
@@ -203,25 +228,25 @@
                     <p><strong>Problem:</strong> Developers needed a single, reliable SDK for ERC-4337 smart accounts and multi-chain execution with gas optimisation and modern signing.</p>
                     <p><strong>Built:</strong> TypeScript SDK for ERC-4337 smart accounts and multi-chain execution. Modular viem-based client with ERC-7579 decorators and Safe support. EIP-712/1271/7739/6492 signing (including P-256/passkeys). MEE quote/sign/execute, supertransactions, session permissions. Gas/latency optimisation via bundler/paymaster integrations and concurrency. Composable batching, Cancun checks, EntryPoint v0.7 support. HTTP client, typed errors, polished docs. CI with Vitest, Bun, GitHub Actions, Codecov; automated funding scripts.</p>
                     <p><strong>Outcome:</strong> Production SDK powering gasless and account-abstracted flows with clear DX and maintainable test coverage.</p>
-                    <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </article>
                 <article class="case-study glass-card">
                     <div class="case-study-header">
-                        <h3>Enso</h3>
+                        <h3>enso</h3>
                         <span class="client-role">Full-Stack Developer · Jun 2021 – Oct 2023</span>
                     </div>
                     <div class="ownership-tags">
                         <span class="ownership-tag">Owned architecture</span>
                         <span class="ownership-tag">Led product surface</span>
                     </div>
-                    <p><strong>Problem:</strong> Enso needed a main client-facing dApp on Ethereum with a robust backend and efficient matching/execution for decentralized trades and actions.</p>
+                    <p><strong>Problem:</strong> enso needed a main client-facing dApp on Ethereum with a robust backend and efficient matching/execution for decentralized trades and actions.</p>
                     <p><strong>Built:</strong> Spearheaded the main client-facing dApp on Ethereum. Developed and maintained the backend with NestJS and seamless frontend–backend integration. Built the intents and solvers framework for matching and executing decentralized trades and actions.</p>
                     <p><strong>Outcome:</strong> Single dApp and backend stack serving users with reliable intents/solvers execution.</p>
-                    <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </article>
                 <article class="case-study glass-card">
                     <div class="case-study-header">
-                        <h3>CoinFLEX</h3>
+                        <h3>coinflex</h3>
                         <span class="client-role">Head of UI/UX · Jul 2019 – Jun 2021</span>
                     </div>
                     <div class="ownership-tags">
@@ -231,7 +256,7 @@
                     <p><strong>Problem:</strong> The trading platform required a reliable, scalable trading interface and a repeatable release process for a critical product.</p>
                     <p><strong>Built:</strong> Directed creation of the platform's trading interface and core features; oversaw code reviews. Designed and managed fully automated CI/CD for the trading interface. Improved code stability and component reusability; fostered collaborative delivery.</p>
                     <p><strong>Outcome:</strong> Production-grade trading UI with automated lifecycle and higher feature delivery confidence.</p>
-                    <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </article>
             </div>
         </div>
@@ -277,7 +302,7 @@
             <p>Founding-engineer and infrastructure roles: I typically reply within 24–48 hours. Based in Cork, Ireland (GMT).</p>
             <div class="contact-ctas">
                 <a href="mailto:pegler.web.services@gmail.com?subject=Intro%20call%20%7C%20peglerweb.services" class="hero-cta contact-cta-primary">Book intro call</a>
-                <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="contact-cta-secondary">View technical resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                <a href="resume.html" class="contact-cta-secondary">View technical resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
             </div>
             <div class="contact-info">
                 <a href="mailto:pegler.web.services@gmail.com" class="contact-link glass-card" aria-label="Email pegler.web.services@gmail.com">
@@ -292,7 +317,7 @@
                     <i class="fab fa-linkedin" aria-hidden="true"></i>
                     LinkedIn
                 </a>
-                <a href="https://gitconnected.com/joepegler/resume" target="_blank" rel="noopener noreferrer" class="contact-link glass-card" aria-label="Full resume on gitconnected">
+                <a href="resume.html" class="contact-link glass-card" aria-label="Resume">
                     <i class="fas fa-file-alt" aria-hidden="true"></i>
                     Resume
                 </a>
