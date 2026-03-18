@@ -1,24 +1,58 @@
-/* Modern, creative CSS for peglerweb.services */
+/* Enso-inspired design system for peglerweb.services */
 :root {
-    /* Streamlined color palette - dark theme with GitHub green */
-    --bg-primary: #0d1117;
-    --bg-secondary: #161b22;
-    --bg-card: rgba(21, 30, 47, 0.4);
-    --text-primary: #f0f6fc;
-    --text-secondary: #8b949e;
-    --accent-primary: #39d353;
-    --accent-glow: rgba(57, 211, 83, 0.15);
-    --accent-glow-strong: rgba(57, 211, 83, 0.4);
-    --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    --card-glow: 0 0 15px rgba(57, 211, 83, 0.1);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --border-radius: 12px;
-    --glass-bg: rgba(13, 17, 23, 0.6);
-    --glass-border: 1px solid rgba(57, 211, 83, 0.1);
+    /* Palette – dark, high contrast, product-launch feel */
+    --bg-primary: #06080b;
+    --bg-secondary: #0c0f14;
+    --bg-elevated: #11151c;
+    --bg-card: rgba(17, 21, 28, 0.85);
+    --text-primary: #f2f4f8;
+    --text-secondary: #9ca3b4;
+    --text-muted: #6b7280;
+    --accent-primary: #22c55e;
+    --accent-secondary: #16a34a;
+    --accent-glow: rgba(34, 197, 94, 0.2);
+    --accent-glow-strong: rgba(34, 197, 94, 0.45);
+    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    --card-glow: 0 0 24px rgba(34, 197, 94, 0.12);
+    --section-border: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.25), transparent);
 
-    /* Animation variables */
+    /* Surfaces & borders */
+    --border-radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 14px;
+    --glass-bg: rgba(12, 15, 20, 0.75);
+    --glass-border: 1px solid rgba(34, 197, 94, 0.12);
+    --glass-border-hover: 1px solid rgba(34, 197, 94, 0.25);
+
+    /* Spacing scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-section: 6rem;
+    --space-section-lg: 8rem;
+
+    /* Typography scale */
+    --font-sans: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    --text-display: clamp(1.75rem, 4vw, 2.75rem);
+    --text-h1: clamp(1.5rem, 3vw, 2.25rem);
+    --text-h2: 2.25rem;
+    --text-h3: 1.35rem;
+    --text-body: 1rem;
+    --text-small: 0.9rem;
+    --text-caption: 0.8rem;
+    --leading-tight: 1.25;
+    --leading-snug: 1.4;
+    --leading-normal: 1.6;
+
+    /* Motion */
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease-out;
     --animation-primary: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --animation-secondary: cubic-bezier(0.65, 0.05, 0.36, 1);
+    --duration-reveal: 0.6s;
 }
 
 /* Reset */
@@ -35,17 +69,15 @@ html {
 }
 
 body {
-    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-sans);
     background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: var(--leading-normal);
     overflow-x: hidden;
     perspective: 1px;
-    /* For parallax effect */
     height: 100%;
     transform-style: preserve-3d;
     padding-top: 6rem;
-    /* Matches site-header height; mobile overrides below */
 }
 
 /* Anchor targets: prevent fixed header from covering section when navigating */
@@ -55,7 +87,9 @@ body {
 #first-90,
 #contact,
 #home,
-#systems-built {
+#systems-built,
+#proof,
+#how-i-think {
     scroll-margin-top: 6rem;
 }
 
@@ -85,15 +119,16 @@ a:hover {
     }
 }
 
-/* Subtle background elements */
+/* Global background – grid + ambient glow (Enso-style) */
 .bg-dots {
     position: fixed;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 56px 56px;
+    background-image:
+        linear-gradient(rgba(34, 197, 94, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
     z-index: 0;
-    opacity: 0.2;
     pointer-events: none;
 }
 
@@ -101,7 +136,9 @@ a:hover {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 70% 10%, rgba(57, 211, 83, 0.06) 0%, transparent 40%);
+    background:
+        radial-gradient(ellipse 80% 50% at 75% 10%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(34, 197, 94, 0.04) 0%, transparent 45%);
     z-index: 0;
     pointer-events: none;
 }
@@ -150,39 +187,35 @@ a:hover {
     }
 }
 
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Typography scale */
+h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-lg);
     color: var(--text-primary);
 }
 
 h2 {
-    font-size: 2.5rem;
+    font-size: var(--text-h2);
     position: relative;
     display: inline-block;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
+    letter-spacing: -0.02em;
 }
 
 h2::after {
     content: '';
     position: absolute;
-    bottom: -1rem;
+    bottom: -0.75rem;
     left: 0;
-    width: 4rem;
+    width: 3rem;
     height: 3px;
     background: var(--accent-primary);
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 section {
-    padding: 6rem 0;
+    padding: var(--space-section) 0;
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
@@ -228,11 +261,11 @@ section {
     opacity: 0.1;
 }
 
-/* Glass card effect */
+/* Card – Enso-style panel with left accent */
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: var(--border-radius);
     border: var(--glass-border);
     box-shadow: var(--card-shadow);
@@ -242,54 +275,46 @@ section {
     z-index: 2;
 }
 
-.glass-card:hover {
-    box-shadow: var(--card-glow);
-    transform: translateY(-5px);
-}
-
-/* Animated gradient border */
 .glass-card::before {
     content: '';
     position: absolute;
-    top: 0;
     left: 0;
-    right: 0;
+    top: 0;
     bottom: 0;
-    border-radius: var(--border-radius);
-    padding: 1px;
-    background: linear-gradient(to right,
-            transparent,
-            var(--accent-primary),
-            transparent);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    width: 3px;
+    background: var(--accent-primary);
+    opacity: 0.4;
+    border-radius: 3px 0 0 3px;
+    transition: opacity var(--transition-fast);
+}
+
+.glass-card:hover {
+    box-shadow: var(--card-glow);
+    border-color: rgba(34, 197, 94, 0.2);
+    transform: translateY(-4px);
 }
 
 .glass-card:hover::before {
-    opacity: 0.6;
+    opacity: 0.9;
 }
 
-/* Header & Navigation – site chrome only (resume page uses .resume-header for content) */
+/* Header – fixed bar, Enso-style */
 header.site-header {
-    background: rgba(13, 17, 23, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(6, 8, 11, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-bottom: var(--glass-border);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
-    padding: 1rem 0;
+    padding: var(--space-md) 0;
     transition: var(--transition-smooth);
 }
 
 header.site-header.scrolled {
-    padding: 0.75rem 0;
-    background: rgba(13, 17, 23, 0.95);
+    padding: var(--space-sm) 0;
+    background: rgba(6, 8, 11, 0.96);
 }
 
 header.site-header .container {
@@ -383,23 +408,23 @@ nav ul li a:hover::after {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(57, 211, 83, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(57, 211, 83, 0.03) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 70%);
+        linear-gradient(rgba(34, 197, 94, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, black 0%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, black 0%, transparent 72%);
 }
 
 .hero-bg-glow-drift {
     position: absolute;
-    width: 60%;
-    height: 60%;
-    top: 20%;
-    right: 0;
-    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+    width: 65%;
+    height: 55%;
+    top: 15%;
+    right: -5%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 55%);
     border-radius: 50%;
-    animation: heroGlowDrift 12s ease-in-out infinite;
-    opacity: 0.6;
+    animation: heroGlowDrift 14s ease-in-out infinite;
+    opacity: 0.7;
 }
 
 @keyframes heroGlowDrift {
@@ -457,13 +482,26 @@ nav ul li a:hover::after {
     transform: translateZ(0);
 }
 
+.hero-label {
+    font-size: var(--text-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-sm);
+    animation: fadeInUp var(--duration-reveal) var(--animation-primary) forwards;
+    opacity: 0;
+    animation-delay: 0.05s;
+}
+
 .hero h1 {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-size: var(--text-display);
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
     color: var(--text-primary);
-    line-height: 1.3;
-    animation: fadeInUp 0.8s var(--animation-primary) forwards;
+    line-height: var(--leading-tight);
+    letter-spacing: -0.02em;
+    animation: fadeInUp var(--duration-reveal) var(--animation-primary) forwards;
     opacity: 0;
     animation-delay: 0.15s;
 }
@@ -491,19 +529,19 @@ nav ul li a:hover::after {
 
 .hero-chip {
     display: inline-block;
-    font-size: 0.8rem;
+    font-size: var(--text-caption);
     font-weight: 500;
     color: var(--accent-primary);
-    background: rgba(57, 211, 83, 0.08);
-    border: 1px solid rgba(57, 211, 83, 0.2);
-    padding: 0.35rem 0.75rem;
-    border-radius: 6px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
     transition: var(--transition-smooth);
 }
 
 .hero-chip:hover {
-    background: rgba(57, 211, 83, 0.12);
-    border-color: rgba(57, 211, 83, 0.35);
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.35);
 }
 
 .hero-ctas {
@@ -518,7 +556,7 @@ nav ul li a:hover::after {
 .hero-cta {
     display: inline-block;
     background: var(--accent-primary);
-    color: #0d1117;
+    color: var(--bg-primary);
     font-weight: 600;
     padding: 0.875rem 1.75rem;
     border-radius: 50px;
@@ -535,11 +573,11 @@ nav ul li a:hover::after {
 .hero-cta-secondary {
     background: transparent;
     color: var(--text-primary);
-    border: 1px solid rgba(57, 211, 83, 0.4);
+    border: 1px solid rgba(34, 197, 94, 0.4);
 }
 
 .hero-cta-secondary:hover {
-    background: rgba(57, 211, 83, 0.1);
+    background: rgba(34, 197, 94, 0.1);
     border-color: var(--accent-primary);
     color: var(--accent-primary);
 }
@@ -651,7 +689,7 @@ nav ul li a:hover::after {
 .github-contributions-wrapper {
     max-width: 850px;
     margin: 0 auto 2.5rem;
-    background-color: #0d1117;
+    background-color: var(--bg-primary);
     border-radius: 12px;
     padding: 1.5rem 1.5rem 1rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -666,7 +704,7 @@ nav ul li a:hover::after {
 
 .github-contributions-wrapper:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(57, 211, 83, 0.2);
+    box-shadow: 0 8px 25px var(--accent-glow);
 }
 
 .github-contributions {
@@ -698,18 +736,18 @@ nav ul li a:hover::after {
 .github-profile-link {
     display: flex;
     align-items: center;
-    background: #0d1117;
+    background: var(--bg-primary);
     border-radius: 12px;
     padding: 1.5rem;
     color: var(--text-primary);
-    border: 1px solid rgba(57, 211, 83, 0.3);
+    border: 1px solid rgba(34, 197, 94, 0.3);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .github-profile-link:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(57, 211, 83, 0.2);
+    box-shadow: 0 8px 25px var(--accent-glow);
     border-color: var(--accent-primary);
     opacity: 1;
 }
@@ -754,10 +792,154 @@ nav ul li a:hover::after {
     opacity: 1;
 }
 
-/* Positioning + Selected Impact (replaces portfolio About) */
+/* Proof / Systems section */
+.proof-section {
+    position: relative;
+    z-index: 2;
+}
+
+.proof-section .section-intro {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.proof-system {
+    padding: 2rem 2.25rem;
+    max-width: 720px;
+}
+
+.proof-system-name {
+    font-size: 1.35rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+}
+
+.proof-etherscan-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+    margin-bottom: 1.5rem;
+}
+
+.proof-etherscan-link:hover {
+    opacity: 0.9;
+}
+
+.proof-etherscan-link i {
+    font-size: 0.7rem;
+}
+
+.proof-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.proof-metric dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.proof-metric dd {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 500;
+}
+
+.proof-work h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.proof-work ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.proof-work li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.proof-work li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 5px;
+    height: 5px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+/* How I Think section */
+.how-i-think {
+    background: var(--bg-secondary);
+    position: relative;
+}
+
+.how-i-think .section-intro {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+}
+
+.how-i-think-content {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+}
+
+.how-i-think-block {
+    padding: 1.5rem 1.75rem;
+    text-align: left;
+}
+
+.how-i-think-block h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+}
+
+.how-i-think-block p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.55;
+}
+
+/* Positioning + Selected Impact – product-style section */
 .positioning {
     position: relative;
     z-index: 2;
+}
+
+.positioning::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--section-border);
+    opacity: 0.6;
 }
 
 .positioning-lead {
@@ -890,7 +1072,7 @@ nav ul li a:hover::after {
     display: inline-block;
     padding: 0.25rem 1rem;
     border-radius: 50px;
-    background: rgba(57, 211, 83, 0.1);
+    background: rgba(34, 197, 94, 0.1);
 }
 
 .bio p {
@@ -919,7 +1101,7 @@ nav ul li a:hover::after {
 }
 
 .tech-tag:hover {
-    background: rgba(57, 211, 83, 0.1);
+    background: rgba(34, 197, 94, 0.1);
     transform: translateY(-2px);
 }
 
@@ -958,27 +1140,19 @@ nav ul li a:hover::after {
     transform-style: preserve-3d;
 }
 
-.services::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    opacity: 0.2;
-}
-
+.services::before,
 .services::after {
     content: '';
     position: absolute;
-    bottom: 0;
     left: 0;
     width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    opacity: 0.2;
+    background: var(--section-border);
+    opacity: 0.6;
 }
+
+.services::before { top: 0; }
+.services::after { bottom: 0; }
 
 .services-grid {
     display: grid;
@@ -1226,8 +1400,8 @@ nav ul li a:hover::after {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--accent-primary);
-    background: rgba(57, 211, 83, 0.1);
-    border: 1px solid rgba(57, 211, 83, 0.25);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.25);
     padding: 0.35rem 0.65rem;
     border-radius: 6px;
 }
@@ -1259,6 +1433,12 @@ nav ul li a:hover::after {
 
 .case-study-link i {
     font-size: 0.75rem;
+}
+
+.case-study-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
 }
 
 /* First 90 days section */
@@ -1341,8 +1521,8 @@ nav ul li a:hover::after {
     left: 0;
     width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    opacity: 0.2;
+    background: var(--section-border);
+    opacity: 0.6;
 }
 
 .contact h2::after {
@@ -1377,13 +1557,13 @@ nav ul li a:hover::after {
     font-weight: 500;
     padding: 0.75rem 1.25rem;
     border-radius: 50px;
-    border: 1px solid rgba(57, 211, 83, 0.4);
+    border: 1px solid rgba(34, 197, 94, 0.4);
     background: transparent;
     transition: var(--transition-smooth);
 }
 
 .contact-cta-secondary:hover {
-    background: rgba(57, 211, 83, 0.1);
+    background: rgba(34, 197, 94, 0.1);
     border-color: var(--accent-primary);
     color: var(--accent-primary);
     opacity: 1;
@@ -1583,7 +1763,10 @@ footer p {
     #experience,
     #first-90,
     #contact,
-    #home {
+    #home,
+    #proof,
+    #how-i-think,
+    #systems-built {
         scroll-margin-top: 8rem;
     }
 
@@ -1680,7 +1863,10 @@ footer p {
     #experience,
     #first-90,
     #contact,
-    #home {
+    #home,
+    #proof,
+    #how-i-think,
+    #systems-built {
         scroll-margin-top: 9rem;
     }
 

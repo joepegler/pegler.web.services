@@ -196,12 +196,16 @@
         ? `<a href="${escapeHtml(url.startsWith("http") ? url : "https://" + url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(company)}</a>`
         : escapeHtml(company);
       const dateRange = formatDateRange(entry);
+      const location = entry.location || "";
       const summary = entry.summary || "";
       const highlights = entry.highlights || [];
 
-      html += '<article class="resume-job">';
+      html += '<article class="resume-job resume-job-card">';
       html += `<h3 class="resume-job-company">${companyDisplay}</h3>`;
-      html += `<p class="resume-job-meta">${escapeHtml(position)}${dateRange ? " · " + dateRange : ""}</p>`;
+      let metaParts = [escapeHtml(position)];
+      if (dateRange) metaParts.push(dateRange);
+      if (location) metaParts.push(location);
+      html += `<p class="resume-job-meta">${metaParts.join(" · ")}</p>`;
       if (summary)
         html += `<p class="resume-job-summary">${escapeHtml(summary)}</p>`;
       if (highlights.length) {
@@ -281,6 +285,7 @@
     if (data.skills && data.skills.length) renderSkills(root, data.skills);
     if (data.education && data.education.length)
       renderEducation(root, data.education);
+    if (data.awards && data.awards.length) renderAwards(root, data.awards);
   }
 
   function setCurrentYear() {

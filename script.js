@@ -1,23 +1,26 @@
-// Add background elements to the DOM
+// Enso-inspired motion: reveal, parallax, and interactions
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Create background elements
-  setupBackgroundEffects();
-  
-  // Add reveal class to sections
+  if (!prefersReducedMotion()) {
+    setupBackgroundEffects();
+  }
+
   document.querySelectorAll('section').forEach(section => {
     section.classList.add('reveal');
   });
-  
-  // Set current year in footer and hero
+
   const year = new Date().getFullYear();
   document.querySelectorAll('.current-year').forEach(el => { el.textContent = year; });
-  
-  // Initialize animations and effects
+
   addScrollReveal();
   handleHeaderScroll();
   setupSmoothScrolling();
-  addHoverEffects();
-  addParallaxEffect();
+  if (!prefersReducedMotion()) {
+    addHoverEffects();
+    addParallaxEffect();
+  }
 });
 
 // Background setup (bg-dots and bg-glow are in HTML; avoid duplicating)
@@ -26,35 +29,21 @@ const setupBackgroundEffects = () => {
   createParallaxBackgrounds();
 };
 
-// Create twinkling stars
+// Subtle starfield (lighter than before for Enso-style clarity)
 const createStars = () => {
   const starsContainer = document.createElement('div');
   starsContainer.className = 'stars';
-  
-  // Add random stars
-  for (let i = 0; i < 100; i++) {
+
+  for (let i = 0; i < 50; i++) {
     const star = document.createElement('div');
     star.className = 'star';
-    
-    // Random position
-    const posX = Math.random() * 100;
-    const posY = Math.random() * 100;
-    
-    // Random size
-    const size = Math.random() * 2;
-    
-    // Random animation duration
-    const duration = 1 + Math.random() * 3;
-    
-    star.style.left = `${posX}%`;
-    star.style.top = `${posY}%`;
-    star.style.width = `${size}px`;
-    star.style.height = `${size}px`;
-    star.style.animationDuration = `${duration}s`;
-    
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.width = star.style.height = `${0.5 + Math.random() * 1.5}px`;
+    star.style.animationDuration = `${2 + Math.random() * 2}s`;
     starsContainer.appendChild(star);
   }
-  
+
   document.body.appendChild(starsContainer);
 };
 
@@ -93,37 +82,38 @@ const createParallaxBackgrounds = () => {
   });
 };
 
-// Parallax effect on scroll (hero has its own motion; only non-hero layers)
+// Gentle parallax on non-hero sections (Enso-style ambient depth)
 const addParallaxEffect = () => {
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    
-    document.querySelectorAll('.parallax-layer').forEach(layer => {
-      const speed = layer.classList.contains('layer-1') ? 0.1 : 
-                   (layer.classList.contains('layer-2') ? 0.2 : 0.3);
-      const yPos = -(scrollY * speed);
-      layer.style.transform = `translateY(${yPos}px) translateZ(-${speed}px) scale(${1 + speed})`;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const scrollY = window.scrollY;
+      document.querySelectorAll('.parallax-layer').forEach(layer => {
+        const speed = layer.classList.contains('layer-1') ? 0.06 : (layer.classList.contains('layer-2') ? 0.12 : 0.18);
+        layer.style.transform = `translateY(${-scrollY * speed}px) translateZ(-${speed}px) scale(${1 + speed})`;
+      });
+      ticking = false;
     });
   });
 };
 
-// Scroll reveal animation
+// Scroll reveal – trigger when section enters view (Enso-style staggered feel)
 const addScrollReveal = () => {
   const targets = document.querySelectorAll('.reveal');
-  
+  const threshold = 120;
+
   const revealElements = () => {
     const windowHeight = window.innerHeight;
-    
     targets.forEach(target => {
-      const targetTop = target.getBoundingClientRect().top;
-      if (targetTop < windowHeight - 100) {
-        target.classList.add('active');
-      }
+      const top = target.getBoundingClientRect().top;
+      if (top < windowHeight - threshold) target.classList.add('active');
     });
   };
-  
-  window.addEventListener('scroll', revealElements);
-  revealElements(); // Check on initial load
+
+  window.addEventListener('scroll', revealElements, { passive: true });
+  revealElements();
 };
 
 // Header scroll effect
@@ -153,39 +143,22 @@ const setupSmoothScrolling = () => {
   });
 };
 
-// Add hover effects for interactive elements
+// Subtle card tilt on hover (Enso-style, not overpowering)
 const addHoverEffects = () => {
-  const serviceCards = document.querySelectorAll('.service-card');
-  const clientItems = document.querySelectorAll('.client-item');
-  const caseStudies = document.querySelectorAll('.case-study');
-  const ninetyCards = document.querySelectorAll('.ninety-card');
-  
-  // Add subtle 3D rotation effect for cards
-  [...serviceCards, ...clientItems, ...caseStudies, ...ninetyCards].forEach(card => {
+  const cards = document.querySelectorAll('.service-card, .client-item, .case-study, .ninety-card');
+
+  cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Calculate rotation based on mouse position
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      // Calculate rotation (max 5 degrees)
-      const rotateX = ((y - centerY) / centerY) * -3;
-      const rotateY = ((x - centerX) / centerX) * 3;
-      
-      // Apply the transform
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-      
-      // Add mouse position variables for highlight effect
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      const rotateY = x * 2;
+      const rotateX = -y * 2;
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
     });
-    
-    // Reset transform when mouse leaves
+
     card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+      card.style.transform = '';
     });
   });
 }; 

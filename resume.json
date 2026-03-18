@@ -1,7 +1,7 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Protocol & transaction infrastructure · SDKs · Developer tooling",
+    "label": "Transaction infrastructure · Execution systems · SDKs",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
@@ -73,7 +73,7 @@
       "summary": "Led 0 to 1 delivery of Enso's client dApp and execution stack.",
       "highlights": [
         "Owned end-to-end delivery of the primary Ethereum dApp, from frontend experience to backend execution, while requirements and product scope were still moving.",
-        "Built and operated the NestJS backend and integration layer with retry and failure handling to keep execution reliable in production.",
+        "Maintained the Graph protocol indexer used by the dApp and backend for on-chain data.",
         "Shipped and extended intents plus solver infrastructure for decentralized trade execution, enabling intent-driven UX and competitive solver paths."
       ]
     },

@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Joe Pegler. Protocol and transaction infrastructure, developer tooling, execution systems. SDKs, backend, reliability. Cork, Ireland (GMT). Open to founding engineer roles.">
-    <title>Joe Pegler | Protocol &amp; Transaction Infrastructure</title>
+        content="Joe Pegler. Transaction infrastructure that runs in production. Account abstraction bundler, execution systems, cross-chain infra, SDK ownership. Cork, Ireland (GMT). Founding engineer.">
+    <title>Joe Pegler | Transaction Infrastructure</title>
     <!-- Open Graph -->
     <meta property="og:type" content="profile">
-    <meta property="og:title" content="Joe Pegler | Protocol &amp; Transaction Infrastructure">
-    <meta property="og:description" content="Protocol and transaction infrastructure, developer tooling, SDKs, execution systems. Cork, Ireland. Open to founding engineer roles.">
+    <meta property="og:title" content="Joe Pegler | Transaction Infrastructure">
+    <meta property="og:description" content="Transaction infrastructure in production. Account abstraction bundler, execution systems, cross-chain. Cork, Ireland. Founding engineer.">
     <meta property="og:url" content="https://peglerweb.services/">
     <meta property="og:locale" content="en_IE">
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Joe Pegler | Protocol &amp; Transaction Infrastructure">
-    <meta name="twitter:description" content="Protocol and transaction infrastructure, developer tooling, SDKs, execution systems. Cork, Ireland. Open to founding engineer roles.">
+    <meta name="twitter:title" content="Joe Pegler | Transaction Infrastructure">
+    <meta name="twitter:description" content="Transaction infrastructure in production. Account abstraction bundler, execution systems. Cork, Ireland. Founding engineer.">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2339d353'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,8 +33,8 @@
         "@type": "Person",
         "name": "Joe Pegler",
         "url": "https://peglerweb.services/",
-        "jobTitle": "Protocol & Transaction Infrastructure Engineer",
-        "description": "Protocol and transaction infrastructure, developer tooling, SDKs, execution systems and reliability. Cork, Ireland.",
+        "jobTitle": "Founding Engineer, Transaction Infrastructure",
+        "description": "Transaction infrastructure in production. Account abstraction bundler, execution systems, cross-chain infra, SDK ownership. Cork, Ireland.",
         "email": "pegler.web.services@gmail.com",
         "sameAs": [
             "https://github.com/joepegler",
@@ -60,9 +60,10 @@
             </div>
             <nav aria-label="Main navigation">
                 <ul>
-                    <li><a href="#about">Impact</a></li>
+                    <li><a href="#proof">Proof</a></li>
                     <li><a href="#expertise">What I build</a></li>
                     <li><a href="#systems-built">Systems built</a></li>
+                    <li><a href="#how-i-think">How I think</a></li>
                     <li><a href="#first-90">First 90 days</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="resume.html">Resume</a></li>
@@ -86,17 +87,18 @@
         <div class="container">
             <div class="hero-layout">
                 <div class="hero-copy">
-                    <h1 id="hero-heading">Protocol and transaction infrastructure, developer tooling, execution systems</h1>
-                    <p class="hero-subhead">I build and own infrastructure end to end: SDKs, execution pipelines, backend systems, and integration surfaces. Focus on reliability and 0→1 delivery.</p>
+                    <p class="hero-label" aria-hidden="true">Account abstraction · Execution · Cross-chain</p>
+                    <h1 id="hero-heading">I build transaction infrastructure that runs in production</h1>
+                    <p class="hero-subhead">Bundlers, execution systems, and SDKs used by real users. Account abstraction, execution systems, cross-chain infrastructure, SDK ownership.</p>
                     <div class="hero-chips" aria-label="Key focus areas">
-                        <span class="hero-chip">SDKs &amp; developer tooling</span>
+                        <span class="hero-chip">Account abstraction bundler</span>
                         <span class="hero-chip">Execution systems</span>
-                        <span class="hero-chip">Protocol-adjacent infra</span>
-                        <span class="hero-chip">Zero to one</span>
+                        <span class="hero-chip">Cross-chain infra</span>
+                        <span class="hero-chip">SDK ownership</span>
                     </div>
                     <div class="hero-ctas">
-                        <a href="#contact" class="hero-cta">Get in touch</a>
-                        <a href="#systems-built" class="hero-cta hero-cta-secondary">See what I've built</a>
+                        <a href="#proof" class="hero-cta">See proof</a>
+                        <a href="#contact" class="hero-cta hero-cta-secondary">Get in touch</a>
                     </div>
                 </div>
                 <div class="hero-panels">
@@ -104,7 +106,7 @@
                         <div class="hero-panel-label"><span class="hero-panel-dot"></span> Live activity</div>
                         <div class="github-contributions-wrapper hero-github-wrapper">
                             <a href="https://github.com/joepegler" target="_blank" rel="noopener noreferrer">
-                                <img src="https://ghchart.rshah.org/39d353/joepegler"
+                                <img src="https://ghchart.rshah.org/22c55e/joepegler"
                                     alt="GitHub contribution activity for joepegler" width="100%" class="github-contributions">
                             </a>
                             <div class="contributions-label"><i class="fab fa-github" aria-hidden="true"></i> joepegler: <span class="current-year"></span></div>
@@ -112,53 +114,91 @@
                     </div>
                     <div class="hero-status-card glass-card">
                         <div class="hero-panel-label"><span class="hero-panel-dot"></span> Status</div>
-                        <p class="hero-status-text">Cork, Ireland · GMT · Open to founding engineer and early infra roles</p>
+                        <p class="hero-status-text">Cork, Ireland. GMT. Open to founding engineer and early infra roles.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="proof-section" id="proof">
+        <div class="container">
+            <h2>Proof</h2>
+            <p class="section-intro">Real systems with measurable outcomes.</p>
+            <article class="proof-system glass-card">
+                <h3 class="proof-system-name">In-house account abstraction bundler</h3>
+                <a href="https://etherscan.io/address/0x8a0bc8ab38b1f49459f1de27626648543036ed22" target="_blank" rel="noopener noreferrer" class="proof-etherscan-link" aria-label="View bundler address on Etherscan">Address #1 of 15 on Etherscan <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                <dl class="proof-metrics">
+                    <div class="proof-metric">
+                        <dt>Scale</dt>
+                        <dd>5k to 7k swaps per day</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Performance</dt>
+                        <dd>20 to 40% faster than Zerodev / Pimlico</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Reliability</dt>
+                        <dd>~103% success rate compared to ZD/Pimlico</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Cost</dt>
+                        <dd>Roughly 20 to 40% of execution costs</dd>
+                    </div>
+                </dl>
+                <div class="proof-work">
+                    <h4>Work</h4>
+                    <ul>
+                        <li>Built retry and fallback execution model</li>
+                        <li>Debugged simulation vs execution mismatches</li>
+                        <li>Identified nonce race conditions and wallet contention</li>
+                        <li>Investigated RPC inconsistencies (e.g. Base chain lag)</li>
+                        <li>Handles slippage, RPC lag, retries, simulation mismatches in production</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
     <section class="positioning" id="about">
         <div class="container">
-            <h2>What I do</h2>
-            <p class="positioning-lead">I focus on transaction plumbing, reliability, and system ownership: the kind of work where you define systems rather than wait for specs, from zero to one and through scale. Based in Cork, Ireland (GMT).</p>
-            <h2 class="impact-heading">Selected Impact</h2>
+            <h2>Impact</h2>
+            <p class="positioning-lead">Transaction plumbing and system ownership. Cork, Ireland (GMT).</p>
             <ul class="impact-list" aria-label="Selected impact">
-                <li>Shipped an in-house transaction bundler in production with retries, simulation, and multi-chain route orchestration (LiFi, Jupiter, 1inch, Odos, LayerZero).</li>
-                <li>Led the TypeScript SDK for smart accounts and multi-chain execution at biconomy; production SDK with gasless flows, modern signing (EIP-712/1271, passkeys), and full protocol compatibility.</li>
-                <li>Built cross-chain execution and sponsored flows with pre-execution validation (slippage, state overrides) so users get reliable submission and fewer failed txs.</li>
-                <li>Designed and delivered the main client-facing dApp and intents/solvers backend at enso for decentralized trades and actions on Ethereum.</li>
-                <li>Reduced transaction failure risk via simulation, retry logic, and typed SDKs so teams ship faster with fewer production incidents.</li>
-                <li>Established production-grade CI/CD and release discipline for critical trading and infra surfaces (coinflex, enso, defi.app).</li>
+                <li>In-house bundler in production. Retries, simulation, multi-chain routes (LiFi, Jupiter, 1inch, Odos, LayerZero).</li>
+                <li>Led TypeScript SDK for smart accounts and multi-chain execution at biconomy. Gasless flows, EIP-712/1271, passkeys.</li>
+                <li>Cross-chain execution and sponsored flows with pre-execution validation (slippage, state overrides).</li>
+                <li>Main dApp dev at enso. Decentralized trades and actions on Ethereum.</li>
+                <li>Simulation, retry logic, typed SDKs. Fewer production incidents.</li>
+                <li>CI/CD and release discipline for critical surfaces (coinflex, enso, defi.app).</li>
             </ul>
         </div>
     </section>
 
     <section class="services what-i-build" id="expertise">
         <div class="container">
-            <h2>What I work on</h2>
-            <p class="section-intro">Infrastructure that makes complex blockchain interactions reliable and shippable.</p>
+            <h2>What I build</h2>
+            <p class="section-intro">Transaction infrastructure that ships.</p>
             <div class="services-grid system-pillars">
                 <div class="service-card glass-card system-pillar">
                     <i class="fas fa-bolt" aria-hidden="true"></i>
                     <h3>Transaction infrastructure</h3>
-                    <p>Execution pipelines, retries, and simulation so transactions and swaps succeed under load. The system handles partial failures and latency without leaving reliability to chance.</p>
+                    <p>Execution pipelines, retries, simulation. Partial failures and latency handled in production.</p>
                 </div>
                 <div class="service-card glass-card system-pillar">
                     <i class="fas fa-wallet" aria-hidden="true"></i>
-                    <h3>Wallet &amp; onboarding systems</h3>
-                    <p>Gasless UX, session permissions, sponsored txs, and modern signing (passkeys, EIP-712/1271). Designed so product teams can ship onboarding and permissions without owning the plumbing.</p>
+                    <h3>Wallet &amp; onboarding</h3>
+                    <p>Gasless UX, session permissions, sponsored txs. Passkeys, EIP-712/1271.</p>
                 </div>
                 <div class="service-card glass-card system-pillar">
                     <i class="fas fa-code" aria-hidden="true"></i>
                     <h3>Developer tooling</h3>
-                    <p>SDKs and APIs that abstract complex transaction flows so the next engineer can integrate and extend without tribal knowledge. Typed clients, clear errors, and docs that match behaviour.</p>
+                    <p>SDKs that abstract transaction flows. Typed clients, clear errors, docs that match behaviour.</p>
                 </div>
                 <div class="service-card glass-card system-pillar">
                     <i class="fas fa-link" aria-hidden="true"></i>
                     <h3>Cross-chain execution</h3>
-                    <p>Route orchestration and execution across EVM and Solana: swap, bridge, and action providers with a single interface. Pre-execution validation and state handling so outcomes match expectations.</p>
+                    <p>Route orchestration across EVM and Solana. Pre-execution validation, state handling.</p>
                 </div>
             </div>
         </div>
@@ -167,7 +207,7 @@
     <section class="clients" id="systems-built">
         <div class="container">
             <h2>Systems Built</h2>
-            <p class="section-intro">Problem → system → result. Production infrastructure I've owned end to end.</p>
+            <p class="section-intro">Production infrastructure owned end to end.</p>
             <div class="client-list case-study-list">
                 <article class="case-study glass-card">
                     <div class="case-study-header">
@@ -179,10 +219,13 @@
                         <span class="ownership-tag">Shipped prod infra</span>
                         <span class="ownership-tag">Led SDK</span>
                     </div>
-                    <p><strong>Problem:</strong> Reliable, low-latency transaction submission and multi-chain swap/bridge execution with sponsored flows.</p>
-                    <p><strong>System:</strong> In-house transaction bundler with retries, simulation, and Sourcify/custom ABIs. Route orchestration (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero). TypeScript SDK: smart accounts (ZeroDev/Kernel), RouteClient, ExecutionManager. Action providers (Aave, Morpho, Hyperliquid, Relay). EVM and Solana simulation and sponsorship infra for pre-execution validation.</p>
-                    <p><strong>Result:</strong> Unified cross-chain UX with reliable submission and pre-execution validation (slippage, state overrides, Jito).</p>
-                    <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <p><strong>Problem:</strong> Reliable, low-latency submission and multi-chain swap/bridge with sponsored flows.</p>
+                    <p><strong>System:</strong> In-house account abstraction bundler. Retries, simulation, Sourcify/custom ABIs. Routes: LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero. TypeScript SDK: smart accounts (ZeroDev/Kernel), RouteClient, ExecutionManager. Action providers: Aave, Morpho, Hyperliquid, Relay. EVM and Solana simulation and sponsorship.</p>
+                    <p><strong>Result:</strong> 5k to 7k swaps/day. ~95% success rate. 20 to 40% faster than Zerodev. Meaningful share of execution traffic. Slippage, state overrides, Jito handled.</p>
+                    <div class="case-study-links">
+                        <a href="https://etherscan.io/address/0x8a0bc8ab38b1f49459f1de27626648543036ed22" target="_blank" rel="noopener noreferrer" class="case-study-link" aria-label="View bundler contract on Etherscan">Bundler on Etherscan <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                        <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    </div>
                 </article>
                 <article class="case-study glass-card">
                     <div class="case-study-header">
@@ -208,7 +251,7 @@
                         <span class="ownership-tag">Led product surface</span>
                     </div>
                     <p><strong>Problem:</strong> Main client-facing dApp on Ethereum with a robust backend and efficient matching/execution for decentralized trades and actions.</p>
-                    <p><strong>System:</strong> Main client-facing dApp and backend (NestJS, frontend–backend integration). Intents and solvers framework for matching and executing decentralized trades and actions.</p>
+                    <p><strong>System:</strong> Main client-facing dApp and backend (NestJS). Intents and solvers framework for matching and executing decentralized trades and actions.</p>
                     <p><strong>Result:</strong> Single dApp and backend stack serving users with reliable intents/solvers execution.</p>
                     <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </article>
@@ -230,35 +273,56 @@
         </div>
     </section>
 
+    <section class="how-i-think" id="how-i-think">
+        <div class="container">
+            <h2>How I think</h2>
+            <p class="section-intro">Opinionated on execution and reliability.</p>
+            <div class="how-i-think-content">
+                <div class="how-i-think-block glass-card">
+                    <h3>Why in-house bundler</h3>
+                    <p>Relying only on Zerodev or Pimlico means you inherit their latency, retry behaviour, and failure modes. We needed control over fallback, nonce handling, and simulation so we could tune for our traffic and debug when things broke.</p>
+                </div>
+                <div class="how-i-think-block glass-card">
+                    <h3>Tradeoffs</h3>
+                    <p>Fallback and retries add latency. Fewer retries mean more failures. I design for observable tradeoffs: clear metrics, so the team can choose reliability vs speed and see the cost.</p>
+                </div>
+                <div class="how-i-think-block glass-card">
+                    <h3>Debugging production</h3>
+                    <p>Simulation vs execution mismatches, nonce races, wallet contention, RPC lag (e.g. Base). I go from logs and metrics to root cause. Reproduce, fix, add guards so it does not recur.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="first-90" id="first-90">
         <div class="container">
             <h2>First 90 days</h2>
-            <p class="section-intro">Concrete deliverables I can target in early-stage product and infra.</p>
+            <p class="section-intro">Concrete deliverables in early-stage infra.</p>
             <div class="ninety-grid">
                 <div class="ninety-card glass-card">
                     <i class="fas fa-bolt" aria-hidden="true"></i>
                     <h3>Transaction reliability</h3>
-                    <p>Design and ship retries, simulation, and error handling so transactions and swaps succeed under load and partial failures.</p>
+                    <p>Retries, simulation, error handling. Swaps succeed under load and partial failures.</p>
                 </div>
                 <div class="ninety-card glass-card">
                     <i class="fas fa-wallet" aria-hidden="true"></i>
-                    <h3>Wallet &amp; onboarding UX</h3>
-                    <p>Get wallet or multi-chain flows into production with clear session/permission model and gas sponsorship or sponsorship infra where needed.</p>
+                    <h3>Wallet &amp; onboarding</h3>
+                    <p>Multi-chain flows in production. Session/permission model, gas sponsorship where needed.</p>
                 </div>
                 <div class="ninety-card glass-card">
                     <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
                     <h3>Integration velocity</h3>
-                    <p>Add and maintain 2–3 key integrations (chains, protocols, or providers) with typed clients and minimal integration debt.</p>
+                    <p>2 to 3 key integrations with typed clients and minimal debt.</p>
                 </div>
                 <div class="ninety-card glass-card">
                     <i class="fas fa-chart-line" aria-hidden="true"></i>
                     <h3>Observability &amp; ops</h3>
-                    <p>Put in place logging, metrics, and runbooks for critical paths (execution, RPC, indexer) so the team can debug and iterate safely.</p>
+                    <p>Logging, metrics, runbooks for execution, RPC, indexer.</p>
                 </div>
                 <div class="ninety-card glass-card">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
                     <h3>DevEx &amp; docs</h3>
-                    <p>Ship a minimal but accurate SDK or API surface with examples and docs so the next engineer can onboard and extend without tribal knowledge.</p>
+                    <p>Minimal SDK or API with examples and docs. Next engineer can extend without tribal knowledge.</p>
                 </div>
             </div>
         </div>
@@ -267,7 +331,7 @@
     <section class="contact" id="contact" aria-labelledby="contact-heading">
         <div class="container">
             <h2 id="contact-heading">Contact</h2>
-            <p>I like hard problems: reliability, transaction flow, and system design. Open to founding engineer and early infra roles. Based in Cork, Ireland (GMT). I usually reply within 24–48 hours.</p>
+            <p>Reliability, transaction flow, system design. Open to founding engineer and early infra roles. Cork, Ireland (GMT). Reply within 24 to 48 hours.</p>
             <div class="contact-ctas">
                 <a href="mailto:pegler.web.services@gmail.com?subject=Intro%20call%20%7C%20peglerweb.services" class="hero-cta contact-cta-primary">Get in touch</a>
                 <a href="resume.html" class="contact-cta-secondary">View technical resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
