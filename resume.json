@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Founding Engineer | Web3 Infrastructure | Account Abstraction (ERC-4337)",
+    "label": "Transaction infrastructure · ERC-4337 · Account abstraction",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
-    "email": "joepegler123@gmail.com",
+    "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Founding-leaning infrastructure engineer building transaction systems end to end: bundlers, SDKs, and execution pipelines. Own ERC-4337 account abstraction and cross-chain infra across EVM and Solana. Operate in 0 to 1 environments with high ambiguity and hard reliability constraints.",
+    "summary": "Infrastructure engineer focused on transaction systems end to end: bundlers, SDKs, execution pipelines. ERC-4337 account abstraction and cross-chain infra across EVM and Solana. Used to 0→1 environments and hard reliability constraints.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -14,9 +14,9 @@
   },
   "selectedImpact": [
     "Shipped an in-house ERC-4337 bundler with retry logic, EntryPoint v0.7 simulation, and structured decoding, enabling stable gasless and sponsored user-op flows.",
-    "Owned the TypeScript smart-account SDK at Biconomy, including EIP-712/1271/7739/6492 signing and P-256 passkeys, to unblock production account abstraction integrations.",
+    "Led the TypeScript smart-account SDK at Biconomy, including EIP-712/1271/7739/6492 signing and P-256 passkeys, for production account abstraction integrations.",
     "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and paymaster systems.",
-    "Led multiple 0 to 1 product surfaces, from dApp and intents execution at Enso to automated CI/CD for business-critical trading interfaces at CoinFLEX."
+    "Shipped 0→1 product surfaces, from dApp and intents execution at Enso to automated CI/CD for trading interfaces at CoinFLEX."
   ],
   "work": [
     {
@@ -89,7 +89,7 @@
       "isCurrentRole": false,
       "start": { "year": 2019, "month": 8 },
       "end": { "year": 2021, "month": 7 },
-      "summary": "Owned the trading interface and deployment system for a business-critical exchange product.",
+      "summary": "Led the trading interface and deployment system for the live exchange product.",
       "highlights": [
         "Led delivery of the platform's trading UI, owning architecture, core feature rollout, and engineering standards across a small team.",
         "Built fully automated CI/CD for the interface stack, reducing release risk and supporting faster iteration on a live trading product."
