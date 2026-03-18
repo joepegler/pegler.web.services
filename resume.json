@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Transaction infrastructure · ERC-4337 · Account abstraction",
+    "label": "Protocol & transaction infrastructure · SDKs · Developer tooling",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Infrastructure engineer focused on transaction systems end to end: bundlers, SDKs, execution pipelines. ERC-4337 account abstraction and cross-chain infra across EVM and Solana. Used to 0→1 environments and hard reliability constraints.",
+    "summary": "Infrastructure engineer focused on protocol and transaction systems end to end: SDKs, execution pipelines, developer tooling, backend and integration surfaces. Blockchain infra across EVM and Solana. Used to 0→1 environments and high-ownership roles.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -13,9 +13,9 @@
     ]
   },
   "selectedImpact": [
-    "Shipped an in-house ERC-4337 bundler with retry logic, EntryPoint v0.7 simulation, and structured decoding, enabling stable gasless and sponsored user-op flows.",
-    "Led the TypeScript smart-account SDK at Biconomy, including EIP-712/1271/7739/6492 signing and P-256 passkeys, for production account abstraction integrations.",
-    "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and paymaster systems.",
+    "Shipped an in-house transaction bundler with retry logic, simulation, and structured error decoding, enabling stable gasless and sponsored flows.",
+    "Led the TypeScript SDK at Biconomy for smart accounts and multi-chain execution: modern signing (EIP-712/1271, passkeys), production integrations, and clear developer experience.",
+    "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and sponsorship systems.",
     "Shipped 0→1 product surfaces, from dApp and intents execution at Enso to automated CI/CD for trading interfaces at CoinFLEX."
   ],
   "work": [
@@ -32,10 +32,10 @@
       "end": {},
       "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed and shipped an internal ERC-4337 bundler with retries, EntryPoint v0.7 simulation, and Sourcify plus ABI-backed error decoding to increase user-op delivery reliability.",
+        "Designed and shipped an internal transaction bundler with retries, simulation, and Sourcify plus ABI-backed error decoding to increase delivery reliability.",
         "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay to expose one execution surface instead of chain-specific flows.",
-        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for account abstraction, quote, and execution paths, reducing integration load for product teams.",
-        "Delivered EVM plus Solana simulation and paymaster infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
+        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart accounts, quote, and execution paths, reducing integration load for product teams.",
+        "Delivered EVM plus Solana simulation and sponsorship infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
       ]
     },
     {
@@ -50,12 +50,12 @@
       "isCurrentRole": false,
       "start": { "year": 2023, "month": 12 },
       "end": { "year": 2025, "month": 5 },
-      "summary": "Owned the core developer SDK for ERC-4337 smart accounts and multi-chain execution.",
+      "summary": "Owned the core developer SDK for smart accounts and multi-chain execution.",
       "highlights": [
-        "Led architecture and API design for the flagship TypeScript SDK used by teams building ERC-4337 smart-account products.",
-        "Implemented EIP-712, EIP-1271, EIP-7739, and EIP-6492 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
-        "Shipped viem-based modular clients with ERC-7579 decorators and Safe support, cutting complexity for account, paymaster, and bundler integration paths.",
-        "Hardened production readiness with typed errors, composable batching, EntryPoint v0.7 support, and CI coverage with Vitest, Bun, GitHub Actions, and Codecov."
+        "Led architecture and API design for the flagship TypeScript SDK used by teams building smart-account and execution products.",
+        "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
+        "Shipped viem-based modular clients with Safe support, cutting complexity for account and bundler integration paths.",
+        "Hardened production readiness with typed errors, composable batching, and CI coverage with Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
@@ -117,8 +117,8 @@
   ],
   "skills": [
     { "name": "TypeScript / Node.js", "level": "Expert", "rating": 5 },
-    { "name": "ERC-4337 / smart accounts / account abstraction", "level": "Expert", "rating": 5 },
-    { "name": "Transaction pipelines / bundlers / paymasters", "level": "Expert", "rating": 5 },
+    { "name": "Smart accounts / account abstraction", "level": "Expert", "rating": 5 },
+    { "name": "Transaction pipelines / execution systems", "level": "Expert", "rating": 5 },
     { "name": "SDK architecture and developer tooling", "level": "Expert", "rating": 5 },
     { "name": "Cross-chain infrastructure (EVM + Solana)", "level": "Advanced", "rating": 4 },
     { "name": "viem / ethers.js", "level": "Expert", "rating": 5 },
