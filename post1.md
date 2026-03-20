@@ -7,7 +7,7 @@ slug: faster-sponsored-erc4337
 
 # A faster path for sponsored ERC-4337: trusted bundler and minimal UserOps
 
-In the usual ERC-4337 story, bundlers collect `UserOperation`s from an alt-mempool, simulate them, and submit via `EntryPoint.handleOps()`. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real `maxFeePerGas`, `maxPriorityFeePerGas`, and `preVerificationGas`, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. We found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.
+In the usual ERC-4337 story, bundlers collect `UserOperation`s from an alt-mempool, simulate them, and submit via `EntryPoint.handleOps()`. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real `maxFeePerGas`, `maxPriorityFeePerGas`, and `preVerificationGas`, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. I found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.
 
 This post is a short technical note on how that works and why it’s faster, without claiming it’s the right choice for every team, only that it’s a viable optimization when you control the client, the bundler, and the wallet pool.
 
@@ -32,7 +32,7 @@ If the bundler is **trusted** and **pays for execution itself**, you don’t nee
 - Set `preVerificationGas`, `maxFeePerGas`, and `maxPriorityFeePerGas` in the UserOp to **zero** (or omit them in your packed format).
 - Omit paymaster usage: `paymasterAndData` can be `"0x"`.
 
-The EntryPoint still computes a charge as `requiredGas × effectiveGasPrice`. With those fee fields at zero, `effectiveGasPrice` is zero, so the EntryPoint debits **nothing** from the user’s deposit. The **bundler** then submits a normal transaction `EntryPoint.handleOps([userOp], bundlerAddress)`; that transaction is paid by the **bundler EOA**. So the user pays nothing; the bundler wallet pays the L1/L2 fee. This is the same “who pays” split we document internally for the bundler (EntryPoint charges nothing; bundler EOA pays the `handleOps` transaction).
+The EntryPoint still computes a charge as `requiredGas × effectiveGasPrice`. With those fee fields at zero, `effectiveGasPrice` is zero, so the EntryPoint debits **nothing** from the user’s deposit. The **bundler** then submits a normal transaction `EntryPoint.handleOps([userOp], bundlerAddress)`; that transaction is paid by the **bundler EOA**. So the user pays nothing; the bundler wallet pays the L1/L2 fee. This is the same “who pays” split I document internally for the bundler (EntryPoint charges nothing; bundler EOA pays the `handleOps` transaction).
 
 A side effect of this setup: the UserOp carries **no bundler reward**. Malicious or competing bundlers are no longer incentivised by the priority fees in each UserOperation, because those fields are zero. With submission going to your trusted first-party bundler rather than a public or shared alt mempool, there is little opportunity and no fee-driven incentive for another bundler to front-run or race for inclusion. That means less wasted gas from competing inclusion attempts and no extra latency from transaction-hash churn when a submission is front-run by a bundler listening on the same mempool.
 
@@ -105,9 +105,9 @@ transactionHash = await walletClient.writeContract({
 
 ## Funded wallet pool instead of batching
 
-Standard bundlers often batch UserOps to amortize cost. Our priority is latency: we want a free wallet available for each submission so one UserOp isn’t waiting on another. So we run a **pool of pre-funded EOAs** per chain (e.g. 7–15 per chain, with `topupTargetUsd` and refill logic). The bundler acquires a wallet from the pool, runs the parallel block above, then submits a single `handleOps([userOp], bundlerAddress)` with that wallet. Fees and gas limit are for the **outer** transaction only; the UserOp’s own fee fields stay zero.
+Standard bundlers often batch UserOps to amortize cost. My priority is latency: I want a free wallet available for each submission so one UserOp isn’t waiting on another. So I run a **pool of pre-funded EOAs** per chain (e.g. 7–15 per chain, with `topupTargetUsd` and refill logic). The bundler acquires a wallet from the pool, runs the parallel block above, then submits a single `handleOps([userOp], bundlerAddress)` with that wallet. Fees and gas limit are for the **outer** transaction only; the UserOp’s own fee fields stay zero.
 
-So we’re not “bundling” in the sense of packing multiple UserOps into one `handleOps` to save cost. We’re trading wallet count for latency: more wallets so that submissions don’t block each other. If queues grow, the lever we use is increasing the wallet count rather than batching.
+So I’m not “bundling” in the sense of packing multiple UserOps into one `handleOps` to save cost. I’m trading wallet count for latency: more wallets so that submissions don’t block each other. If queues grow, the lever I use is increasing the wallet count rather than batching.
 
 ---
 
@@ -126,4 +126,4 @@ So we’re not “bundling” in the sense of packing multiple UserOps into one 
 3. **No batching dependency:** A pool of funded wallets means most requests get a sender immediately; latency is dominated by wallet availability and the parallel backend work, not by waiting for a bundle to fill.
 4. **No fee-driven front-running:** The UserOp has no bundler reward, and submission is to your trusted bundler, so there is no incentive or practical opportunity for a malicious bundler to front-run for priority fees—reducing wasted gas and avoiding latency from replaced or raced submissions.
 
-This only makes sense when you own the SDK, the bundler, and the wallet pool and can accept the trust and portability tradeoffs. In that setting, we’ve found it a practical way to get sponsored, low-latency execution without the extra round-trips and serialization of the standard ERC-4337 path.
+This only makes sense when you own the SDK, the bundler, and the wallet pool and can accept the trust and portability tradeoffs. In that setting, I’ve found it a practical way to get sponsored, low-latency execution without the extra round-trips and serialization of the standard ERC-4337 path.
