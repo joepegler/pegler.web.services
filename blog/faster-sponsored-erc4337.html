@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trusted bundler flow, minimal UserOps, and why it reduces latency.">
+    <title>A faster path for sponsored ERC-4337 | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="A faster path for sponsored ERC-4337">
+    <meta property="og:description" content="Trusted bundler flow, minimal UserOps, and why it reduces latency.">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="index.html">Blog</a></li>
+                    <li><a href="../resume.html">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">A faster path for sponsored ERC-4337</h1>
+                        <time class="blog-post-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<h1>A faster path for sponsored ERC-4337: trusted bundler and minimal UserOps</h1>
+<p>In the usual ERC-4337 story, bundlers collect <code>UserOperation</code>s from an alt-mempool, simulate them, and submit via <code>EntryPoint.handleOps()</code>. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real <code>maxFeePerGas</code>, <code>maxPriorityFeePerGas</code>, and <code>preVerificationGas</code>, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. We found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.</p>
+<p>This post is a short technical note on how that works and why it’s faster, without claiming it’s the right choice for every team, only that it’s a viable optimization when you control the client, the bundler, and the wallet pool.</p>
+<hr>
+<h2>How the standard flow adds latency</h2>
+<p>In the <a href="https://docs.erc4337.io/bundlers/index.html">ERC-4337 model</a>, bundlers “act like miners for smart wallets”: they verify, package, and submit UserOps and are compensated via the <a href="https://docs.erc4337.io/bundlers/index.html">priority fees specified in each UserOperation</a> and refunds from the account or paymaster. That reward is what incentivises bundlers to include a given UserOp; in a shared or public alt mempool, bundlers compete for that same reward, which can create incentives to front-run or race for inclusion. So the client (or middleware) typically:</p>
+<ol>
+<li>Fetches gas prices for the UserOp (e.g. <a href="https://docs.pimlico.io/permissionless/v0_1/reference/pimlico-bundler-actions/getUserOperationGasPrice">Pimlico’s <code>getUserOperationGasPrice</code></a> for <code>maxFeePerGas</code> / <code>maxPriorityFeePerGas</code>).</li>
+<li>Optionally calls a paymaster to get sponsorship data (<a href="https://docs.pimlico.io/references/permissionless/v0_1/reference/pimlico-paymaster-actions/sponsorUserOperation"><code>sponsorUserOperation</code></a>), which returns <code>preVerificationGas</code>, gas limits, and paymaster payload.</li>
+<li>Builds the full UserOp and only then signs and submits.</li>
+</ol>
+<p>Simulation often happens in the same pipeline: you need a valid-looking UserOp (including fee fields) before the bundler can simulate or the paymaster can validate. So gas estimation, fee lookup, and paymaster calls tend to sit on the critical path and can be serialized or tightly coupled. Platforms like <a href="https://docs.zerodev.app/sdk/v5_3_x/">ZeroDev</a> give you a full-featured smart-account and sponsorship story, but that story is built around the standard UserOp and reimbursement flow, not a latency-specialized trusted-relayer shortcut.</p>
+<hr>
+<h2>The deviation: zero-fee UserOp + bundler pays</h2>
+<p>If the bundler is <strong>trusted</strong> and <strong>pays for execution itself</strong>, you don’t need the EntryPoint to charge the user or a paymaster. You only need the EntryPoint to accept and run the UserOp. You also need some way of ensuring that the UserOp’s calldata has come from your own backend (e.g. signed or issued by your service), not arbitrary data a user might submit, so the bundler only executes operations you’ve authorised. So you can:</p>
+<ul>
+<li>Set <code>preVerificationGas</code>, <code>maxFeePerGas</code>, and <code>maxPriorityFeePerGas</code> in the UserOp to <strong>zero</strong> (or omit them in your packed format).</li>
+<li>Omit paymaster usage: <code>paymasterAndData</code> can be <code>&quot;0x&quot;</code>.</li>
+</ul>
+<p>The EntryPoint still computes a charge as <code>requiredGas × effectiveGasPrice</code>. With those fee fields at zero, <code>effectiveGasPrice</code> is zero, so the EntryPoint debits <strong>nothing</strong> from the user’s deposit. The <strong>bundler</strong> then submits a normal transaction <code>EntryPoint.handleOps([userOp], bundlerAddress)</code>; that transaction is paid by the <strong>bundler EOA</strong>. So the user pays nothing; the bundler wallet pays the L1/L2 fee. This is the same “who pays” split we document internally for the bundler (EntryPoint charges nothing; bundler EOA pays the <code>handleOps</code> transaction).</p>
+<p>A side effect of this setup: the UserOp carries <strong>no bundler reward</strong>. Malicious or competing bundlers are no longer incentivised by the priority fees in each UserOperation, because those fields are zero. With submission going to your trusted first-party bundler rather than a public or shared alt mempool, there is little opportunity and no fee-driven incentive for another bundler to front-run or race for inclusion. That means less wasted gas from competing inclusion attempts and no extra latency from transaction-hash churn when a submission is front-run by a bundler listening on the same mempool.</p>
+<hr>
+<h2>Fewer calls before the user signs</h2>
+<p>On the client, the unsigned UserOp can be built without any gas-price or paymaster RPCs. For example (SDK, trimmed):</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">unsignedUserOp</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">  sender: smartAccount.address,</span></div><div class='line'><span style="color: #C9D1D9">  nonce,</span></div><div class='line'><span style="color: #C9D1D9">  callData,</span></div><div class='line'><span style="color: #C9D1D9">  signature: zeroAddress,</span></div><div class='line'><span style="color: #C9D1D9">  preVerificationGas: </span><span style="color: #79C0FF">0</span><span style="color: #FF7B72">n</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  paymasterPostOpGasLimit: </span><span style="color: #79C0FF">0</span><span style="color: #FF7B72">n</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  paymasterVerificationGasLimit: </span><span style="color: #79C0FF">0</span><span style="color: #FF7B72">n</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">...</span><span style="color: #C9D1D9">gasLimits, </span><span style="color: #8B949E">// e.g. callGasLimit, verificationGasLimit from constants</span></div><div class='line'><span style="color: #C9D1D9">} </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">unknown</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">UserOperation</span><span style="color: #C9D1D9">;</span></div></code></div></pre>
+<p>No <code>getUserOperationGasPrice</code>, no <code>sponsorUserOperation</code>, no <code>preVerificationGas</code> estimation. The hot path before signing is basically: nonce (and any session/permission work), then sign and POST to the bundler. So you remove entire round-trips that standard flows need.</p>
+<hr>
+<h2>Parallelizing the work that remains</h2>
+<p>The backend still has to: acquire a wallet, decide fees for the <strong>outer</strong> <code>handleOps</code> transaction, get a nonce, verify sponsorship policy, simulate the UserOp, and estimate gas for <code>handleOps</code>. In a typical flow, some of that might be serialized behind “build UserOp → get gas for UserOp → then simulate.” Here, fee selection belongs to the <strong>bundler’s</strong> transaction, not the UserOp, so all of that can run in parallel as soon as the signed UserOp lands. For example:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> [</span><span style="color: #79C0FF">feeData</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">nonce</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">gas</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">verified</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">sim</span><span style="color: #C9D1D9">] </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">Promise</span><span style="color: #C9D1D9">.</span><span style="color: #D2A8FF">all</span><span style="color: #C9D1D9">([</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #79C0FF">this</span><span style="color: #C9D1D9">.quicknodeProvider.</span><span style="color: #D2A8FF">getFeeData</span><span style="color: #C9D1D9">(chainId),</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #79C0FF">this</span><span style="color: #C9D1D9">.quicknodeProvider.</span><span style="color: #D2A8FF">getNonce</span><span style="color: #C9D1D9">(chainId, wallet.address),</span></div><div class='line'><span style="color: #C9D1D9">  publicClient.</span><span style="color: #D2A8FF">estimateContractGas</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">    address: entryPoint07Address,</span></div><div class='line'><span style="color: #C9D1D9">    abi: entryPoint07Abi,</span></div><div class='line'><span style="color: #C9D1D9">    functionName: </span><span style="color: #A5D6FF">"handleOps"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">    args: [[userOperation], wallet.address </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Hex</span><span style="color: #C9D1D9">],</span></div><div class='line'><span style="color: #C9D1D9">    account: wallet.address </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Hex</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  }),</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #79C0FF">this</span><span style="color: #C9D1D9">.txService.</span><span style="color: #D2A8FF">verifyCalldata</span><span style="color: #C9D1D9">(</span></div><div class='line'><span style="color: #C9D1D9">    userOperation.sender,</span></div><div class='line'><span style="color: #C9D1D9">    userOperation.nonce,</span></div><div class='line'><span style="color: #C9D1D9">    userOperation.callData,</span></div><div class='line'><span style="color: #C9D1D9">  ),</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #D2A8FF">backOff</span><span style="color: #C9D1D9">(() </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">this</span><span style="color: #C9D1D9">.</span><span style="color: #D2A8FF">_simulateUserOp</span><span style="color: #C9D1D9">(</span><span style="color: #8B949E">/* ... */</span><span style="color: #C9D1D9">)),</span></div><div class='line'><span style="color: #C9D1D9">]);</span></div></code></div></pre>
+<p>So simulation runs in the same time window as fee lookup, nonce fetch, sponsorship check, and <code>handleOps</code> gas estimation, instead of after a separate user-op gas/paymaster preparation phase. That’s a second kind of win: not just fewer calls, but better overlap of the calls you still need.</p>
+<p>The bundler then applies <code>maxFeePerGas</code> and <code>maxPriorityFeePerGas</code> only to the <strong>wallet</strong> transaction that calls <code>handleOps</code>, not to the UserOp’s internal accounting:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #C9D1D9">transactionHash </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> walletClient.</span><span style="color: #D2A8FF">writeContract</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">  address: entryPoint07Address,</span></div><div class='line'><span style="color: #C9D1D9">  abi: entryPoint07Abi,</span></div><div class='line'><span style="color: #C9D1D9">  functionName: </span><span style="color: #A5D6FF">"handleOps"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  args: [[userOperation], wallet.address </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Hex</span><span style="color: #C9D1D9">],</span></div><div class='line'><span style="color: #C9D1D9">  account: walletClient.account</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  gas: gasLimit,</span></div><div class='line'><span style="color: #C9D1D9">  maxFeePerGas: feeData.maxFeePerGas,</span></div><div class='line'><span style="color: #C9D1D9">  maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,</span></div><div class='line'><span style="color: #C9D1D9">  nonce: currentNonce,</span></div><div class='line'><span style="color: #C9D1D9">});</span></div></code></div></pre>
+<hr>
+<h2>Funded wallet pool instead of batching</h2>
+<p>Standard bundlers often batch UserOps to amortize cost. Our priority is latency: we want a free wallet available for each submission so one UserOp isn’t waiting on another. So we run a <strong>pool of pre-funded EOAs</strong> per chain (e.g. 7–15 per chain, with <code>topupTargetUsd</code> and refill logic). The bundler acquires a wallet from the pool, runs the parallel block above, then submits a single <code>handleOps([userOp], bundlerAddress)</code> with that wallet. Fees and gas limit are for the <strong>outer</strong> transaction only; the UserOp’s own fee fields stay zero.</p>
+<p>So we’re not “bundling” in the sense of packing multiple UserOps into one <code>handleOps</code> to save cost. We’re trading wallet count for latency: more wallets so that submissions don’t block each other. If queues grow, the lever we use is increasing the wallet count rather than batching.</p>
+<hr>
+<h2>Tradeoffs</h2>
+<ul>
+<li><strong>Non-standard UserOp.</strong> The signed UserOp has zero (or omitted) fee fields and no paymaster. Only a bundler that accepts this format can execute it. A generic meta-bundler or third-party bundler expecting standard UserOps would not take the same payload; fallback would require the user to sign again with a standard UserOp.</li>
+<li><strong>Trust.</strong> This is only safe when the client is your first-party (or otherwise trusted) and the backend is your bundler. The backend enforces sponsorship and execution policy before submitting.</li>
+<li><strong>Portability.</strong> Similarly optimized setups exist (e.g. some Pimlico/Ultra Relay flows), but the format is deliberately non-standard, so you’re not plugging into the generic ERC-4337 mempool.</li>
+</ul>
+<hr>
+<h2>Why it’s faster, in short</h2>
+<ol>
+<li><strong>Fewer pre-sign RPCs:</strong> No gas-price or paymaster calls when building the UserOp; the client only needs nonce (and any session/permission data), then sign and submit.</li>
+<li><strong>Better overlap:</strong> Simulation, sponsorship verification, nonce, fee lookup, and <code>handleOps</code> gas estimation can run in parallel on the backend instead of being serialized behind user-op fee preparation.</li>
+<li><strong>No batching dependency:</strong> A pool of funded wallets means most requests get a sender immediately; latency is dominated by wallet availability and the parallel backend work, not by waiting for a bundle to fill.</li>
+<li><strong>No fee-driven front-running:</strong> The UserOp has no bundler reward, and submission is to your trusted bundler, so there is no incentive or practical opportunity for a malicious bundler to front-run for priority fees—reducing wasted gas and avoiding latency from replaced or raced submissions.</li>
+</ol>
+<p>This only makes sense when you own the SDK, the bundler, and the wallet pool and can accept the trust and portability tradeoffs. In that setting, we’ve found it a practical way to get sponsored, low-latency execution without the extra round-trips and serialization of the standard ERC-4337 path.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>

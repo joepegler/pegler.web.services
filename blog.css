@@ -1,0 +1,210 @@
+/* Blog layout and prose – peglerweb.services */
+.blog-page {
+  padding-top: 6rem;
+}
+
+.blog-main {
+  padding: var(--space-xl, 1.5rem) 0 var(--space-section, 6rem);
+}
+
+.blog-content-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.blog-index-header {
+  margin-bottom: var(--space-2xl, 3rem);
+}
+
+.blog-index-header h1 {
+  font-size: var(--text-h2, 2.25rem);
+  font-weight: 700;
+  margin-bottom: var(--space-sm, 0.5rem);
+}
+
+.blog-index-intro {
+  color: var(--text-secondary, #9ca3b4);
+  font-size: var(--text-body, 1rem);
+}
+
+.blog-index-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg, 1.5rem);
+}
+
+.blog-card {
+  padding: var(--space-lg, 1.5rem);
+}
+
+.blog-card-title {
+  font-size: var(--text-h3, 1.35rem);
+  font-weight: 600;
+  margin-bottom: var(--space-xs, 0.25rem);
+}
+
+.blog-card-title::after {
+  content: none;
+}
+
+.blog-card-title a {
+  color: inherit;
+}
+
+.blog-card-title a:hover {
+  color: var(--accent-primary, #22c55e);
+}
+
+.blog-card-date {
+  display: block;
+  font-size: var(--text-caption, 0.8rem);
+  color: var(--text-muted, #6b7280);
+  margin-bottom: var(--space-sm, 0.5rem);
+}
+
+.blog-card-summary {
+  font-size: var(--text-small, 0.9rem);
+  color: var(--text-secondary, #9ca3b4);
+  margin-bottom: var(--space-md, 1rem);
+  line-height: var(--leading-snug, 1.4);
+}
+
+.blog-card-link {
+  font-size: var(--text-small, 0.9rem);
+  font-weight: 500;
+}
+
+/* Post single */
+.blog-post-header {
+  margin-bottom: var(--space-xl, 2rem);
+}
+
+.blog-post-title {
+  font-size: var(--text-h1, clamp(1.5rem, 3vw, 2.25rem));
+  font-weight: 700;
+  line-height: var(--leading-tight, 1.25);
+  margin-bottom: var(--space-sm, 0.5rem);
+}
+
+.blog-post-date {
+  font-size: var(--text-caption, 0.8rem);
+  color: var(--text-muted, #6b7280);
+}
+
+/* Prose – headings, lists, blockquote, links */
+.blog-content.prose {
+  font-size: var(--text-body, 1rem);
+  line-height: var(--leading-normal, 1.6);
+}
+
+.blog-content.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.blog-content.prose h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-content.prose p {
+  margin-bottom: 1rem;
+}
+
+.blog-content.prose ul,
+.blog-content.prose ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.blog-content.prose li {
+  margin-bottom: 0.35rem;
+}
+
+.blog-content.prose blockquote {
+  border-left: 3px solid var(--accent-primary, #22c55e);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--text-secondary, #9ca3b4);
+  font-style: italic;
+}
+
+.blog-content.prose a {
+  color: var(--accent-primary, #22c55e);
+  text-decoration: none;
+}
+
+.blog-content.prose a:hover {
+  text-decoration: underline;
+}
+
+.blog-content.prose hr {
+  border: none;
+  border-top: 1px solid rgba(34, 197, 94, 0.2);
+  margin: 2rem 0;
+}
+
+/* Code – inline and blocks (Shiki/Twoslash output) */
+.blog-content.prose code {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--bg-elevated, #11151c);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm, 6px);
+  color: var(--accent-primary, #22c55e);
+}
+
+.blog-content.prose pre {
+  margin: 1.25rem 0;
+  border-radius: var(--border-radius, 10px);
+  overflow: auto;
+  background: var(--bg-elevated, #11151c);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.blog-content.prose pre .language-id {
+  display: none;
+}
+
+.blog-content.prose pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Twoslash-specific (type hints, errors, highlights) */
+.blog-content .twoslash-query,
+.blog-content .twoslash-error,
+.blog-content .twoslash-info {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-sm, 6px);
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+}
+
+.blog-content .twoslash-query {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: var(--text-primary, #f2f4f8);
+}
+
+.blog-content .twoslash-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.blog-content .twoslash-info {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: var(--text-secondary, #9ca3b4);
+}

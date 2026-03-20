@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical notes on transaction infrastructure, account abstraction, and execution systems. Joe Pegler.">
+    <title>Blog | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Blog">
+    <meta property="og:description" content="Technical notes on transaction infrastructure, account abstraction, and execution systems. Joe Pegler.">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="index.html" aria-current="page">Blog</a></li>
+                    <li><a href="../resume.html">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <header class="blog-index-header">
+                    <h1>Blog</h1>
+                    <p class="blog-index-intro">Technical notes on transaction infrastructure, bundlers, and execution.</p>
+                </header>
+                <div class="blog-index-list">
+
+                <article class="blog-card glass-card">
+                    <h2 class="blog-card-title"><a href="faster-sponsored-erc4337.html">A faster path for sponsored ERC-4337</a></h2>
+                    <time class="blog-card-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
+                    <p class="blog-card-summary">Trusted bundler flow, minimal UserOps, and why it reduces latency.</p>
+                    <a href="faster-sponsored-erc4337.html" class="blog-card-link">Read more</a>
+                </article>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>

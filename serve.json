@@ -1,0 +1,9 @@
+{
+  "cleanUrls": ["/blog", "/blog/**"],
+  "rewrites": [
+    { "source": "/blog", "destination": "/blog/index.html" },
+    { "source": "/blog/", "destination": "/blog/index.html" },
+    { "source": "/resume", "destination": "/resume.html" },
+    { "source": "/resume/", "destination": "/resume.html" }
+  ]
+}

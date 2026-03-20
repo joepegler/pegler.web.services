@@ -1,0 +1,92 @@
+# Dependencies
+
+# Build / output
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime / environment
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Cache / temp
+.cache/
+.temp/
+tmp/
+temp/
+*.tmp
+*.temp
+.parcel-cache/
+.turbo/
+.eslintcache
+.stylelintcache
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm
+.npm
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+.yarn-state.yml
+
+# Optional local config
+*.local
+local.config.*
+
+# Coverage / testing
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# Misc
+*.bak
+*.orig
+*.rej
+*.min.js.map
+*.min.css.map
