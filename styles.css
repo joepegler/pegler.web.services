@@ -808,6 +808,10 @@ nav ul li a:hover::after {
     max-width: 820px;
 }
 
+.proof-system + .proof-system {
+    margin-top: 1.5rem;
+}
+
 .proof-system-name {
     font-size: 1.35rem;
     color: var(--accent-primary);

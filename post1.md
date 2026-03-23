@@ -1,11 +1,13 @@
 ---
-title: A faster path for sponsored ERC-4337
+title: BYOB: A faster path for sponsored ERC-4337
 date: 2026-03-20
 summary: Trusted bundler flow, minimal UserOps, and why it reduces latency.
 slug: faster-sponsored-erc4337
 ---
 
-# A faster path for sponsored ERC-4337: trusted bundler and minimal UserOps
+# BYOB: A faster path for sponsored ERC-4337
+
+**BYOB** means **Bring Your Own Bundler**: a trusted first-party bundler flow with minimal UserOps and lower latency.
 
 In the usual ERC-4337 story, bundlers collect `UserOperation`s from an alt-mempool, simulate them, and submit via `EntryPoint.handleOps()`. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real `maxFeePerGas`, `maxPriorityFeePerGas`, and `preVerificationGas`, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. I found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.
 
@@ -43,7 +45,7 @@ A side effect of this setup: the UserOp carries **no bundler reward**. Malicious
 On the client, the unsigned UserOp can be built without any gas-price or paymaster RPCs. For example (SDK, trimmed):
 
 ```ts
-const unsignedUserOp = {
+const unsignedUserOp: UserOperation = {
   sender: smartAccount.address,
   nonce,
   callData,
@@ -51,8 +53,9 @@ const unsignedUserOp = {
   preVerificationGas: 0n,
   paymasterPostOpGasLimit: 0n,
   paymasterVerificationGasLimit: 0n,
-  ...gasLimits, // e.g. callGasLimit, verificationGasLimit from constants
-} as unknown as UserOperation;
+  callGasLimit: ...,
+  verificationGasLimit: ...,
+};
 ```
 
 No `getUserOperationGasPrice`, no `sponsorUserOperation`, no `preVerificationGas` estimation. The hot path before signing is basically: nonce (and any session/permission work), then sign and POST to the bundler. So you remove entire round-trips that standard flows need.
@@ -64,7 +67,7 @@ No `getUserOperationGasPrice`, no `sponsorUserOperation`, no `preVerificationGas
 The backend still has to: acquire a wallet, decide fees for the **outer** `handleOps` transaction, get a nonce, verify sponsorship policy, simulate the UserOp, and estimate gas for `handleOps`. In a typical flow, some of that might be serialized behind “build UserOp → get gas for UserOp → then simulate.” Here, fee selection belongs to the **bundler’s** transaction, not the UserOp, so all of that can run in parallel as soon as the signed UserOp lands. For example:
 
 ```ts
-const [feeData, nonce, gas, verified, sim] = await Promise.all([
+const [fee, nonce, gas, verified, sim] = await Promise.all([
   this.quicknodeProvider.getFeeData(chainId),
   this.quicknodeProvider.getNonce(chainId, wallet.address),
   publicClient.estimateContractGas({
@@ -79,7 +82,7 @@ const [feeData, nonce, gas, verified, sim] = await Promise.all([
     userOperation.nonce,
     userOperation.callData,
   ),
-  backOff(() => this._simulateUserOp(/* ... */)),
+  this.simulateUserOp(/* ... */),
 ]);
 ```
 
@@ -95,9 +98,9 @@ transactionHash = await walletClient.writeContract({
   args: [[userOperation], wallet.address as Hex],
   account: walletClient.account!,
   gas: gasLimit,
-  maxFeePerGas: feeData.maxFeePerGas,
-  maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-  nonce: currentNonce,
+  maxFeePerGas: fee.maxFeePerGas,
+  maxPriorityFeePerGas: fee.maxPriorityFeePerGas,
+  nonce,
 });
 ```
 
@@ -124,6 +127,6 @@ So I’m not “bundling” in the sense of packing multiple UserOps into one `h
 1. **Fewer pre-sign RPCs:** No gas-price or paymaster calls when building the UserOp; the client only needs nonce (and any session/permission data), then sign and submit.
 2. **Better overlap:** Simulation, sponsorship verification, nonce, fee lookup, and `handleOps` gas estimation can run in parallel on the backend instead of being serialized behind user-op fee preparation.
 3. **No batching dependency:** A pool of funded wallets means most requests get a sender immediately; latency is dominated by wallet availability and the parallel backend work, not by waiting for a bundle to fill.
-4. **No fee-driven front-running:** The UserOp has no bundler reward, and submission is to your trusted bundler, so there is no incentive or practical opportunity for a malicious bundler to front-run for priority fees—reducing wasted gas and avoiding latency from replaced or raced submissions.
+4. **No fee-driven front-running:** The UserOp has no bundler reward, and submission is to your trusted bundler, so there is no incentive or practical opportunity for a malicious bundler to front-run for priority fees, reducing wasted gas and avoiding latency from replaced or raced submissions.
 
 This only makes sense when you own the SDK, the bundler, and the wallet pool and can accept the trust and portability tradeoffs. In that setting, I’ve found it a practical way to get sponsored, low-latency execution without the extra round-trips and serialization of the standard ERC-4337 path.

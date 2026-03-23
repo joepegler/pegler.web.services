@@ -158,6 +158,33 @@
                     </ul>
                 </div>
             </article>
+            <article class="proof-system glass-card">
+                <h3 class="proof-system-name">Bulletproof ERC-2612 permit system</h3>
+                <a href="/blog/bulletproof-erc2612-permits.html" class="proof-etherscan-link" aria-label="Read the full blog post">Full write-up <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                <dl class="proof-metrics">
+                    <div class="proof-metric">
+                        <dt>Reliability</dt>
+                        <dd>Zero user-facing permit failures on supported tokens</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Coverage</dt>
+                        <dd>USDC, GHO, Morpho, OpenZeppelin, Solmate and others across 5+ chains</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>False positives caught</dt>
+                        <dd>stETH, bsdETH, Morpho vaults and other tokens that pass heuristic checks but revert on permit()</dd>
+                    </div>
+                </dl>
+                <div class="proof-work">
+                    <h4>Work</h4>
+                    <ul>
+                        <li>Two-pass detection: heuristic multicall probing, then ephemeral-key on-chain simulation</li>
+                        <li>Stub-and-swap runtime pattern so users browse quotes without wallet popups</li>
+                        <li>Consistent version() fallback logic across detection, simulation, and SDK signing</li>
+                        <li>Self-healing batch pipeline with chunk-level error isolation</li>
+                    </ul>
+                </div>
+            </article>
         </div>
     </section>
 

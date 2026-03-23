@@ -10,8 +10,8 @@
     <meta property="og:description" content="Technical notes on transaction infrastructure, account abstraction, and execution systems. Joe Pegler.">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="../blog.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/blog.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,14 +21,14 @@
     <header class="site-header">
         <div class="container">
             <div class="logo">
-                <a href="../index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <a href="/index.html" title="Home"><h1>Joe Pegler</h1></a>
                 <span>Cork, Ireland</span>
             </div>
             <nav aria-label="Main navigation">
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="index.html" aria-current="page">Blog</a></li>
-                    <li><a href="../resume.html">Resume</a></li>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/blog/index.html" aria-current="page">Blog</a></li>
+                    <li><a href="/resume.html">Resume</a></li>
                 </ul>
             </nav>
         </div>
@@ -44,10 +44,17 @@
                 <div class="blog-index-list">
 
                 <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="faster-sponsored-erc4337.html">A faster path for sponsored ERC-4337</a></h2>
+                    <h2 class="blog-card-title"><a href="/blog/bulletproof-erc2612-permits.html">How we built a bulletproof ERC-2612 permit system</a></h2>
+                    <time class="blog-card-date" datetime="2026-03-23T00:00:00.000Z">23 March 2026</time>
+                    <p class="blog-card-summary">Two-pass permit detection, ephemeral-key simulation, and a stub-and-swap runtime pattern for gasless ERC-20 approvals.</p>
+                    <a href="/blog/bulletproof-erc2612-permits.html" class="blog-card-link">Read more</a>
+                </article>
+
+                <article class="blog-card glass-card">
+                    <h2 class="blog-card-title"><a href="/blog/faster-sponsored-erc4337.html">BYOB: A faster path for sponsored ERC-4337</a></h2>
                     <time class="blog-card-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
                     <p class="blog-card-summary">Trusted bundler flow, minimal UserOps, and why it reduces latency.</p>
-                    <a href="faster-sponsored-erc4337.html" class="blog-card-link">Read more</a>
+                    <a href="/blog/faster-sponsored-erc4337.html" class="blog-card-link">Read more</a>
                 </article>
                 </div>
             </div>

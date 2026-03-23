@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Two-pass permit detection, ephemeral-key simulation, and a stub-and-swap runtime pattern for gasless ERC-20 approvals.">
+    <title>How I built a bulletproof ERC-2612 permit system | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How I built a bulletproof ERC-2612 permit system">
+    <meta property="og:description" content="Two-pass permit detection, ephemeral-key simulation, and a stub-and-swap runtime pattern for gasless ERC-20 approvals.">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="/index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/blog/index.html">Blog</a></li>
+                    <li><a href="/resume.html">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">How I built a bulletproof ERC-2612 permit system</h1>
+                        <time class="blog-post-date" datetime="2026-03-23T00:00:00.000Z">23 March 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<p>You hold 500 USDC in an external wallet. Zero ETH. You want to swap. The app says "approve USDC first." You click approve, and nothing happens, because approvals are on-chain transactions, and on-chain transactions cost gas, and you have no gas.</p>
+<p>This is the ERC-20 cul-de-sac. Tokens without native balance can't authorize spending. Getting out usually means funding the EOA from another wallet or an on-ramp, just to send one approval. It's a terrible experience.</p>
+<p><a href="https://eips.ethereum.org/EIPS/eip-2612">ERC-2612</a> fixes this by turning approvals into off-chain signatures. You sign a typed-data message; someone else submits the <code>permit</code> call on your behalf. No native gas needed from the token holder. I shipped this on <a href="https://defi.app">defi.app</a> and it works. But getting there meant solving a harder problem than the spec suggests.</p>
+<hr>
+<h2>The spec lies (sometimes)</h2>
+<p>ERC-2612 defines a <code>permit(owner, spender, value, deadline, v, r, s)</code> function. Tokens that implement it also expose <code>DOMAIN_SEPARATOR()</code>, <code>nonces(address)</code>, and usually <code>name()</code>. So the naive detection strategy is: call those view functions, and if they all return sensible data, the token supports permits.</p>
+<p>This is wrong often enough to be dangerous.</p>
+<p>Lido's stETH exposes every view function. <code>DOMAIN_SEPARATOR</code> returns bytes, <code>nonces</code> returns a uint, <code>name()</code> returns <code>"Liquid staked Ether 2.0"</code>. It looks like a textbook 2612 token. But call <code>permit()</code> and it reverts. Same story with bsdETH on Base (version <code>"3.4.0"</code> breaks the EIP-712 domain). Same with certain Morpho vault tokens that pass every heuristic check but fail the actual permit execution.</p>
+<p>The cost of a false positive is real: the user sees a signing prompt, signs, the transaction reverts, and trust is gone. I needed a system where if a user sees a permit prompt, it will work. Every time.</p>
+<hr>
+<h2>Pass 1: heuristic probing. Does this token look like it supports permits?</h2>
+<p>The first pass is a cheap screening filter. For every new token I index, I batch four <code>aggregate3</code> subcalls per token via Multicall3 in a single RPC round-trip:</p>
+<pre><code>// Per token, four view calls in a single multicall
+const calls = tokenAddresses.flatMap((address) =&gt; [
+  { target: address, callData: "DOMAIN_SEPARATOR()", allowFailure: true },
+  { target: address, callData: "nonces(0x0…0)", allowFailure: true },
+  { target: address, callData: "name()", allowFailure: true },
+  { target: address, callData: "version()", allowFailure: true },
+]);</code></pre>
+<p>Three of these are <strong>required</strong>: <code>DOMAIN_SEPARATOR</code>, <code>nonces</code>, and <code>name</code> must succeed and decode to non-empty values. If any of them are missing or return empty bytes, the token fails immediately. No ERC-2612 token can function without a domain separator, a nonce tracker, or a name for the EIP-712 domain.</p>
+<p>The fourth call, <code>version()</code>, is <strong>optional</strong>. This is where the defaults come in.</p>
+<p><code>version()</code> isn't actually in the ERC-2612 spec. It comes from EIP-712's optional domain fields. Many major tokens, including USDC, use version <code>"1"</code> internally but never expose a <code>version()</code> getter. If I required it, I'd reject half the tokens that genuinely support permits. So I tolerate its absence and default to <code>"1"</code> downstream, which has been reliable across OpenZeppelin, Solmate, and most custom implementations.</p>
+<p>The outcome per token is one of three values: <code>true</code> (candidate: the interface looks right), <code>false</code> (definitely not: required view functions are missing), or <code>null</code> (inconclusive: RPC failed, decode error, try again later). This three-valued logic matters. I never want to commit to "unsupported" based on a transient RPC failure, and I never want to commit to "supported" based on heuristics alone.</p>
+<p>That last point is critical: pass 1 <strong>never writes <code>true</code> to the database</strong>. It can only rule tokens out or nominate them for the real test.</p>
+<hr>
+<h2>Pass 2: prove it. Simulate a real permit with throwaway keys</h2>
+<p>Every pass-1 positive advances here. I don't trust view functions alone. Tokens like stETH and certain Morpho vault tokens expose perfect ERC-2612 interfaces but revert when you actually call <code>permit()</code>. So I call it.</p>
+<p>The idea is simple: generate ephemeral keys that hold nothing, sign a real EIP-712 permit with them, execute it against the live chain, and check whether the allowance was set. If it was, the token genuinely supports permits. If it wasn't, it doesn't, no matter what the view functions claim.</p>
+<p>Here's the core of it:</p>
+<pre><code>async simulatePermitBatch(inputs: Record&lt;ChainId, Address[]&gt;) {
+    // Fresh throwaway keys per chain
+    const ownerAccount = privateKeyToAccount(generatePrivateKey());
+    const spenderAccount = privateKeyToAccount(generatePrivateKey());
+    const owner = ownerAccount.address;
+    const spender = spenderAccount.address;
+
+    for (const [chainId, tokens] of Object.entries(inputs)) {
+        // Step 1: for each candidate token, read name/version/nonce and sign
+        // a real EIP-712 Permit with the ephemeral owner key.
+        // version defaults to "1" if the contract doesn't expose version().
+        const permits = await Promise.all(
+            tokens.map(async (token) =&gt; {
+                const info = await this.generatePermit({
+                    tokenAddress: token,
+                    spender,
+                    value: '1',
+                    chainId,
+                    owner: ownerAccount,
+                });
+                return { token, info };
+            }),
+        );
+
+        // Step 2: multicall permit() then allowance() for each token
+        const contracts = permits.flatMap(({ token, info }) =&gt; [
+            {
+                address: token,
+                abi: ERC2612_PERMIT_ABI,
+                functionName: 'permit',
+                args: [owner, spender, 1n, info.deadline, info.v, info.r, info.s],
+            },
+            {
+                address: token,
+                abi: ERC2612_PERMIT_ABI,
+                functionName: 'allowance',
+                args: [owner, spender],
+            },
+        ]);
+
+        const results = await publicClient.multicall({ contracts, allowFailure: true });
+
+        // Step 3: supported only if permit succeeded AND allowance matches
+        for (let i = 0; i &lt; tokens.length; i++) {
+            const permitOk = results[i * 2]?.status === 'success';
+            const allowanceOk =
+                results[i * 2 + 1]?.status === 'success'
+                &amp;&amp; results[i * 2 + 1].result === 1n;
+            supported = permitOk &amp;&amp; allowanceOk;
+        }
+    }
+}</code></pre>
+<p>This is what makes the two-pass system iron-clad. Pass 1 checks "does this contract have the right interface?" Pass 2 checks "does the permit actually work when you execute it?"</p>
+<p>The simulation runs against the live chain. These are real <code>eth_call</code> executions via multicall, not local EVM forks. The same defaults apply here as in pass 1: <code>version</code> falls back to <code>"1"</code> if the token doesn't expose <code>version()</code>, <code>nonce</code> is read from chain for the ephemeral owner address, and <code>name</code> is read directly from the contract. The EIP-712 domain and Permit typed data are constructed identically to how they'd be constructed for a real user. The only difference is the signer is a throwaway key.</p>
+<p>A token is only marked as supported when <strong>both</strong> calls succeed <strong>and</strong> the resulting allowance equals the expected value. This catches everything pass 1 can't: tokens with correct view functions but broken <code>permit()</code> implementations, tokens with non-standard signature verification, tokens where the domain hash computation doesn't match the contract's expectations. If the contract's <code>permit</code> would revert for a real user, it reverts here too, and I mark it <code>false</code> before any user is ever involved.</p>
+<hr>
+<h2>The pipeline: how both passes connect</h2>
+<p>The two passes run as a batch job over all tokens where <code>supports_eip_2612</code> is still <code>NULL</code> in the database:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│  All asset_to_chain rows where supports_eip_2612 = NULL         │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                    Process in chunks of 10
+                           │
+              ┌────────────▼────────────┐
+              │  Pass 1: Heuristic      │
+              │  Does the interface     │
+              │  look right?            │
+              └────┬────────┬───────┬───┘
+                   │        │       │
+               false      true    null
+                   │        │       │
+                   ▼        ▼       ▼
+           DB: false   ┌────▼────┐  Left as NULL
+                       │ Pass 2  │  (retry next run)
+                       │ Execute │
+                       │ permit  │
+                       └──┬───┬──┘
+                          │   │
+                     pass │   │ fail
+                          ▼   ▼
+                    DB: true  DB: false</code></pre>
+<p>Together, the two passes form a tight funnel. Pass 1 is cheap and eliminates the obvious non-candidates. Pass 2 is more expensive but definitive. It answers the only question that matters: does <code>permit()</code> actually work on this contract?</p>
+<p>Three design decisions reinforce this:</p>
+<p><strong><code>true</code> is only written after pass 2 succeeds.</strong> Heuristics alone never flip the flag. A token can look perfect on paper and still fail the actual permit call: stETH, bsdETH, certain Morpho vaults. The simulation is the gatekeeper.</p>
+<p><strong><code>null</code> means "unsupported" at read time.</strong> When the application checks whether to offer a permit flow, the lookup is:</p>
+<pre><code>return token?.supports_eip_2612 ?? false;</code></pre>
+<p>A token that hasn't been simulated yet, or where the RPC failed, or where the batch threw. All of these read as <code>false</code>. The user gets a standard approval flow instead. I'd rather miss a permit opportunity than show a signing prompt that reverts.</p>
+<p><strong>Chunk-level error isolation.</strong> If one chunk of 10 tokens fails, processing continues with the next chunk. If <code>simulatePermitBatch</code> throws for a set of pass-1 positives, those tokens stay <code>NULL</code> and get retried on the next run. The system is self-healing.</p>
+<hr>
+<h2>Runtime: the stub-and-swap pattern</h2>
+<p>Once <code>supports_eip_2612 = true</code> is in the database, the runtime flow uses a placeholder pattern that avoids wallet popups during quote browsing.</p>
+<pre><code>  User            SDK               API              Wallet
+   │                │                 │                 │
+   │  Request quote │                 │                 │
+   │───────────────>│  GET /quote     │                 │
+   │                │────────────────>│                 │
+   │                │                 │                 │
+   │                │  beforeAction:  │                 │
+   │                │  { data: '0xStubPermit',          │
+   │                │    context: 'PERMIT' }            │
+   │                │<────────────────│                 │
+   │                │                 │                 │
+   │  Browse quotes │  (no wallet     │                 │
+   │  Compare routes│   popup)        │                 │
+   │                │                 │                 │
+   │  Confirm swap  │                 │                 │
+   │───────────────>│  signTypedData  │                 │
+   │                │────────────────────────────────── >│
+   │                │                 │    EIP-712 sign │
+   │                │< ─────────────────────────────────│
+   │                │                 │                 │
+   │                │  POST /action   │                 │
+   │                │  { signature,   │                 │
+   │                │    deadline,    │                 │
+   │                │    nonce }      │                 │
+   │                │────────────────>│                 │
+   │                │                 │                 │
+   │                │  Real calldata: │                 │
+   │                │  permit() +     │                 │
+   │                │  transferFrom() │                 │
+   │                │<────────────────│                 │
+   │                │                 │                 │
+   │                │  Execute batch  │                 │
+   │                │────────────────>│                 │
+   │  Swap complete │                 │                 │
+   │<───────────────│                 │                 │</code></pre>
+<p><strong>At quote time</strong>, the backend includes the permit as a <code>beforeAction</code> step, but with synthetic placeholder data:</p>
+<pre><code>{
+    data: '0xStubPermit',
+    customData: { context: 'PERMIT' }
+}</code></pre>
+<p>No real signature, no wallet interaction. The user can browse quotes, compare routes, and change their mind without being interrupted by signing prompts.</p>
+<p><strong>At confirm time</strong>, the SDK detects the stub:</p>
+<pre><code>private shouldUsePermit(beforeAction): boolean {
+    return beforeAction?.transactionRequests?.some(
+        (tx) =&gt; tx.customData?.context === 'PERMIT' &amp;&amp; tx.data === '0xStubPermit'
+    ) ?? false;
+}</code></pre>
+<p>When the user commits, the SDK requests the EIP-2612 signature from their wallet, sends the <code>{ deadline, nonce, signature }</code> back to the API, and the API returns real calldata (the actual <code>permit()</code> call plus the <code>transferFrom</code>), replacing the stub. Execution proceeds with proven calldata.</p>
+<p>The SDK-side signing handles the same <code>version()</code> quirk I deal with server-side:</p>
+<pre><code>const [name, nonce, version] = await Promise.all([
+  publicClient.readContract({
+    address: tokenAddress,
+    abi,
+    functionName: "name",
+  }),
+  publicClient.readContract({
+    address: tokenAddress,
+    abi,
+    functionName: "nonces",
+    args: [owner],
+  }),
+  publicClient
+    .readContract({ address: tokenAddress, abi, functionName: "version" })
+    .catch(() =&gt; "1"), // Default to "1" if version() doesn't exist
+]);
+
+const domain = {
+  name,
+  version: String(version),
+  chainId,
+  verifyingContract: tokenAddress,
+};</code></pre>
+<p>The <code>.catch(() =&gt; '1')</code> on <code>version()</code> is the same fuzzy tolerance I apply during detection. If the token doesn't expose <code>version()</code>, I use <code>"1"</code>. This has been reliable across every 2612 implementation I've encountered: OpenZeppelin, Solmate, USDC, Aave's GHO, Morpho's token, and others.</p>
+<hr>
+<h2>Dev quirks and lessons</h2>
+<p><strong>The <code>version()</code> default is load-bearing.</strong> This single design decision, <code>.catch(() =&gt; '1')</code>, unlocks permits for a huge number of tokens that technically comply with ERC-2612 but omit the optional <code>version()</code> accessor. Both passes use the same default, which means the heuristic and the simulation are constructing identical EIP-712 domains. If the default works in the simulation, it will work for the real user. If it doesn't, the simulation catches it and the token is marked unsupported. The default is never a guess that goes untested.</p>
+<p><strong>Defaults propagate consistently across the stack.</strong> The server-side simulation, the batch heuristic job, and the SDK-side signing code all share the same fallback logic: read <code>name</code> and <code>nonces</code> from chain, try <code>version()</code>, default to <code>"1"</code>. This means the exact domain that I prove in pass 2 is the exact domain the user will sign against at runtime. No domain mismatch between detection and execution.</p>
+<p><strong>Gas is pre-quoted with fixed estimates.</strong> Rather than calling <code>estimateGas</code> on every permit (which would add latency to every quote), I use fixed per-chain gas constants. The permit call is predictable enough that static estimates work well:</p>
+<pre><code>Ethereum:  105,000 gas
+Base:       72,000 gas
+Arbitrum:   72,000 gas
+Sonic:      80,000 gas
+BSC:        80,000 gas</code></pre>
+<p><strong>New tokens start conservative.</strong> When I index a previously unseen token, pass 1 runs inline. If it returns <code>false</code>, I persist that immediately. If it returns <code>true</code> or <code>null</code>, I persist <code>null</code>, and the token won't be offered as permit-capable until the batch job runs pass 2 and confirms it. No user is ever the first to test a permit.</p>
+<hr>
+<h2>Results</h2>
+<p>Zero user-facing permit failures on tokens marked as supported. Every <code>true</code> in the database has been proven by an actual on-chain permit execution with ephemeral keys before any real user signed anything.</p>
+<p>The conservative <code>null → false</code> policy means I occasionally miss permit opportunities. A token that supports 2612 but hasn't been simulated yet will get a standard approval flow. That's the right tradeoff. A missed optimization is invisible; a failed signing prompt is not.</p>
+<p>Try this flow with zero native balance and a 2612-enabled token. If you hit edge cases or unsupported variants, <a href="https://x.com/Joepegler">ping me</a>. I am always keen to hear about new ones.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>
