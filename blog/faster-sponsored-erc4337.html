@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trusted bundler flow, minimal UserOps, and why it reduces latency.">
-    <title>A faster path for sponsored ERC-4337 | Joe Pegler</title>
+    <meta name="description" content="BYOB (Bring Your Own Bundler): trusted bundler flow, minimal UserOps, and why it reduces latency.">
+    <title>BYOB: A faster path for sponsored ERC-4337 | Joe Pegler</title>
     <meta property="og:type" content="article">
-    <meta property="og:title" content="A faster path for sponsored ERC-4337">
-    <meta property="og:description" content="Trusted bundler flow, minimal UserOps, and why it reduces latency.">
+    <meta property="og:title" content="BYOB: A faster path for sponsored ERC-4337">
+    <meta property="og:description" content="BYOB (Bring Your Own Bundler): trusted bundler flow, minimal UserOps, and why it reduces latency.">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="../styles.css">
@@ -39,11 +39,11 @@
 
                 <article class="blog-post">
                     <header class="blog-post-header">
-                        <h1 class="blog-post-title">A faster path for sponsored ERC-4337</h1>
+                        <h1 class="blog-post-title">BYOB: A faster path for sponsored ERC-4337</h1>
                         <time class="blog-post-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
                     </header>
                     <div class="blog-content prose">
-<h1>A faster path for sponsored ERC-4337: trusted bundler and minimal UserOps</h1>
+<p><strong>BYOB</strong> means <strong>Bring Your Own Bundler</strong>: a trusted first-party bundler flow with minimal UserOps and lower latency.</p>
 <p>In the usual ERC-4337 story, bundlers collect <code>UserOperation</code>s from an alt-mempool, simulate them, and submit via <code>EntryPoint.handleOps()</code>. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real <code>maxFeePerGas</code>, <code>maxPriorityFeePerGas</code>, and <code>preVerificationGas</code>, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. I found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.</p>
 <p>This post is a short technical note on how that works and why it’s faster, without claiming it’s the right choice for every team, only that it’s a viable optimization when you control the client, the bundler, and the wallet pool.</p>
 <hr>
