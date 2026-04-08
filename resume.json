@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Transaction infrastructure · Execution systems · SDKs",
+    "label": "Full-stack engineer · Transaction infrastructure · SDKs",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Infrastructure engineer focused on protocol and transaction systems end to end: SDKs, execution pipelines, developer tooling, backend and integration surfaces. Blockchain infra across EVM and Solana. Used to 0→1 environments and high-ownership roles.",
+    "summary": "Full-stack engineer with production experience across backend, frontend, mobile, and SDK systems, with a current focus on transaction infrastructure and execution. I build from 0 to 1 across product and platform layers, from UI and mobile surfaces to backend pipelines and developer tooling. Blockchain infra across EVM and Solana.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -30,11 +30,22 @@
       "isCurrentRole": true,
       "start": { "year": 2025, "month": 5 },
       "end": {},
+      "techStack": [
+        "TypeScript",
+        "Node.js",
+        "NestJS",
+        "PostgreSQL",
+        "Redis",
+        "viem",
+        "ethers.js",
+        "EVM",
+        "Solana"
+      ],
       "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed and shipped an internal transaction bundler with retries, simulation, and Sourcify plus ABI-backed error decoding to increase delivery reliability.",
+        "Designed and shipped an internal transaction bundler with retries, simulation, and Sourcify plus ABI-backed error decoding to increase delivery reliability across product-facing execution flows.",
         "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay to expose one execution surface instead of chain-specific flows.",
-        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart accounts, quote, and execution paths, reducing integration load for product teams.",
+        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart accounts, quote, and execution paths, reducing integration load for frontend and backend product teams.",
         "Delivered EVM plus Solana simulation and sponsorship infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
       ]
     },
@@ -50,6 +61,17 @@
       "isCurrentRole": false,
       "start": { "year": 2023, "month": 12 },
       "end": { "year": 2025, "month": 5 },
+      "techStack": [
+        "TypeScript",
+        "Node.js",
+        "Bun",
+        "viem",
+        "Safe",
+        "EIP-712",
+        "EIP-1271",
+        "Passkeys",
+        "Vitest"
+      ],
       "summary": "Owned the core developer SDK for smart accounts and multi-chain execution.",
       "highlights": [
         "Led architecture and API design for the flagship TypeScript SDK used by teams building smart-account and execution products.",
@@ -70,6 +92,15 @@
       "isCurrentRole": false,
       "start": { "year": 2021, "month": 7 },
       "end": { "year": 2023, "month": 11 },
+      "techStack": [
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Graph Protocol",
+        "Solidity",
+        "EVM",
+        "Docker"
+      ],
       "summary": "Led 0 to 1 delivery of Enso's client dApp and execution stack.",
       "highlights": [
         "Owned end-to-end delivery of the primary Ethereum dApp, from frontend experience to backend execution, while requirements and product scope were still moving.",
@@ -89,6 +120,14 @@
       "isCurrentRole": false,
       "start": { "year": 2019, "month": 8 },
       "end": { "year": 2021, "month": 7 },
+      "techStack": [
+        "TypeScript",
+        "React",
+        "React Native",
+        "Node.js",
+        "CI/CD",
+        "GitHub Actions"
+      ],
       "summary": "Led the trading interface and deployment system for the live exchange product.",
       "highlights": [
         "Led delivery of the platform's trading UI, owning architecture, core feature rollout, and engineering standards across a small team.",

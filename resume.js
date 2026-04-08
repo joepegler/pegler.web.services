@@ -198,6 +198,7 @@
       const dateRange = formatDateRange(entry);
       const location = entry.location || "";
       const summary = entry.summary || "";
+      const techStack = Array.isArray(entry.techStack) ? entry.techStack : [];
       const highlights = entry.highlights || [];
 
       html += '<article class="resume-job resume-job-card">';
@@ -208,6 +209,17 @@
       html += `<p class="resume-job-meta">${metaParts.join(" · ")}</p>`;
       if (summary)
         html += `<p class="resume-job-summary">${escapeHtml(summary)}</p>`;
+      if (techStack.length) {
+        const stack = techStack
+          .map(function (item) {
+            return item && item.trim ? item.trim() : String(item);
+          })
+          .filter(Boolean)
+          .map(escapeHtml)
+          .join(" · ");
+        if (stack)
+          html += `<p class="resume-job-stack"><strong>Tech Stack:</strong> ${stack}</p>`;
+      }
       if (highlights.length) {
         html += '<ul class="resume-job-highlights">';
         highlights.forEach(function (h) {

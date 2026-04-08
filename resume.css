@@ -125,6 +125,7 @@ body.resume-page {
 .resume-contact,
 .resume-job-meta,
 .resume-job-summary,
+.resume-job-stack,
 .resume-job-highlights,
 .resume-selected-impact-list {
   overflow-wrap: anywhere;
@@ -218,6 +219,18 @@ body.resume-page {
   color: var(--text-secondary);
   line-height: 1.5;
   margin: 0 0 0.5rem;
+}
+
+.resume-job-stack {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+}
+
+.resume-job-stack strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .resume-job-highlights {
@@ -342,6 +355,7 @@ body.resume-page {
 
   .resume-job-meta,
   .resume-job-summary,
+  .resume-job-stack,
   .resume-selected-impact-list li,
   .resume-job-highlights {
     font-size: 0.85rem;
@@ -449,6 +463,7 @@ body.resume-page {
   .resume-summary,
   .resume-job-meta,
   .resume-job-summary,
+  .resume-job-stack,
   .resume-selected-impact-list li,
   .resume-job-highlights,
   .resume-skills-list li,
