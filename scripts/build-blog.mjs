@@ -8,12 +8,14 @@ import { markdownItShikiTwoslashSetup } from "markdown-it-shiki-twoslash";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const BLOG_OUT = path.join(ROOT, "blog");
-const POSTS_SOURCES = [
-  path.join(ROOT, "post1.md"),
-  ...(fs.existsSync(path.join(ROOT, "posts"))
-    ? fs.readdirSync(path.join(ROOT, "posts")).map((f) => path.join(ROOT, "posts", f)).filter((p) => p.endsWith(".md"))
-    : []),
-].filter((p) => fs.existsSync(p));
+const rootPostSources = fs
+  .readdirSync(ROOT)
+  .filter((f) => /^post\d+.*\.md$/.test(f))
+  .map((f) => path.join(ROOT, f));
+const nestedPostSources = fs.existsSync(path.join(ROOT, "posts"))
+  ? fs.readdirSync(path.join(ROOT, "posts")).map((f) => path.join(ROOT, "posts", f)).filter((p) => p.endsWith(".md"))
+  : [];
+const POSTS_SOURCES = [...rootPostSources, ...nestedPostSources].filter((p) => fs.existsSync(p));
 
 function layout(options) {
   const { title, description, content, isIndex = false, posts = [] } = options;
@@ -158,7 +160,7 @@ ${bodyHtml}
     posts.push({ slug, title, date, summary });
   }
 
-  posts.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  posts.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
 
   const indexHtml = layoutIndex(posts);
   fs.writeFileSync(path.join(BLOG_OUT, "index.html"), indexHtml, "utf-8");

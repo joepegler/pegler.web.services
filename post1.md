@@ -1,5 +1,5 @@
 ---
-title: BYOB: A faster path for sponsored ERC-4337
+title: "BYOB: A faster path for sponsored ERC-4337"
 date: 2026-03-20
 summary: Trusted bundler flow, minimal UserOps, and why it reduces latency.
 slug: faster-sponsored-erc4337

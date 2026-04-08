@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why deterministic fixtures matter for Ethereum integration tests, when Statecraft is a strong fit, and when simpler setups are better.">
+    <title>Why I built Statecraft for Ethereum integration testing | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Why I built Statecraft for Ethereum integration testing">
+    <meta property="og:description" content="Why deterministic fixtures matter for Ethereum integration tests, when Statecraft is a strong fit, and when simpler setups are better.">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="index.html">Blog</a></li>
+                    <li><a href="../resume.html">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">Why I built Statecraft for Ethereum integration testing</h1>
+                        <time class="blog-post-date" datetime="2026-04-08T00:00:00.000Z">8 April 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<h1>Why I built Statecraft for Ethereum integration testing</h1>
+<p>I built <a href="https://statecraft.services/">Statecraft</a> because I kept seeing the same test failure pattern in Ethereum application teams. Integration tests started clean, then slowly accumulated hidden setup in <code>beforeEach</code>, chain state assumptions, and helper files that only one or two people understood. That setup looked convenient at first, but it made failures harder to reproduce and made parallel runs noisy.</p>
+<p>Statecraft gives me a more explicit model: each test declares setup as typed scenario fixtures in one visible pipeline. I can read a test and immediately see setup order, chain runtime expectations, and seeded state.</p>
+<h2>Why teams might use Statecraft</h2>
+<p>I see Statecraft as most useful when a team wants deterministic integration tests without replacing the rest of their stack:</p>
+<ul>
+<li><strong>Explicit setup order.</strong> <code>scenario(...)</code> makes fixture order visible, so setup does not hide inside hook timing.</li>
+<li><strong>Deterministic chain state.</strong> Forked tests can pin blocks and keep assumptions reproducible.</li>
+<li><strong>Composable fixtures.</strong> Teams can combine only the setup they need, such as chain runtime, funded wallet, or ERC-20 balances.</li>
+<li><strong>Parallel-friendly test files.</strong> Isolated runtimes reduce cross-test state coupling as suites grow.</li>
+<li><strong>Viem-first TypeScript ergonomics.</strong> It fits teams already writing tests with TypeScript and viem.</li>
+</ul>
+<h2>Why this matters in practice</h2>
+<p>When integration tests are unstable, teams lose confidence in refactors and ship velocity slows. In my experience, the root cause is often not one bad assertion. The root cause is hidden setup behavior and unclear runtime state. I built Statecraft to reduce that class of failure by making setup explicit and typed.</p>
+<p>This does not make every test perfect. It does make failure analysis more straightforward because the setup pipeline is directly in front of you.</p>
+<h2>When I would skip Statecraft</h2>
+<p>I would not force Statecraft into every project:</p>
+<ul>
+<li>If tests are mostly unit tests with minimal chain interaction, the extra fixture layer can be unnecessary.</li>
+<li>If the integration surface is very small and stable, simple hand-written setup might be sufficient.</li>
+<li>If a team needs a full framework that manages broader blockchain app concerns beyond integration setup, Statecraft is intentionally narrower.</li>
+</ul>
+<h2>A practical adoption path</h2>
+<p>I usually recommend introducing Statecraft in one high-value integration suite first:</p>
+<ol>
+<li>Pick a flaky or high-maintenance flow.</li>
+<li>Move setup into a <code>scenario(...)</code> pipeline.</li>
+<li>Pin fork state where reproducibility matters.</li>
+<li>Keep the rest of the test runner and assertion stack unchanged.</li>
+<li>Expand only after the team sees easier debugging and cleaner test readability.</li>
+</ol>
+<p>That incremental path keeps migration risk low while still giving clear signal on whether the approach improves reliability for your codebase.</p>
+<p>If you want the project overview and examples, use the <a href="https://statecraft.services/">Statecraft site</a> and the <a href="https://github.com/joepegler/statecraft">GitHub repository</a>.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>

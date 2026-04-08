@@ -13,6 +13,7 @@
     ]
   },
   "selectedImpact": [
+    "Built and maintain Statecraft, an open-source TypeScript SDK for deterministic Ethereum integration testing with explicit scenario fixtures and isolated chain runtimes.",
     "Shipped an in-house transaction bundler with retry logic, simulation, and structured error decoding, enabling stable gasless and sponsored flows.",
     "Led the TypeScript SDK at Biconomy for smart accounts and multi-chain execution: modern signing (EIP-712/1271, passkeys), production integrations, and clear developer experience.",
     "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and sponsorship systems.",
@@ -44,6 +45,7 @@
       "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
         "Designed and shipped an internal transaction bundler with retries, simulation, and Sourcify plus ABI-backed error decoding to increase delivery reliability across product-facing execution flows.",
+        "Built and published Statecraft as an open-source SDK to make Ethereum integration tests deterministic through typed scenario fixtures, pinned chain state, and per-file isolated runtimes.",
         "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay to expose one execution surface instead of chain-specific flows.",
         "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart accounts, quote, and execution paths, reducing integration load for frontend and backend product teams.",
         "Delivered EVM plus Solana simulation and sponsorship infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
@@ -74,8 +76,9 @@
       ],
       "summary": "Owned the core developer SDK for smart accounts and multi-chain execution.",
       "highlights": [
-        "Led architecture and API design for the flagship TypeScript SDK used by teams building smart-account and execution products.",
+        "Built the flagship TypeScript SDK from scratch and led architecture plus API design; as of Apr 2026 the package (@biconomy/abstractjs) records 7,652 weekly and 29,868 monthly downloads.",
         "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
+        "Primary contributor to the open-source SDK repository with 97 commits, establishing the core architecture and initial implementation across account and execution flows.",
         "Shipped viem-based modular clients with Safe support, cutting complexity for account and bundler integration paths.",
         "Hardened production readiness with typed errors, composable batching, and CI coverage with Vitest, Bun, GitHub Actions, and Codecov."
       ]

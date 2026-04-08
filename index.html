@@ -185,6 +185,33 @@
                     </ul>
                 </div>
             </article>
+            <article class="proof-system glass-card">
+                <h3 class="proof-system-name">Statecraft deterministic test SDK</h3>
+                <a href="https://statecraft.services/" target="_blank" rel="noopener noreferrer" class="proof-etherscan-link" aria-label="Visit Statecraft website">Project site <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                <dl class="proof-metrics">
+                    <div class="proof-metric">
+                        <dt>Problem</dt>
+                        <dd>Ethereum integration tests often hide setup order and drift into flaky helper stacks</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Approach</dt>
+                        <dd>Typed scenario fixtures with explicit setup order and pinned chain state</dd>
+                    </div>
+                    <div class="proof-metric">
+                        <dt>Outcome</dt>
+                        <dd>Clearer integration tests with deterministic, reproducible setup as suites grow</dd>
+                    </div>
+                </dl>
+                <div class="proof-work">
+                    <h4>Work</h4>
+                    <ul>
+                        <li>Designed scenario pipeline primitives for TypeScript and viem-based tests</li>
+                        <li>Implemented chain runtime fixtures for local and forked workflows</li>
+                        <li>Documented adoption path from hook-heavy tests to explicit fixture composition</li>
+                        <li>Shipped as open source with docs and runnable examples</li>
+                    </ul>
+                </div>
+            </article>
         </div>
     </section>
 
@@ -195,6 +222,7 @@
             <ul class="impact-list" aria-label="Selected impact">
                 <li>In-house bundler in production. Retries, simulation, multi-chain routes (LiFi, Jupiter, 1inch, Odos, LayerZero).</li>
                 <li>Led TypeScript SDK for smart accounts and multi-chain execution at biconomy. Gasless flows, EIP-712/1271, passkeys.</li>
+                <li>Built Statecraft, an open-source SDK for deterministic Ethereum integration testing with explicit TypeScript scenario fixtures.</li>
                 <li>Cross-chain execution and sponsored flows with pre-execution validation (slippage, state overrides).</li>
                 <li>Main dApp dev at enso. Decentralized trades and actions on Ethereum.</li>
                 <li>Simulation, retry logic, typed SDKs. Fewer production incidents.</li>
@@ -268,6 +296,24 @@
                     <p><strong>System:</strong> TypeScript SDK for smart accounts and multi-chain execution. Modular viem-based client, Safe support. EIP-712/1271 signing (P-256/passkeys). Quote/sign/execute flows, session permissions. Gas and latency optimisation via bundler integration and concurrency. Composable batching, typed errors, docs. CI: Vitest, Bun, GitHub Actions, Codecov; automated funding.</p>
                     <p><strong>Result:</strong> Production SDK powering gasless and account-abstracted flows with clear DX and maintainable test coverage.</p>
                     <a href="resume.html" class="case-study-link">View full resume <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                </article>
+                <article class="case-study glass-card">
+                    <div class="case-study-header">
+                        <h3>Statecraft</h3>
+                        <span class="client-role">Open-source side project · 2026 – Present</span>
+                    </div>
+                    <div class="ownership-tags">
+                        <span class="ownership-tag">Owned architecture</span>
+                        <span class="ownership-tag">Shipped SDK</span>
+                        <span class="ownership-tag">Wrote docs</span>
+                    </div>
+                    <p><strong>Problem:</strong> Integration tests for Ethereum apps often become brittle when setup depends on hidden hooks and ad hoc helper stacks.</p>
+                    <p><strong>System:</strong> A TypeScript-first SDK that composes explicit scenario fixtures like chain, fork, funded wallet, and token balance setup into one deterministic test pipeline for viem-based projects.</p>
+                    <p><strong>Result:</strong> A clearer path to deterministic integration tests and parallel-friendly suite design without replacing existing test runners.</p>
+                    <div class="case-study-links">
+                        <a href="https://statecraft.services/" target="_blank" rel="noopener noreferrer" class="case-study-link" aria-label="Visit Statecraft website">Project site <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                        <a href="https://github.com/joepegler/statecraft" target="_blank" rel="noopener noreferrer" class="case-study-link" aria-label="View Statecraft GitHub repository">GitHub <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    </div>
                 </article>
                 <article class="case-study glass-card">
                     <div class="case-study-header">
