@@ -71,6 +71,9 @@
         "Safe",
         "EIP-712",
         "EIP-1271",
+        "ERC-4337",
+        "ERC-7579",
+        "EIP-7702",
         "Passkeys",
         "Vitest"
       ],

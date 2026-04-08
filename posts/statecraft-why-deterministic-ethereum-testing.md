@@ -7,8 +7,6 @@ slug: statecraft-why-deterministic-ethereum-testing
 
 # Why I built Statecraft after debugging flaky Ethereum integration tests
 
-If the output reads like product marketing or documentation, it has failed.
-
 ## Opening: concrete failure
 
 I hit this failure enough times that I stopped calling it random.
