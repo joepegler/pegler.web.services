@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Why deterministic fixtures matter for Ethereum integration tests, when Statecraft is a strong fit, and when simpler setups are better.">
-    <title>Why I built Statecraft for Ethereum integration testing | Joe Pegler</title>
+    <meta name="description" content="A technical write-up on recurring Ethereum integration test failures, why hidden setup causes non-determinism, and how I switched to explicit scenario pipelines.">
+    <title>Why I built Statecraft after debugging flaky Ethereum integration tests | Joe Pegler</title>
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Why I built Statecraft for Ethereum integration testing">
-    <meta property="og:description" content="Why deterministic fixtures matter for Ethereum integration tests, when Statecraft is a strong fit, and when simpler setups are better.">
+    <meta property="og:title" content="Why I built Statecraft after debugging flaky Ethereum integration tests">
+    <meta property="og:description" content="A technical write-up on recurring Ethereum integration test failures, why hidden setup causes non-determinism, and how I switched to explicit scenario pipelines.">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="../styles.css">
@@ -39,43 +39,73 @@
 
                 <article class="blog-post">
                     <header class="blog-post-header">
-                        <h1 class="blog-post-title">Why I built Statecraft for Ethereum integration testing</h1>
+                        <h1 class="blog-post-title">Why I built Statecraft after debugging flaky Ethereum integration tests</h1>
                         <time class="blog-post-date" datetime="2026-04-08T00:00:00.000Z">8 April 2026</time>
                     </header>
                     <div class="blog-content prose">
-<h1>Why I built Statecraft for Ethereum integration testing</h1>
-<p>I built <a href="https://statecraft.services/">Statecraft</a> because I kept seeing the same test failure pattern in Ethereum application teams. Integration tests started clean, then slowly accumulated hidden setup in <code>beforeEach</code>, chain state assumptions, and helper files that only one or two people understood. That setup looked convenient at first, but it made failures harder to reproduce and made parallel runs noisy.</p>
-<p>Statecraft gives me a more explicit model: each test declares setup as typed scenario fixtures in one visible pipeline. I can read a test and immediately see setup order, chain runtime expectations, and seeded state.</p>
-<h2>Why teams might use Statecraft</h2>
-<p>I see Statecraft as most useful when a team wants deterministic integration tests without replacing the rest of their stack:</p>
+<h1>Why I built Statecraft after debugging flaky Ethereum integration tests</h1>
+<p>If the output reads like product marketing or documentation, it has failed.</p>
+<h2>Opening: concrete failure</h2>
+<p>I hit this failure enough times that I stopped calling it random.</p>
+<p>A test that verifies token settlement on a mainnet fork passes locally and fails in CI two or three times a week. The assertion is simple. Expected user balance after settlement is <code>120_000000</code>, actual is <code>119_998742</code>. I rerun the same commit and it passes.</p>
+<p>The first version of that test looked like this:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #D2A8FF">beforeEach</span><span style="color: #C9D1D9">(</span><span style="color: #FF7B72">async</span><span style="color: #C9D1D9"> () </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">  runtime </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">startFork</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">    rpcUrl: process.env.</span><span style="color: #79C0FF">MAINNET_RPC_URL</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #8B949E">// no block pin here</span></div><div class='line'><span style="color: #C9D1D9">  });</span></div><div class='line'></div><div class='line'><span style="color: #C9D1D9">  clients </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">makeClients</span><span style="color: #C9D1D9">(runtime);</span></div><div class='line'><span style="color: #C9D1D9">  wallets </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">loadWalletsFromMnemonic</span><span style="color: #C9D1D9">(process.env.</span><span style="color: #79C0FF">TEST_MNEMONIC</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">seedUsdc</span><span style="color: #C9D1D9">(clients.publicClient, wallets.maker.address, </span><span style="color: #79C0FF">120_000000</span><span style="color: #FF7B72">n</span><span style="color: #C9D1D9">);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">deploySettlementRouter</span><span style="color: #C9D1D9">(clients.walletClient);</span></div><div class='line'><span style="color: #C9D1D9">});</span></div><div class='line'></div><div class='line'><span style="color: #D2A8FF">test</span><span style="color: #C9D1D9">(</span><span style="color: #A5D6FF">"settles maker order"</span><span style="color: #C9D1D9">, </span><span style="color: #FF7B72">async</span><span style="color: #C9D1D9"> () </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">result</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">settleOrder</span><span style="color: #C9D1D9">(clients, wallets.maker, order);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #D2A8FF">expect</span><span style="color: #C9D1D9">(result.makerUsdcBalance).</span><span style="color: #D2A8FF">toBe</span><span style="color: #C9D1D9">(</span><span style="color: #79C0FF">120_000000</span><span style="color: #FF7B72">n</span><span style="color: #C9D1D9">);</span></div><div class='line'><span style="color: #C9D1D9">});</span></div></code></div></pre>
+<p>When this fails, the test body tells me nothing about state assumptions. I have to inspect hooks, helper files, and runtime startup code. By the time I find the cause, I have burned an hour.</p>
+<h2>Pattern recognition</h2>
+<p>I saw the same pattern across multiple Ethereum projects and codebases:</p>
 <ul>
-<li><strong>Explicit setup order.</strong> <code>scenario(...)</code> makes fixture order visible, so setup does not hide inside hook timing.</li>
-<li><strong>Deterministic chain state.</strong> Forked tests can pin blocks and keep assumptions reproducible.</li>
-<li><strong>Composable fixtures.</strong> Teams can combine only the setup they need, such as chain runtime, funded wallet, or ERC-20 balances.</li>
-<li><strong>Parallel-friendly test files.</strong> Isolated runtimes reduce cross-test state coupling as suites grow.</li>
-<li><strong>Viem-first TypeScript ergonomics.</strong> It fits teams already writing tests with TypeScript and viem.</li>
+<li>Setup starts in one <code>beforeEach</code>, then moves into helpers.</li>
+<li>Helper calls start sharing mutable runtime handles.</li>
+<li>Forks stop being pinned because pinning is &quot;temporary.&quot;</li>
+<li>One new test mutates state and another test starts failing in parallel CI.</li>
 </ul>
-<h2>Why this matters in practice</h2>
-<p>When integration tests are unstable, teams lose confidence in refactors and ship velocity slows. In my experience, the root cause is often not one bad assertion. The root cause is hidden setup behavior and unclear runtime state. I built Statecraft to reduce that class of failure by making setup explicit and typed.</p>
-<p>This does not make every test perfect. It does make failure analysis more straightforward because the setup pipeline is directly in front of you.</p>
-<h2>When I would skip Statecraft</h2>
-<p>I would not force Statecraft into every project:</p>
+<p>The root cause is not flaky assertions. The root cause is hidden setup and implicit chain state.</p>
+<p>Most failures looked different on the surface, but they came from the same place: test state was assembled across files, not declared where the test ran.</p>
+<h2>Why existing approaches fail</h2>
+<h3><code>beforeEach</code> hooks</h3>
+<p>Hooks hide ordering and ownership. If <code>fundWallet()</code> runs before <code>deployRouter()</code> one day and after it the next day because someone touched helpers, behavior changes without any change in the test body.</p>
+<h3>Helper abstractions</h3>
+<p>Helpers remove duplication, but they also remove visibility. I have seen &quot;single helper&quot; files that start runtimes, deploy contracts, set balances, impersonate accounts, and return five clients. That is not abstraction. That is state compression.</p>
+<h3>Fork drift from non-pinned state</h3>
+<p>Unpinned fork tests are unstable by design. If your test depends on liquidity depth, nonce, allowance, oracle state, or an account's existing balance, you have moving input every time the head block advances.</p>
+<h3>Parallel test interference</h3>
+<p>Parallel file execution magnifies hidden coupling. Shared runtime reuse without explicit rollback creates test-order dependencies. Local runs may pass because files run in one order. CI shards run a different order and expose the coupling.</p>
+<h2>The model I switched to</h2>
+<p>I switched to an explicit <code>scenario(...)</code> pipeline where each test declares setup in order.</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">import</span><span style="color: #C9D1D9"> { test, expect } </span><span style="color: #FF7B72">from</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">"vitest"</span><span style="color: #C9D1D9">;</span></div><div class='line'><span style="color: #FF7B72">import</span><span style="color: #C9D1D9"> { parseEther, parseUnits } </span><span style="color: #FF7B72">from</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">"viem"</span><span style="color: #C9D1D9">;</span></div><div class='line'><span style="color: #FF7B72">import</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">  scenario,</span></div><div class='line'><span style="color: #C9D1D9">  withFork,</span></div><div class='line'><span style="color: #C9D1D9">  withFundedWallet,</span></div><div class='line'><span style="color: #C9D1D9">  withErc20Balance,</span></div><div class='line'><span style="color: #C9D1D9">} </span><span style="color: #FF7B72">from</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">"@st8craft/core"</span><span style="color: #C9D1D9">;</span></div><div class='line'></div><div class='line'><span style="color: #D2A8FF">test</span><span style="color: #C9D1D9">(</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #A5D6FF">"runs against pinned fork with explicit seeded state"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #D2A8FF">scenario</span><span style="color: #C9D1D9">(</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #D2A8FF">withFork</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">      rpcUrl: process.env.</span><span style="color: #79C0FF">MAINNET_RPC_URL</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">      blockNumber: </span><span style="color: #79C0FF">22124510</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">    }),</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #D2A8FF">withFundedWallet</span><span style="color: #C9D1D9">({ label: </span><span style="color: #A5D6FF">"maker"</span><span style="color: #C9D1D9"> }),</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #D2A8FF">withErc20Balance</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">      wallet: </span><span style="color: #A5D6FF">"maker"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">      token: </span><span style="color: #A5D6FF">"USDC"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">      amount: </span><span style="color: #D2A8FF">parseUnits</span><span style="color: #C9D1D9">(</span><span style="color: #A5D6FF">"120000"</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">6</span><span style="color: #C9D1D9">),</span></div><div class='line'><span style="color: #C9D1D9">    }),</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #FF7B72">async</span><span style="color: #C9D1D9"> ({ </span><span style="color: #FFA657">publicClient</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">maker</span><span style="color: #C9D1D9"> }) </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">      </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">balance</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> publicClient.</span><span style="color: #D2A8FF">getBalance</span><span style="color: #C9D1D9">({ address: maker.address });</span></div><div class='line'><span style="color: #C9D1D9">      </span><span style="color: #D2A8FF">expect</span><span style="color: #C9D1D9">(balance).</span><span style="color: #D2A8FF">toBeGreaterThan</span><span style="color: #C9D1D9">(</span><span style="color: #D2A8FF">parseEther</span><span style="color: #C9D1D9">(</span><span style="color: #A5D6FF">"1"</span><span style="color: #C9D1D9">));</span></div><div class='line'><span style="color: #C9D1D9">    },</span></div><div class='line'><span style="color: #C9D1D9">  ),</span></div><div class='line'><span style="color: #C9D1D9">);</span></div></code></div></pre>
+<p>What used to be hidden is now explicit in one place:</p>
 <ul>
-<li>If tests are mostly unit tests with minimal chain interaction, the extra fixture layer can be unnecessary.</li>
-<li>If the integration surface is very small and stable, simple hand-written setup might be sufficient.</li>
-<li>If a team needs a full framework that manages broader blockchain app concerns beyond integration setup, Statecraft is intentionally narrower.</li>
+<li>Which chain state I run against</li>
+<li>Whether that state is pinned</li>
+<li>Which wallet exists and with what balance</li>
+<li>What dependencies the test callback receives</li>
 </ul>
-<h2>A practical adoption path</h2>
-<p>I usually recommend introducing Statecraft in one high-value integration suite first:</p>
+<p>I can inspect one test and see the full setup contract.</p>
+<h2>What this actually fixes</h2>
+<p>This model fixes three specific problems for me.</p>
+<p>First, reproducibility. A pinned fork plus explicit fixture order means I can rerun the same failing case with the same state assumptions.</p>
+<p>Second, state visibility. I stop guessing where runtime, funding, and deployment happened because setup is declared in the scenario pipeline.</p>
+<p>Third, debugging speed. When a test fails, I narrow my search to one list of fixture steps instead of tracing hook chains through multiple helper modules.</p>
+<p>This does not guarantee bug-free tests. It reduces one class of failure: non-deterministic integration failures caused by hidden or drifting setup state.</p>
+<h2>Tradeoffs and when not to use it</h2>
+<p>I do not use this pattern everywhere.</p>
+<ul>
+<li>If the suite is mostly unit tests, this is extra machinery.</li>
+<li>If integration coverage is tiny and stable, direct setup is faster.</li>
+<li>If you need a full blockchain app framework, this is the wrong layer.</li>
+</ul>
+<p>This is a test setup model, not an application architecture.</p>
+<h2>Adoption strategy</h2>
+<p>I adopt it in one suite first, not across the whole repo.</p>
 <ol>
-<li>Pick a flaky or high-maintenance flow.</li>
-<li>Move setup into a <code>scenario(...)</code> pipeline.</li>
-<li>Pin fork state where reproducibility matters.</li>
-<li>Keep the rest of the test runner and assertion stack unchanged.</li>
-<li>Expand only after the team sees easier debugging and cleaner test readability.</li>
+<li>Pick a flaky path that already burns review or CI time.</li>
+<li>Convert only that file to <code>scenario(...)</code> fixtures.</li>
+<li>Pin fork state for any test that depends on existing chain conditions.</li>
+<li>Keep runner and assertions unchanged.</li>
+<li>Expand only after failures become easier to reproduce and explain.</li>
 </ol>
-<p>That incremental path keeps migration risk low while still giving clear signal on whether the approach improves reliability for your codebase.</p>
-<p>If you want the project overview and examples, use the <a href="https://statecraft.services/">Statecraft site</a> and the <a href="https://github.com/joepegler/statecraft">GitHub repository</a>.</p>
+<p>This keeps migration small and gives a clear signal quickly.</p>
+<p>For project details, see <a href="https://statecraft.services/">Statecraft</a> and the <a href="https://github.com/joepegler/statecraft">GitHub repository</a>.</p>
 
                     </div>
                 </article>

@@ -8,14 +8,13 @@ import { markdownItShikiTwoslashSetup } from "markdown-it-shiki-twoslash";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const BLOG_OUT = path.join(ROOT, "blog");
-const rootPostSources = fs
-  .readdirSync(ROOT)
-  .filter((f) => /^post\d+.*\.md$/.test(f))
-  .map((f) => path.join(ROOT, f));
-const nestedPostSources = fs.existsSync(path.join(ROOT, "posts"))
-  ? fs.readdirSync(path.join(ROOT, "posts")).map((f) => path.join(ROOT, "posts", f)).filter((p) => p.endsWith(".md"))
+const POSTS_DIR = path.join(ROOT, "posts");
+const POSTS_SOURCES = fs.existsSync(POSTS_DIR)
+  ? fs
+      .readdirSync(POSTS_DIR)
+      .map((f) => path.join(POSTS_DIR, f))
+      .filter((p) => p.endsWith(".md"))
   : [];
-const POSTS_SOURCES = [...rootPostSources, ...nestedPostSources].filter((p) => fs.existsSync(p));
 
 function layout(options) {
   const { title, description, content, isIndex = false, posts = [] } = options;
@@ -136,7 +135,7 @@ async function main() {
   for (const filePath of POSTS_SOURCES) {
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(raw);
-    const slug = data.slug || path.basename(filePath, ".md").replace(/^post\d+_?/, "") || path.basename(filePath, ".md");
+    const slug = data.slug || path.basename(filePath, ".md");
     const title = data.title || slug;
     const date = data.date || null;
     const summary = data.summary || "";
