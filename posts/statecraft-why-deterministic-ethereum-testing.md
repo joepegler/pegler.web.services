@@ -1,50 +1,150 @@
 ---
-title: Why I built Statecraft for Ethereum integration testing
+title: Why I built Statecraft after debugging flaky Ethereum integration tests
 date: 2026-04-08
-summary: Why deterministic fixtures matter for Ethereum integration tests, when Statecraft is a strong fit, and when simpler setups are better.
+summary: A technical write-up on recurring Ethereum integration test failures, why hidden setup causes non-determinism, and how I switched to explicit scenario pipelines.
 slug: statecraft-why-deterministic-ethereum-testing
 ---
 
-# Why I built Statecraft for Ethereum integration testing
+# Why I built Statecraft after debugging flaky Ethereum integration tests
 
-I built [Statecraft](https://statecraft.services/) because I kept seeing the same test failure pattern in Ethereum application teams. Integration tests started clean, then slowly accumulated hidden setup in `beforeEach`, chain state assumptions, and helper files that only one or two people understood. That setup looked convenient at first, but it made failures harder to reproduce and made parallel runs noisy.
+If the output reads like product marketing or documentation, it has failed.
 
-Statecraft gives me a more explicit model: each test declares setup as typed scenario fixtures in one visible pipeline. I can read a test and immediately see setup order, chain runtime expectations, and seeded state.
+## Opening: concrete failure
 
-## Why teams might use Statecraft
+I hit this failure enough times that I stopped calling it random.
 
-I see Statecraft as most useful when a team wants deterministic integration tests without replacing the rest of their stack:
+A test that verifies token settlement on a mainnet fork passes locally and fails in CI two or three times a week. The assertion is simple. Expected user balance after settlement is `120_000000`, actual is `119_998742`. I rerun the same commit and it passes.
 
-- **Explicit setup order.** `scenario(...)` makes fixture order visible, so setup does not hide inside hook timing.
-- **Deterministic chain state.** Forked tests can pin blocks and keep assumptions reproducible.
-- **Composable fixtures.** Teams can combine only the setup they need, such as chain runtime, funded wallet, or ERC-20 balances.
-- **Parallel-friendly test files.** Isolated runtimes reduce cross-test state coupling as suites grow.
-- **Viem-first TypeScript ergonomics.** It fits teams already writing tests with TypeScript and viem.
+The first version of that test looked like this:
 
-## Why this matters in practice
+```ts
+beforeEach(async () => {
+  runtime = await startFork({
+    rpcUrl: process.env.MAINNET_RPC_URL!,
+    // no block pin here
+  });
 
-When integration tests are unstable, teams lose confidence in refactors and ship velocity slows. In my experience, the root cause is often not one bad assertion. The root cause is hidden setup behavior and unclear runtime state. I built Statecraft to reduce that class of failure by making setup explicit and typed.
+  clients = makeClients(runtime);
+  wallets = await loadWalletsFromMnemonic(process.env.TEST_MNEMONIC!);
+  await seedUsdc(clients.publicClient, wallets.maker.address, 120_000000n);
+  await deploySettlementRouter(clients.walletClient);
+});
 
-This does not make every test perfect. It does make failure analysis more straightforward because the setup pipeline is directly in front of you.
+test("settles maker order", async () => {
+  const result = await settleOrder(clients, wallets.maker, order);
+  expect(result.makerUsdcBalance).toBe(120_000000n);
+});
+```
 
-## When I would skip Statecraft
+When this fails, the test body tells me nothing about state assumptions. I have to inspect hooks, helper files, and runtime startup code. By the time I find the cause, I have burned an hour.
 
-I would not force Statecraft into every project:
+## Pattern recognition
 
-- If tests are mostly unit tests with minimal chain interaction, the extra fixture layer can be unnecessary.
-- If the integration surface is very small and stable, simple hand-written setup might be sufficient.
-- If a team needs a full framework that manages broader blockchain app concerns beyond integration setup, Statecraft is intentionally narrower.
+I saw the same pattern across multiple Ethereum projects and codebases:
 
-## A practical adoption path
+- Setup starts in one `beforeEach`, then moves into helpers.
+- Helper calls start sharing mutable runtime handles.
+- Forks stop being pinned because pinning is "temporary."
+- One new test mutates state and another test starts failing in parallel CI.
 
-I usually recommend introducing Statecraft in one high-value integration suite first:
+The root cause is not flaky assertions. The root cause is hidden setup and implicit chain state.
 
-1. Pick a flaky or high-maintenance flow.
-2. Move setup into a `scenario(...)` pipeline.
-3. Pin fork state where reproducibility matters.
-4. Keep the rest of the test runner and assertion stack unchanged.
-5. Expand only after the team sees easier debugging and cleaner test readability.
+Most failures looked different on the surface, but they came from the same place: test state was assembled across files, not declared where the test ran.
 
-That incremental path keeps migration risk low while still giving clear signal on whether the approach improves reliability for your codebase.
+## Why existing approaches fail
 
-If you want the project overview and examples, use the [Statecraft site](https://statecraft.services/) and the [GitHub repository](https://github.com/joepegler/statecraft).
+### `beforeEach` hooks
+
+Hooks hide ordering and ownership. If `fundWallet()` runs before `deployRouter()` one day and after it the next day because someone touched helpers, behavior changes without any change in the test body.
+
+### Helper abstractions
+
+Helpers remove duplication, but they also remove visibility. I have seen "single helper" files that start runtimes, deploy contracts, set balances, impersonate accounts, and return five clients. That is not abstraction. That is state compression.
+
+### Fork drift from non-pinned state
+
+Unpinned fork tests are unstable by design. If your test depends on liquidity depth, nonce, allowance, oracle state, or an account's existing balance, you have moving input every time the head block advances.
+
+### Parallel test interference
+
+Parallel file execution magnifies hidden coupling. Shared runtime reuse without explicit rollback creates test-order dependencies. Local runs may pass because files run in one order. CI shards run a different order and expose the coupling.
+
+## The model I switched to
+
+I switched to an explicit `scenario(...)` pipeline where each test declares setup in order.
+
+```ts
+import { test, expect } from "vitest";
+import { parseEther, parseUnits } from "viem";
+import {
+  scenario,
+  withFork,
+  withFundedWallet,
+  withErc20Balance,
+} from "@st8craft/core";
+
+test(
+  "runs against pinned fork with explicit seeded state",
+  scenario(
+    withFork({
+      rpcUrl: process.env.MAINNET_RPC_URL!,
+      blockNumber: 22124510,
+    }),
+    withFundedWallet({ label: "maker" }),
+    withErc20Balance({
+      wallet: "maker",
+      token: "USDC",
+      amount: parseUnits("120000", 6),
+    }),
+    async ({ publicClient, maker }) => {
+      const balance = await publicClient.getBalance({ address: maker.address });
+      expect(balance).toBeGreaterThan(parseEther("1"));
+    },
+  ),
+);
+```
+
+What used to be hidden is now explicit in one place:
+
+- Which chain state I run against
+- Whether that state is pinned
+- Which wallet exists and with what balance
+- What dependencies the test callback receives
+
+I can inspect one test and see the full setup contract.
+
+## What this actually fixes
+
+This model fixes three specific problems for me.
+
+First, reproducibility. A pinned fork plus explicit fixture order means I can rerun the same failing case with the same state assumptions.
+
+Second, state visibility. I stop guessing where runtime, funding, and deployment happened because setup is declared in the scenario pipeline.
+
+Third, debugging speed. When a test fails, I narrow my search to one list of fixture steps instead of tracing hook chains through multiple helper modules.
+
+This does not guarantee bug-free tests. It reduces one class of failure: non-deterministic integration failures caused by hidden or drifting setup state.
+
+## Tradeoffs and when not to use it
+
+I do not use this pattern everywhere.
+
+- If the suite is mostly unit tests, this is extra machinery.
+- If integration coverage is tiny and stable, direct setup is faster.
+- If you need a full blockchain app framework, this is the wrong layer.
+
+This is a test setup model, not an application architecture.
+
+## Adoption strategy
+
+I adopt it in one suite first, not across the whole repo.
+
+1. Pick a flaky path that already burns review or CI time.
+2. Convert only that file to `scenario(...)` fixtures.
+3. Pin fork state for any test that depends on existing chain conditions.
+4. Keep runner and assertions unchanged.
+5. Expand only after failures become easier to reproduce and explain.
+
+This keeps migration small and gives a clear signal quickly.
+
+For project details, see [Statecraft](https://statecraft.services/) and the [GitHub repository](https://github.com/joepegler/statecraft).
