@@ -84,12 +84,11 @@ body {
 #about,
 #expertise,
 #experience,
-#first-90,
+#recommendations,
 #contact,
 #home,
 #systems-built,
-#proof,
-#how-i-think {
+#proof {
     scroll-margin-top: 6rem;
 }
 
@@ -923,39 +922,94 @@ nav ul li a:hover::after {
     }
 }
 
-/* How I Think section */
-.how-i-think {
+/* Recommendations section */
+.recommendations {
     background: var(--bg-secondary);
     position: relative;
+    transform-style: preserve-3d;
 }
 
-.how-i-think .section-intro {
+.recommendations .section-intro {
     margin-bottom: 2rem;
     color: var(--text-secondary);
+    max-width: 760px;
 }
 
-.how-i-think-content {
+.recommendations-grid {
     display: grid;
     gap: 1.5rem;
-    max-width: 800px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
 }
 
-.how-i-think-block {
+.recommendation-card {
     padding: 1.5rem 1.75rem;
     text-align: left;
 }
 
-.how-i-think-block h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-    color: var(--accent-primary);
+.recommendation-quote {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
 }
 
-.how-i-think-block p {
-    color: var(--text-secondary);
+.recommendation-author {
     font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin: 0 0 0.35rem;
+}
+
+.recommendation-author-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: inherit;
+}
+
+.recommendation-author-link:hover {
+    color: var(--accent-primary);
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.recommendation-author-link i {
+    font-size: 0.72rem;
+}
+
+.recommendation-role {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
     margin: 0;
-    line-height: 1.55;
+    line-height: 1.45;
+}
+
+.recommendations-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(34, 197, 94, 0.28);
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.06);
+    transition: var(--transition-smooth);
+}
+
+.recommendations-link:hover {
+    border-color: rgba(34, 197, 94, 0.5);
+    background: rgba(34, 197, 94, 0.12);
+    opacity: 1;
+}
+
+.recommendations-link i:last-child {
+    font-size: 0.75rem;
 }
 
 /* Positioning + Selected Impact – product-style section */
@@ -1474,71 +1528,6 @@ nav ul li a:hover::after {
     gap: 1rem 1.5rem;
 }
 
-/* First 90 days section */
-.first-90 {
-    background: var(--bg-secondary);
-    position: relative;
-    transform-style: preserve-3d;
-}
-
-.first-90 .section-intro {
-    margin-bottom: 2rem;
-}
-
-.ninety-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    position: relative;
-    z-index: 2;
-}
-
-@media (min-width: 900px) {
-    .ninety-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    .ninety-grid {
-        grid-template-columns: repeat(5, 1fr);
-    }
-}
-
-@media (max-width: 400px) {
-    .ninety-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.ninety-card {
-    padding: 1.75rem 1.5rem;
-    text-align: center;
-    transition: var(--transition-smooth);
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(0);
-}
-
-.ninety-card i {
-    font-size: 1.75rem;
-    color: var(--accent-primary);
-    margin-bottom: 1rem;
-    display: block;
-}
-
-.ninety-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-}
-
-.ninety-card p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin: 0;
-    line-height: 1.5;
-}
-
 /* Contact Section */
 .contact {
     background: var(--bg-primary);
@@ -1794,11 +1783,10 @@ footer p {
     #about,
     #expertise,
     #experience,
-    #first-90,
+    #recommendations,
     #contact,
     #home,
     #proof,
-    #how-i-think,
     #systems-built {
         scroll-margin-top: 8rem;
     }
@@ -1894,11 +1882,10 @@ footer p {
     #about,
     #expertise,
     #experience,
-    #first-90,
+    #recommendations,
     #contact,
     #home,
     #proof,
-    #how-i-think,
     #systems-built {
         scroll-margin-top: 9rem;
     }
@@ -1949,7 +1936,7 @@ footer p {
     .service-card,
     .client-item,
     .case-study,
-    .ninety-card {
+    .recommendation-card {
         padding: 1.5rem;
     }
 
