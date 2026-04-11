@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Full-stack engineer · Transaction infrastructure · SDKs",
+    "label": "Senior Full-Stack Engineer · Product, Platforms, and Developer Tooling",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Full-stack engineer with production experience across backend, frontend, mobile, and SDK systems, with a current focus on transaction infrastructure and execution. I build from 0 to 1 across product and platform layers, from UI and mobile surfaces to backend pipelines and developer tooling. Blockchain infra across EVM and Solana.",
+    "summary": "Senior full-stack engineer who ships product and platform systems end to end across React, Node.js, SDKs, and infrastructure. I specialize in high-reliability execution and developer tooling, with deep Web3 experience in smart accounts, simulation, and transaction pipelines.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -13,11 +13,14 @@
     ]
   },
   "selectedImpact": [
-    "Built and maintain Statecraft, an open-source TypeScript SDK for deterministic Ethereum integration testing with explicit scenario fixtures and isolated chain runtimes.",
-    "Shipped an in-house transaction bundler with retry logic, simulation, and structured error decoding, enabling stable gasless and sponsored flows.",
-    "Led the TypeScript SDK at Biconomy for smart accounts and multi-chain execution: modern signing (EIP-712/1271, passkeys), production integrations, and clear developer experience.",
-    "Built defi.app execution infrastructure: multi-chain quote and route orchestration, DeFi action providers, and EVM plus Solana simulation and sponsorship systems.",
-    "Shipped 0→1 product surfaces, from dApp and intents execution at Enso to automated CI/CD for trading interfaces at CoinFLEX."
+    "Built and open-sourced Statecraft, a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
+    "Designed and shipped an internal transaction bundler with retries, simulation, and structured error decoding to improve delivery reliability for sponsored and gasless flows.",
+    "Built a unified quote and route orchestration layer across EVM and Solana providers, replacing chain-specific integrations with a single execution surface.",
+    "Owned the core TypeScript SDK for smart-account, quote, and execution flows, reducing integration complexity for frontend and backend product teams.",
+    "Built Biconomy's flagship TypeScript SDK from scratch and led architecture and API design for smart-account and multi-chain execution integrations.",
+    "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless transaction UX.",
+    "Led end-to-end delivery of Enso's primary dApp and execution stack, spanning frontend product work, backend services, and on-chain data pipelines.",
+    "Built automated CI/CD for CoinFLEX's trading interface and led frontend standards at GameAnalytics, improving release safety and team delivery quality."
   ],
   "work": [
     {
@@ -44,11 +47,11 @@
       ],
       "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed and shipped an internal transaction bundler with retries, simulation, and Sourcify plus ABI-backed error decoding to increase delivery reliability across product-facing execution flows.",
-        "Built and published Statecraft as an open-source SDK to make Ethereum integration tests deterministic through typed scenario fixtures, pinned chain state, and per-file isolated runtimes.",
-        "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay to expose one execution surface instead of chain-specific flows.",
-        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart accounts, quote, and execution paths, reducing integration load for frontend and backend product teams.",
-        "Delivered EVM plus Solana simulation and sponsorship infrastructure, including Jito-aware validation, enabling sponsored transactions across both ecosystems."
+        "Designed and shipped an internal transaction bundler with retries, simulation, and ABI-backed error decoding to improve reliability in product-facing execution flows.",
+        "Built and open-sourced Statecraft to make Ethereum integration tests deterministic through typed fixtures, pinned state, and per-file isolated runtimes.",
+        "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one execution surface.",
+        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart-account, quote, and execution paths used by frontend and backend teams.",
+        "Delivered EVM and Solana simulation plus sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
       ]
     },
     {
@@ -79,11 +82,10 @@
       ],
       "summary": "Owned the core developer SDK for smart accounts and multi-chain execution.",
       "highlights": [
-        "Built the flagship TypeScript SDK from scratch and led architecture plus API design; as of Apr 2026 the package (@biconomy/abstractjs) records 7,652 weekly and 29,868 monthly downloads.",
+        "Built the flagship TypeScript SDK from scratch and led architecture and API design for smart-account and multi-chain execution.",
         "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
-        "Primary contributor to the open-source SDK repository with 97 commits, establishing the core architecture and initial implementation across account and execution flows.",
-        "Shipped viem-based modular clients with Safe support, cutting complexity for account and bundler integration paths.",
-        "Hardened production readiness with typed errors, composable batching, and CI coverage with Vitest, Bun, GitHub Actions, and Codecov."
+        "Shipped viem-based modular clients with Safe support, reducing complexity for account and bundler integrations.",
+        "Hardened production readiness with typed errors, composable batching, and CI coverage using Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
@@ -109,9 +111,9 @@
       ],
       "summary": "Led 0 to 1 delivery of Enso's client dApp and execution stack.",
       "highlights": [
-        "Owned end-to-end delivery of the primary Ethereum dApp, from frontend experience to backend execution, while requirements and product scope were still moving.",
-        "Maintained the Graph protocol indexer used by the dApp and backend for on-chain data.",
-        "Shipped and extended intents plus solver infrastructure for decentralized trade execution, enabling intent-driven UX and competitive solver paths."
+        "Owned end-to-end delivery of Enso's primary Ethereum dApp, from frontend experience to backend execution services.",
+        "Built and maintained the Graph-based indexing pipeline used by both product and backend systems for on-chain data.",
+        "Shipped and extended intents and solver infrastructure for decentralized trade execution."
       ]
     },
     {
@@ -136,14 +138,14 @@
       ],
       "summary": "Led the trading interface and deployment system for the live exchange product.",
       "highlights": [
-        "Led delivery of the platform's trading UI, owning architecture, core feature rollout, and engineering standards across a small team.",
-        "Built fully automated CI/CD for the interface stack, reducing release risk and supporting faster iteration on a live trading product."
+        "Led delivery of the platform's trading UI, owning frontend architecture, core feature rollout, and engineering standards.",
+        "Built automated CI/CD for the interface stack, reducing release risk and increasing shipping velocity on a live trading product."
       ]
     }
   ],
   "earlierExperience": [
-    "GameAnalytics - Lead Frontend Developer (2016 to 2019): led a team of five, set stack and quality practices, awarded company MVP 2018/19.",
-    "FSI, Healthcare 21, and Nixatel (2013 to 2016): delivered cross-platform enterprise products and 0 to 1 mobile plus web systems in small teams."
+    "GameAnalytics - Lead Frontend Developer (2016 to 2019): led a team of five, defined frontend architecture and quality standards, and won company MVP 2018/19.",
+    "FSI, Healthcare 21, and Nixatel (2013 to 2016): built cross-platform enterprise applications and delivered 0 to 1 mobile and web products in small teams."
   ],
   "education": [
     {
