@@ -88,14 +88,13 @@ test(
       rpcUrl: process.env.MAINNET_RPC_URL!,
       blockNumber: 22124510,
     }),
-    withFundedWallet({ label: "maker" }),
+    withFundedWallet(),
     withErc20Balance({
-      wallet: "maker",
       token: "USDC",
       amount: parseUnits("120000", 6),
     }),
-    async ({ publicClient, maker }) => {
-      const balance = await publicClient.getBalance({ address: maker.address });
+    async ({ publicClient }) => {
+      const balance = await publicClient.getBalance();
       expect(balance).toBeGreaterThan(parseEther("1"));
     },
   ),

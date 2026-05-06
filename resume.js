@@ -169,6 +169,18 @@
     root.insertAdjacentHTML("beforeend", html);
   }
 
+  function renderWhyHire(root, items) {
+    if (!Array.isArray(items) || items.length === 0) return;
+    let html =
+      '<section class="resume-section resume-why-hire" id="resume-why-hire"><h2>Why Hire This Person</h2><ul class="resume-selected-impact-list">';
+    items.forEach(function (text) {
+      const t = text && text.trim ? text.trim() : String(text);
+      if (t) html += `<li>${escapeHtml(t)}</li>`;
+    });
+    html += "</ul></section>";
+    root.insertAdjacentHTML("beforeend", html);
+  }
+
   function renderSkills(root, skills) {
     if (!Array.isArray(skills) || skills.length === 0) return;
     let html =
@@ -289,6 +301,7 @@
     root.innerHTML = "";
 
     if (data.basics) renderBasics(root, data.basics);
+    if (data.whyHire && data.whyHire.length) renderWhyHire(root, data.whyHire);
     if (data.selectedImpact && data.selectedImpact.length)
       renderSelectedImpact(root, data.selectedImpact);
     if (data.work && data.work.length) renderWork(root, data.work);

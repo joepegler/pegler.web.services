@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Senior Full-Stack Engineer · Product, Platforms, and Developer Tooling",
+    "label": "Staff Infrastructure Engineer · Low-Latency Execution Systems and Reliability",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Senior full-stack engineer who ships product and platform systems end to end across React, Node.js, SDKs, and infrastructure. I specialize in high-reliability execution and developer tooling, with deep Web3 experience in smart accounts, simulation, and transaction pipelines.",
+    "summary": "Staff-level infrastructure engineer focused on transaction execution systems, production reliability, and developer platforms. Designs and operates low-latency execution pipelines, simulation systems, and developer tooling across EVM and Solana. Strong in failure handling, operational debugging, and systems that hold up under real-world production conditions.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -13,14 +13,18 @@
     ]
   },
   "selectedImpact": [
-    "Built and open-sourced Statecraft, a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
-    "Designed and shipped an internal transaction bundler with retries, simulation, and structured error decoding to improve delivery reliability for sponsored and gasless flows.",
-    "Built a unified quote and route orchestration layer across EVM and Solana providers, replacing chain-specific integrations with a single execution surface.",
-    "Owned the core TypeScript SDK for smart-account, quote, and execution flows, reducing integration complexity for frontend and backend product teams.",
-    "Built Biconomy's flagship TypeScript SDK from scratch and led architecture and API design for smart-account and multi-chain execution integrations.",
-    "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless transaction UX.",
-    "Led end-to-end delivery of Enso's primary dApp and execution stack, spanning frontend product work, backend services, and on-chain data pipelines.",
-    "Built automated CI/CD for CoinFLEX's trading interface and led frontend standards at GameAnalytics, improving release safety and team delivery quality."
+    "Designed a trusted ERC-4337 bundler architecture that reduced transaction latency versus existing provider flows through parallelized simulation and execution paths.",
+    "Hardened production transaction orchestration with retries, simulation, and ABI-backed error decoding for sponsored and gasless flows.",
+    "Unified multi-provider execution routing across EVM and Solana, replacing chain-specific integrations with one execution surface.",
+    "Architected core TypeScript SDKs for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
+    "Architected Biconomy's flagship TypeScript SDK and led API design for smart-account and multi-chain execution.",
+    "Open-sourced Statecraft (https://github.com/joepegler/statecraft), a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
+    "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support for keyless and gasless transaction UX."
+  ],
+  "whyHire": [
+    "Solves hard execution infrastructure problems where reliability and latency both matter.",
+    "Designs transaction pipelines with simulation, retries, fallback logic, and structured error handling.",
+    "Reduces execution failures and integration complexity for product and backend teams."
   ],
   "work": [
     {
@@ -37,21 +41,19 @@
       "techStack": [
         "TypeScript",
         "Node.js",
-        "NestJS",
-        "PostgreSQL",
-        "Redis",
         "viem",
-        "ethers.js",
         "EVM",
-        "Solana"
+        "Solana",
+        "PostgreSQL",
+        "NestJS"
       ],
-      "summary": "Own transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
+      "summary": "Lead transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed and shipped an internal transaction bundler with retries, simulation, and ABI-backed error decoding to improve reliability in product-facing execution flows.",
-        "Built and open-sourced Statecraft to make Ethereum integration tests deterministic through typed fixtures, pinned state, and per-file isolated runtimes.",
-        "Built cross-chain quote and route orchestration across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one execution surface.",
-        "Owned the TypeScript SDK (RouteClient and ExecutionManager) for smart-account, quote, and execution paths used by frontend and backend teams.",
-        "Delivered EVM and Solana simulation plus sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
+        "Designed a trusted transaction orchestration architecture (bundler) that reduced latency versus provider-managed flows through parallelized simulation and execution, while improving reliability with ABI-backed error decoding.",
+        "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one integration surface.",
+        "Standardized the TypeScript SDK layer (RouteClient and ExecutionManager) used by frontend and backend teams for transaction execution.",
+        "Architected EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety.",
+        "Open-sourced Statecraft (https://github.com/joepegler/statecraft) to make Ethereum integration tests deterministic through typed fixtures, pinned state, and per-file isolated runtimes."
       ]
     },
     {
@@ -69,22 +71,18 @@
       "techStack": [
         "TypeScript",
         "Node.js",
-        "Bun",
         "viem",
         "Safe",
-        "EIP-712",
-        "EIP-1271",
         "ERC-4337",
-        "ERC-7579",
-        "EIP-7702",
-        "Passkeys",
-        "Vitest"
+        "EIP-1271",
+        "Vitest",
+        "Bun"
       ],
-      "summary": "Owned the core developer SDK for smart accounts and multi-chain execution.",
+      "summary": "Led the core developer SDK for smart accounts and multi-chain transaction execution.",
       "highlights": [
-        "Built the flagship TypeScript SDK from scratch and led architecture and API design for smart-account and multi-chain execution.",
-        "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support to enable keyless and gasless UX patterns.",
-        "Shipped viem-based modular clients with Safe support, reducing complexity for account and bundler integrations.",
+        "Architected the flagship TypeScript SDK from zero and led API design for account abstraction execution flows.",
+        "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support for keyless and gasless user flows.",
+        "Standardized viem-based modular clients with Safe support to reduce integration complexity for account and bundler systems.",
         "Hardened production readiness with typed errors, composable batching, and CI coverage using Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
@@ -102,18 +100,17 @@
       "end": { "year": 2023, "month": 11 },
       "techStack": [
         "TypeScript",
-        "React",
         "Node.js",
+        "EVM",
         "Graph Protocol",
         "Solidity",
-        "EVM",
-        "Docker"
+        "React"
       ],
-      "summary": "Led 0 to 1 delivery of Enso's client dApp and execution stack.",
+      "summary": "Led 0 to 1 delivery of Enso's client dApp and transaction execution stack.",
       "highlights": [
-        "Owned end-to-end delivery of Enso's primary Ethereum dApp, from frontend experience to backend execution services.",
-        "Built and maintained the Graph-based indexing pipeline used by both product and backend systems for on-chain data.",
-        "Shipped and extended intents and solver infrastructure for decentralized trade execution."
+        "Orchestrated end-to-end delivery of Enso's primary Ethereum dApp, from frontend product experience to backend execution services.",
+        "Engineered and maintained the Graph-based indexing pipeline used by both product and backend systems for on-chain data.",
+        "Extended intents and solver infrastructure for decentralized trade execution."
       ]
     },
     {
@@ -131,15 +128,15 @@
       "techStack": [
         "TypeScript",
         "React",
-        "React Native",
         "Node.js",
         "CI/CD",
-        "GitHub Actions"
+        "GitHub Actions",
+        "React Native"
       ],
       "summary": "Led the trading interface and deployment system for the live exchange product.",
       "highlights": [
         "Led delivery of the platform's trading UI, owning frontend architecture, core feature rollout, and engineering standards.",
-        "Built automated CI/CD for the interface stack, reducing release risk and increasing shipping velocity on a live trading product."
+        "Automated CI/CD for the interface stack, reducing release risk and increasing shipping velocity on a live trading product."
       ]
     }
   ],
@@ -163,12 +160,12 @@
     }
   ],
   "skills": [
-    { "name": "TypeScript / Node.js", "level": "Expert", "rating": 5 },
-    { "name": "Smart accounts / account abstraction", "level": "Expert", "rating": 5 },
-    { "name": "Transaction pipelines / execution systems", "level": "Expert", "rating": 5 },
+    { "name": "Low-latency transaction execution and reliability engineering", "level": "Expert", "rating": 5 },
     { "name": "SDK architecture and developer tooling", "level": "Expert", "rating": 5 },
-    { "name": "Cross-chain infrastructure (EVM + Solana)", "level": "Advanced", "rating": 4 },
-    { "name": "viem / ethers.js", "level": "Expert", "rating": 5 },
+    { "name": "Smart accounts / account abstraction", "level": "Expert", "rating": 5 },
+    { "name": "Transaction simulation and production debugging", "level": "Expert", "rating": 5 },
+    { "name": "Multi-provider execution routing (EVM + Solana)", "level": "Advanced", "rating": 4 },
+    { "name": "TypeScript / Node.js / viem / ethers.js", "level": "Expert", "rating": 5 },
     { "name": "NestJS / PostgreSQL / Redis", "level": "Advanced", "rating": 4 },
     { "name": "CI/CD (GitHub Actions, Vitest, Bun)", "level": "Advanced", "rating": 4 }
   ]
