@@ -17,8 +17,9 @@ const POSTS_SOURCES = fs.existsSync(POSTS_DIR)
   : [];
 
 function layout(options) {
-  const { title, description, content, isIndex = false, posts = [] } = options;
-  const base = "../"; // blog pages live in blog/ so assets and site links are one level up
+  const { title, description, content, isIndex = false, urlPath = "/" } = options;
+  const base = isIndex ? "../" : "../../"; // posts now live in blog/<slug>/index.html
+  const blogHref = isIndex ? "./" : "../";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +30,8 @@ function layout(options) {
     <meta property="og:type" content="article">
     <meta property="og:title" content="${escapeHtml(title)}">
     <meta property="og:description" content="${escapeHtml(description)}">
+    <meta property="og:url" content="https://peglerweb.services${escapeHtml(urlPath)}">
+    <link rel="canonical" href="https://peglerweb.services${escapeHtml(urlPath)}">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="${base}styles.css">
@@ -42,14 +45,14 @@ function layout(options) {
     <header class="site-header">
         <div class="container">
             <div class="logo">
-                <a href="${base}index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <a href="${base}" title="Home"><h1>Joe Pegler</h1></a>
                 <span>Cork, Ireland</span>
             </div>
             <nav aria-label="Main navigation">
                 <ul>
-                    <li><a href="${base}index.html">Home</a></li>
-                    <li><a href="index.html"${isIndex ? ' aria-current="page"' : ""}>Blog</a></li>
-                    <li><a href="${base}resume.html">Resume</a></li>
+                    <li><a href="${base}">Home</a></li>
+                    <li><a href="${blogHref}"${isIndex ? ' aria-current="page"' : ""}>Blog</a></li>
+                    <li><a href="${base}resume/">Resume</a></li>
                 </ul>
             </nav>
         </div>
@@ -78,10 +81,10 @@ function layoutIndex(posts) {
     .map(
       (p) => `
                 <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="${escapeHtml(p.slug)}.html">${escapeHtml(p.title)}</a></h2>
+                    <h2 class="blog-card-title"><a href="${escapeHtml(p.slug)}/">${escapeHtml(p.title)}</a></h2>
                     <time class="blog-card-date" datetime="${escapeHtml(toIsoDate(p.date))}">${formatDate(p.date)}</time>
                     <p class="blog-card-summary">${escapeHtml(p.summary || "")}</p>
-                    <a href="${escapeHtml(p.slug)}.html" class="blog-card-link">Read more</a>
+                    <a href="${escapeHtml(p.slug)}/" class="blog-card-link">Read more</a>
                 </article>`
     )
     .join("\n");
@@ -97,8 +100,23 @@ function layoutIndex(posts) {
 ${listHtml}
                 </div>`,
     isIndex: true,
-    posts,
+    urlPath: "/blog/",
   });
+}
+
+function legacyRedirectHtml(urlPath) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=${escapeHtml(urlPath)}">
+    <link rel="canonical" href="https://peglerweb.services${escapeHtml(urlPath)}">
+    <title>Redirecting to ${escapeHtml(urlPath)}</title>
+</head>
+<body>
+    <p>Redirecting to <a href="${escapeHtml(urlPath)}">${escapeHtml(urlPath)}</a>...</p>
+</body>
+</html>`;
 }
 
 function escapeHtml(s) {
@@ -129,7 +147,8 @@ async function main() {
   const md = new MarkdownIt({ html: true });
   md.use(shiki);
 
-  if (!fs.existsSync(BLOG_OUT)) fs.mkdirSync(BLOG_OUT, { recursive: true });
+  if (fs.existsSync(BLOG_OUT)) fs.rmSync(BLOG_OUT, { recursive: true, force: true });
+  fs.mkdirSync(BLOG_OUT, { recursive: true });
 
   const posts = [];
   for (const filePath of POSTS_SOURCES) {
@@ -154,8 +173,12 @@ ${bodyHtml}
                     </div>
                 </article>`,
       isIndex: false,
+      urlPath: `/blog/${slug}/`,
     });
-    fs.writeFileSync(path.join(BLOG_OUT, `${slug}.html`), fullHtml, "utf-8");
+    const postOutDir = path.join(BLOG_OUT, slug);
+    fs.mkdirSync(postOutDir, { recursive: true });
+    fs.writeFileSync(path.join(postOutDir, "index.html"), fullHtml, "utf-8");
+    fs.writeFileSync(path.join(BLOG_OUT, `${slug}.html`), legacyRedirectHtml(`/blog/${slug}/`), "utf-8");
     posts.push({ slug, title, date, summary });
   }
 

@@ -329,7 +329,7 @@
   }
 
   function load() {
-    fetch("resume.json")
+    fetch("/resume.json")
       .then(function (res) {
         if (!res.ok) throw new Error("Failed to load resume.json");
         return res.json();

@@ -20,13 +20,13 @@ The website is built with vanilla HTML, CSS and JavaScript and is hosted via Git
 To run the site locally:
 
 1. Clone this repository
-2. Either open `index.html` in your browser, or run `npm run dev` and visit `http://localhost:3000` (with optional clean URLs like `/blog` and `/resume` via `serve.json`)
+2. Either open `index.html` in your browser, or run `npm run dev` and visit `http://localhost:3000` (clean URLs resolve to directory routes like `/blog/` and `/resume/`)
 
 ## Deployment
 
 The site is automatically deployed to GitHub Pages whenever changes are pushed to the main branch.
 
-All internal links use explicit `.html` URLs (e.g. `resume.html`, `blog/index.html`, `blog/post-slug.html`) so the site works on GitHub Pages without any server rewrites. For local dev, `npm run dev` uses `serve` and `serve.json` to allow extensionless URLs like `/blog` and `/resume`; production relies only on the `.html` links.
+All internal links use extensionless directory URLs (e.g. `/resume/`, `/blog/`, `/blog/post-slug/`) so the site works on GitHub Pages without server rewrites. Each route maps to an `index.html` file inside its folder. For local dev, `npm run dev` still uses `serve` and `serve.json` for convenience, but production behavior is driven by the generated folder structure.
 
 Last updated: 2025-05-01 23:04:56
 

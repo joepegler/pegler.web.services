@@ -8,6 +8,8 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="Blog">
     <meta property="og:description" content="Technical notes on transaction infrastructure, account abstraction, and execution systems. Joe Pegler.">
+    <meta property="og:url" content="https://peglerweb.services/blog/">
+    <link rel="canonical" href="https://peglerweb.services/blog/">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="../styles.css">
@@ -21,14 +23,14 @@
     <header class="site-header">
         <div class="container">
             <div class="logo">
-                <a href="../index.html" title="Home"><h1>Joe Pegler</h1></a>
+                <a href="../" title="Home"><h1>Joe Pegler</h1></a>
                 <span>Cork, Ireland</span>
             </div>
             <nav aria-label="Main navigation">
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="index.html" aria-current="page">Blog</a></li>
-                    <li><a href="../resume.html">Resume</a></li>
+                    <li><a href="../">Home</a></li>
+                    <li><a href="./" aria-current="page">Blog</a></li>
+                    <li><a href="../resume/">Resume</a></li>
                 </ul>
             </nav>
         </div>
@@ -44,24 +46,31 @@
                 <div class="blog-index-list">
 
                 <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="statecraft-why-deterministic-ethereum-testing.html">Why I built Statecraft after debugging flaky Ethereum integration tests</a></h2>
+                    <h2 class="blog-card-title"><a href="statecraft-why-deterministic-ethereum-testing/">Why I built Statecraft after debugging flaky Ethereum integration tests</a></h2>
                     <time class="blog-card-date" datetime="2026-04-08T00:00:00.000Z">8 April 2026</time>
                     <p class="blog-card-summary">A technical write-up on recurring Ethereum integration test failures, why hidden setup causes non-determinism, and how I switched to explicit scenario pipelines.</p>
-                    <a href="statecraft-why-deterministic-ethereum-testing.html" class="blog-card-link">Read more</a>
+                    <a href="statecraft-why-deterministic-ethereum-testing/" class="blog-card-link">Read more</a>
                 </article>
 
                 <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="bulletproof-erc2612-permits.html">A safer pattern for ERC-2612 permits</a></h2>
+                    <h2 class="blog-card-title"><a href="bulletproof-erc2612-permits/">A safer pattern for ERC-2612 permits</a></h2>
                     <time class="blog-card-date" datetime="2026-03-23T00:00:00.000Z">23 March 2026</time>
                     <p class="blog-card-summary">ERC-2612 detection is unreliable in practice. The robust pattern is cheap interface screening followed by on-chain permit simulation with identical EIP-712 domain logic.</p>
-                    <a href="bulletproof-erc2612-permits.html" class="blog-card-link">Read more</a>
+                    <a href="bulletproof-erc2612-permits/" class="blog-card-link">Read more</a>
                 </article>
 
                 <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="faster-sponsored-erc4337.html">BYOB: A faster path for sponsored ERC-4337</a></h2>
+                    <h2 class="blog-card-title"><a href="backtests-break-where-execution-begins/">Backtests Break Where Execution Begins</a></h2>
+                    <time class="blog-card-date" datetime="2026-05-08T00:00:00.000Z">8 May 2026</time>
+                    <p class="blog-card-summary">A concise retrospective on a 2018 TradingView Pine Script that looked strong in backtests until realistic execution assumptions changed the result.</p>
+                    <a href="backtests-break-where-execution-begins/" class="blog-card-link">Read more</a>
+                </article>
+
+                <article class="blog-card glass-card">
+                    <h2 class="blog-card-title"><a href="faster-sponsored-erc4337/">BYOB: A faster path for sponsored ERC-4337</a></h2>
                     <time class="blog-card-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
                     <p class="blog-card-summary">Trusted bundler flow, minimal UserOps, and why it reduces latency.</p>
-                    <a href="faster-sponsored-erc4337.html" class="blog-card-link">Read more</a>
+                    <a href="faster-sponsored-erc4337/" class="blog-card-link">Read more</a>
                 </article>
                 </div>
             </div>

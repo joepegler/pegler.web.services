@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A concise retrospective on a 2018 TradingView Pine Script that looked strong in backtests until realistic execution assumptions changed the result.">
+    <title>Backtests Break Where Execution Begins | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Backtests Break Where Execution Begins">
+    <meta property="og:description" content="A concise retrospective on a 2018 TradingView Pine Script that looked strong in backtests until realistic execution assumptions changed the result.">
+    <meta property="og:url" content="https://peglerweb.services/blog/backtests-break-where-execution-begins/">
+    <link rel="canonical" href="https://peglerweb.services/blog/backtests-break-where-execution-begins/">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../../" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Blog</a></li>
+                    <li><a href="../../resume/">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">Backtests Break Where Execution Begins</h1>
+                        <time class="blog-post-date" datetime="2026-05-08T00:00:00.000Z">8 May 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<p><a href="https://www.tradingview.com/script/QoNKoXwW-Simple-profitable-trading-strategy/">Original 2018 script on TradingView</a></p>
+<h2>Opening</h2>
+<p>In 2018, I published an open-source Pine Script called <strong>Simple profitable trading strategy</strong>.</p>
+<p>It spread further than I expected. The page reached around 66,000 views and around 3.1k uses, enough that it felt viral for a niche technical script.</p>
+<p>The interesting part, in hindsight, was not the name and not the headline equity curve.</p>
+<p>The interesting part was discovering how quickly a promising backtest falls apart when execution assumptions are wrong.</p>
+<h2>What the strategy did</h2>
+<p>The logic was simple trend and oscillator confluence:</p>
+<ul>
+<li>EMA stack: 8, 13, 21, 34, 55</li>
+<li>RSI filter</li>
+<li>Stochastic filter</li>
+<li>Long/short entries only when trend and oscillators aligned</li>
+<li>Exits on EMA crossover deterioration or oscillator extremes</li>
+</ul>
+<p>Core setup:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class='code-container'><code>strategy(
+  default_qty_type = strategy.percent_of_equity,
+  default_qty_value = 100,
+  commission_type = strategy.commission.percent,
+  commission_value = .0020,
+  slippage = 3,
+  pyramiding = 0
+)</code></div></pre><!-- Note from shiki-twoslash: the language pine was not set up for Shiki to use, and so there is no code highlighting -->
+<p>It was not meant as a production-grade execution system. It was a compact strategy model in TradingView.</p>
+<h2>Why it looked good</h2>
+<p>The backtest looked stronger than it deserved for predictable reasons:</p>
+<ul>
+<li>Bitcoin spent long periods in trend-friendly conditions</li>
+<li>Indicator confluence made entries feel &quot;validated&quot;</li>
+<li>Full-equity sizing amplified curve shape</li>
+<li>Strategy Tester outputs made results easy to trust quickly</li>
+</ul>
+<p>This is a common trap. Strong presentation can hide weak assumptions.</p>
+<h2>Where it broke</h2>
+<p>The key mistake was fee modeling.</p>
+<p>I had set:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class='code-container'><code>commission_value = .0020</code></div></pre><!-- Note from shiki-twoslash: the language pine was not set up for Shiki to use, and so there is no code highlighting -->
+<p>With percent commissions in Pine, that is <strong>0.002%</strong>, not <strong>0.2%</strong>.<br>
+That is a 100x difference.</p>
+<p>Someone in the comments spotted the mismatch at the time. I replied that it was an oversight and that it materially changed the result.</p>
+<p>For a strategy that enters and exits frequently, that difference is not cosmetic:</p>
+<ul>
+<li>Taker fees compound fast</li>
+<li>Slippage and spread add friction on top</li>
+<li>Churn can erase apparent edge</li>
+</ul>
+<p>Once fees were modeled more realistically, the strategy profile changed materially.</p>
+<h2>Backtests are incomplete by default</h2>
+<p>Most backtests are not misleading on purpose. They are incomplete by default.</p>
+<p>They often skip the factors that decide live outcomes:</p>
+<ul>
+<li>Real fee tiers and maker/taker routing</li>
+<li>Spread, slippage, and depth</li>
+<li>Partial fills and latency</li>
+<li>API instability and exchange downtime</li>
+<li>Recalculation quirks and execution timing differences</li>
+<li>Regime dependency and overfitting</li>
+</ul>
+<p>A backtest is useful, but it is still a hypothesis. Execution is the test.</p>
+<p>The script even attracted inbound from a crypto trading automation startup. That was the useful signal: people wanted to connect simple TradingView logic to live execution. But automation does not fix a weak edge. It executes assumptions faster.</p>
+<h2>Why this still matters in my current work</h2>
+<p>This later became familiar territory in account abstraction and transaction execution: a UserOperation can simulate cleanly and still fail inclusion, a route can quote well and still settle poorly, and an alert can fire and still fail to fill.</p>
+<p>The hard part is not writing logic that works in ideal conditions.<br>
+The hard part is surviving production conditions consistently.</p>
+<h2>What I would do differently now</h2>
+<p>If I were evaluating the same strategy today, I would prioritize execution realism early:</p>
+<ul>
+<li>Use realistic fee tiers per exchange</li>
+<li>Separate maker and taker assumptions</li>
+<li>Model spread and slippage by regime</li>
+<li>Validate across market regimes and out-of-sample windows</li>
+<li>Add position and drawdown constraints</li>
+<li>Paper trade with production-like alert and monitoring flows</li>
+<li>Treat alerts as untrusted until execution confirms fills</li>
+<li>Add risk limits and kill switches before real capital</li>
+</ul>
+<h2>Closing</h2>
+<p>The lesson was not that I had found a Bitcoin money machine.</p>
+<p>The lesson was that execution assumptions are part of the strategy.</p>
+<p>A backtest is not evidence of profit. It is a hypothesis.<br>
+Execution is where the hypothesis gets tested.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>
