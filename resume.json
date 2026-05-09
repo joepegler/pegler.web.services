@@ -18,7 +18,7 @@
     "Unified multi-provider execution routing across EVM and Solana, replacing chain-specific integrations with one execution surface.",
     "Architected core TypeScript SDKs for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
     "Architected Biconomy's flagship TypeScript SDK and led API design for smart-account and multi-chain execution.",
-    "Open-sourced Statecraft (https://github.com/joepegler/statecraft), a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
+    "Personal project: open-sourced Statecraft (https://github.com/joepegler/statecraft), a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
     "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support for keyless and gasless transaction UX."
   ],
   "whyHire": [
@@ -52,8 +52,7 @@
         "Designed a trusted transaction orchestration architecture (bundler) that reduced latency versus provider-managed flows through parallelized simulation and execution, while improving reliability with ABI-backed error decoding.",
         "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one integration surface.",
         "Standardized the TypeScript SDK layer (RouteClient and ExecutionManager) used by frontend and backend teams for transaction execution.",
-        "Architected EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety.",
-        "Open-sourced Statecraft (https://github.com/joepegler/statecraft) to make Ethereum integration tests deterministic through typed fixtures, pinned state, and per-file isolated runtimes."
+        "Architected EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
       ]
     },
     {

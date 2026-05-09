@@ -45,6 +45,7 @@
                         <time class="blog-post-date" datetime="2026-04-08T00:00:00.000Z">8 April 2026</time>
                     </header>
                     <div class="blog-content prose">
+<h1>Why I built Statecraft after debugging flaky Ethereum integration tests</h1>
 <h2>Opening: concrete failure</h2>
 <p>I hit this failure enough times that I stopped calling it random.</p>
 <p>A test that verifies token settlement on a mainnet fork passes locally and fails in CI two or three times a week. The assertion is simple. Expected user balance after settlement is <code>120_000000</code>, actual is <code>119_998742</code>. I rerun the same commit and it passes.</p>

@@ -45,6 +45,7 @@
                         <time class="blog-post-date" datetime="2026-03-23T00:00:00.000Z">23 March 2026</time>
                     </header>
                     <div class="blog-content prose">
+<h1>A safer pattern for ERC-2612 permits</h1>
 <p>ERC-2612 is supposed to solve a simple problem. A token holder should be able to authorize spending with a signature instead of an on-chain approval transaction. In practice, deciding whether a token actually supports <code>permit()</code> is much harder than the spec implies.</p>
 <p>The failure mode is not missing support. The failure mode is a false positive. If you surface a permit flow, ask the user to sign, and the contract reverts, the damage is already done.</p>
 <p>The pattern I ended up trusting is simple:</p>

@@ -45,6 +45,7 @@
                         <time class="blog-post-date" datetime="2026-03-20T00:00:00.000Z">20 March 2026</time>
                     </header>
                     <div class="blog-content prose">
+<h1>BYOB: A faster path for sponsored ERC-4337</h1>
 <p><strong>BYOB</strong> means <strong>Bring Your Own Bundler</strong>: a trusted first-party bundler flow with minimal UserOps and lower latency.</p>
 <p>In the usual ERC-4337 story, bundlers collect <code>UserOperation</code>s from an alt-mempool, simulate them, and submit via <code>EntryPoint.handleOps()</code>. They get reimbursed from the UserOp’s fee fields or from a paymaster, so the UserOp has to carry real <code>maxFeePerGas</code>, <code>maxPriorityFeePerGas</code>, and <code>preVerificationGas</code>, and often paymaster data. That implies gas-price lookups and paymaster round-trips before the user signs, and simulation is often tied to that same preparation. I found that when the bundler is a trusted first-party that pays for execution itself, you can use a different UserOp shape and a different backend layout and end up with fewer round-trips and better parallelization than the standard path.</p>
 <p>This post is a short technical note on how that works and why it’s faster, without claiming it’s the right choice for every team, only that it’s a viable optimization when you control the client, the bundler, and the wallet pool.</p>
