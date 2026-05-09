@@ -1,6 +1,7 @@
 {
   "basics": {
     "name": "Joe Pegler",
+    "location": "Cork, Ireland",
     "label": "Staff Infrastructure Engineer · Transaction Execution, SDKs and Reliability",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
@@ -13,12 +14,12 @@
     ]
   },
   "selectedImpact": [
-    "Designed a trusted ERC-4337 transaction orchestration architecture with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
+    "Designed an internal ERC-4337 transaction orchestration architecture with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
     "Hardened sponsored and gasless transaction execution with retries, simulation, fallback handling, ABI/Sourcify-backed error decoding, and structured operational errors.",
     "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed execution surface.",
     "Led SDK architecture for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
     "Architected Biconomy's flagship TypeScript SDK for smart accounts, modular clients, batching, signing, and multi-chain execution.",
-    "Built Statecraft, a TypeScript-first Ethereum integration testing framework for deterministic scenario-based tests with typed fixtures, forked state, and isolated runtimes.",
+    "Built and open-sourced Statecraft, a TypeScript-first Ethereum integration testing framework for deterministic scenario-based tests with typed fixtures, forked state, and isolated runtimes.",
     "Implemented EIP-712, EIP-1271, ERC-6492-style compatibility flows, and P-256/passkey-related signing support for smart-account UX."
   ],
   "whyHire": [
@@ -34,7 +35,7 @@
     "Reliability-heavy backend systems",
     "Early-stage teams needing senior ownership across architecture and implementation"
   ],
-  "availability": "Open to full-time, long-term contract, or high-leverage fractional work in infrastructure, protocol, SDK, reliability, and developer tooling.",
+  "availability": "Open to full-time, long-term contract, or selective fractional work across protocol infrastructure, transaction execution, SDKs, reliability, and developer tooling.",
   "work": [
     {
       "name": "defi.app",
@@ -44,7 +45,7 @@
       "website": "https://defi.app",
       "startDate": "2025-05-01",
       "endDate": "2026-04-01",
-      "location": "Canada",
+      "location": "Remote",
       "isCurrentRole": false,
       "start": { "year": 2025, "month": 5 },
       "end": { "year": 2026, "month": 4 },
@@ -63,7 +64,7 @@
         "Improved execution reliability with retries, fallback handling, EntryPoint v7 simulation, ABI/Sourcify-backed error decoding, and structured operational errors.",
         "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed integration surface.",
         "Standardized TypeScript SDK execution surfaces including RouteClient and ExecutionManager for frontend and backend teams.",
-        "Architected EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
+        "Built EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
       ]
     },
     {
@@ -98,8 +99,8 @@
     },
     {
       "name": "enso",
-      "company": "enso",
-      "position": "Lead Web3 / dApp Developer",
+      "company": "enso.finance",
+      "position": "Lead Frontend Engineer",
       "url": "https://www.enso.build",
       "website": "https://www.enso.build",
       "startDate": "2021-07-01",
@@ -116,17 +117,17 @@
         "Solidity",
         "React"
       ],
-      "summary": "Led 0 to 1 delivery of Enso's dApp, on-chain data infrastructure, and transaction execution surfaces.",
+      "summary": "Lead Frontend Engineer at Enso Finance. Shipped the primary Ethereum dApp from early product stages through production, with focus on client architecture, execution-related user flows, and integration surfaces for DeFi execution workflows.",
       "highlights": [
-        "Led end-to-end delivery of Enso's primary Ethereum dApp, spanning frontend architecture, backend execution services, and production rollout.",
-        "Built and maintained Graph-based indexing pipelines used by product and backend systems for on-chain data.",
-        "Worked on intents and solver infrastructure for decentralized trade execution."
+        "Built and maintained frontend and client-side systems for Enso's primary Ethereum dApp—architecture, execution-related user flows, and production rollout—collaborating with backend and protocol engineers on integration boundaries, API contracts, and execution UX.",
+        "Contributed to Graph Protocol–based indexing used by the product for on-chain data, with clear integration boundaries to backend consumers and the client surface.",
+        "Contributed to intent/routing-adjacent product surfaces for decentralized trade execution, in collaboration with backend and protocol engineering."
       ]
     },
     {
       "name": "coinflex",
       "company": "coinflex",
-      "position": "Head of UI/UX",
+      "position": "Head of UI/UX Engineering",
       "url": "https://coinflex.io",
       "website": "https://coinflex.io",
       "startDate": "2019-08-01",
@@ -167,6 +168,32 @@
       "gpa": "1st",
       "start": { "year": 2012, "month": 9 },
       "end": { "year": 2014, "month": 9 }
+    }
+  ],
+  "references": [
+    {
+      "name": "Ajdin Kahrovic",
+      "position": "Engineering Manager",
+      "company": "defi.app",
+      "profiles": [
+        {
+          "network": "Telegram",
+          "username": "ajdin_kahrovic",
+          "url": "https://t.me/ajdin_kahrovic"
+        }
+      ]
+    },
+    {
+      "name": "Mislav",
+      "position": "VP Product",
+      "company": "biconomy",
+      "profiles": [
+        {
+          "network": "Telegram",
+          "username": "oxshaman",
+          "url": "https://t.me/oxshaman"
+        }
+      ]
     }
   ],
   "skills": [

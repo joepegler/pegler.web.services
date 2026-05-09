@@ -1,10 +1,10 @@
 /* Blog layout and prose – peglerweb.services */
 .blog-page {
-  padding-top: 6rem;
+  padding-top: 5.5rem;
 }
 
 .blog-main {
-  padding: var(--space-xl, 1.5rem) 0 var(--space-section, 6rem);
+  padding: var(--space-xl, 1.5rem) 0 var(--space-section, 5rem);
 }
 
 .blog-content-wrap {
@@ -23,7 +23,7 @@
 }
 
 .blog-index-intro {
-  color: var(--text-secondary, #9ca3b4);
+  color: var(--text-secondary, #b8c1cc);
   font-size: var(--text-body, 1rem);
 }
 
@@ -52,19 +52,19 @@
 }
 
 .blog-card-title a:hover {
-  color: var(--accent-primary, #22c55e);
+  color: var(--accent-primary, #7dd3a8);
 }
 
 .blog-card-date {
   display: block;
   font-size: var(--text-caption, 0.8rem);
-  color: var(--text-muted, #6b7280);
+  color: var(--text-muted, #8290a0);
   margin-bottom: var(--space-sm, 0.5rem);
 }
 
 .blog-card-summary {
   font-size: var(--text-small, 0.9rem);
-  color: var(--text-secondary, #9ca3b4);
+  color: var(--text-secondary, #b8c1cc);
   margin-bottom: var(--space-md, 1rem);
   line-height: var(--leading-snug, 1.4);
 }
@@ -88,7 +88,7 @@
 
 .blog-post-date {
   font-size: var(--text-caption, 0.8rem);
-  color: var(--text-muted, #6b7280);
+  color: var(--text-muted, #8290a0);
 }
 
 /* Prose – headings, lists, blockquote, links */
@@ -103,6 +103,11 @@
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   padding-bottom: 0.25rem;
+  color: var(--text-primary, #edf2f7);
+}
+
+.blog-content.prose h2::after {
+  content: none;
 }
 
 .blog-content.prose h3 {
@@ -127,15 +132,15 @@
 }
 
 .blog-content.prose blockquote {
-  border-left: 3px solid var(--accent-primary, #22c55e);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.45);
   padding-left: 1rem;
   margin: 1.5rem 0;
-  color: var(--text-secondary, #9ca3b4);
+  color: var(--text-secondary, #b8c1cc);
   font-style: italic;
 }
 
 .blog-content.prose a {
-  color: var(--accent-primary, #22c55e);
+  color: var(--accent-primary, #7dd3a8);
   text-decoration: none;
 }
 
@@ -145,7 +150,7 @@
 
 .blog-content.prose hr {
   border: none;
-  border-top: 1px solid rgba(34, 197, 94, 0.2);
+  border-top: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.14));
   margin: 2rem 0;
 }
 
@@ -153,17 +158,18 @@
 .blog-content.prose code {
   font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
   font-size: 0.9em;
-  background: var(--bg-elevated, #11151c);
+  background: rgba(21, 28, 38, 0.72);
   padding: 0.15em 0.4em;
   border-radius: var(--radius-sm, 6px);
-  color: var(--accent-primary, #22c55e);
+  color: var(--accent-primary, #7dd3a8);
 }
 
 .blog-content.prose pre {
   margin: 1.25rem 0;
   border-radius: var(--border-radius, 10px);
   overflow: auto;
-  background: var(--bg-elevated, #11151c);
+  background: var(--bg-elevated, #151c26);
+  border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.14));
   padding: 1rem 1.25rem;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -192,9 +198,9 @@
 }
 
 .blog-content .twoslash-query {
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.25);
-  color: var(--text-primary, #f2f4f8);
+  background: rgba(var(--accent-rgb), 0.075);
+  border: 1px solid rgba(var(--accent-rgb), 0.18);
+  color: var(--text-primary, #edf2f7);
 }
 
 .blog-content .twoslash-error {
@@ -204,7 +210,7 @@
 }
 
 .blog-content .twoslash-info {
-  background: rgba(34, 197, 94, 0.08);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  color: var(--text-secondary, #9ca3b4);
+  background: rgba(var(--accent-rgb), 0.055);
+  border: 1px solid rgba(var(--accent-rgb), 0.14);
+  color: var(--text-secondary, #b8c1cc);
 }

@@ -85,9 +85,14 @@ coverage/
 *.lcov
 .jest/
 
+# Tailored job-application resumes (PDF/HTML/MD); generated locally
+tailored-resumes/
+
 # Misc
 *.bak
 *.orig
 *.rej
 *.min.js.map
 *.min.css.map
+
+.cursor/skills
