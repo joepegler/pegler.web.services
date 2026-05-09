@@ -181,16 +181,64 @@
     root.insertAdjacentHTML("beforeend", html);
   }
 
-  function renderSkills(root, skills) {
-    if (!Array.isArray(skills) || skills.length === 0) return;
+  function renderBestFit(root, items) {
+    if (!Array.isArray(items) || items.length === 0) return;
     let html =
-      '<section class="resume-section" id="resume-skills"><h2>Skills</h2><ul class="resume-skills-list">';
-    skills.forEach(function (s) {
-      const name = s.name || "";
-      // const level = s.level ? ` <span class="resume-skill-level">(${escapeHtml(s.level)})</span>` : '';
-      html += `<li>${escapeHtml(name)}</li>`;
+      '<section class="resume-section resume-best-fit" id="resume-best-fit"><h2>Best Fit</h2><ul class="resume-selected-impact-list">';
+    items.forEach(function (text) {
+      const t = text && text.trim ? text.trim() : String(text);
+      if (t) html += `<li>${escapeHtml(t)}</li>`;
     });
     html += "</ul></section>";
+    root.insertAdjacentHTML("beforeend", html);
+  }
+
+  function renderAvailability(root, text) {
+    const value = text && text.trim ? text.trim() : String(text || "");
+    if (!value) return;
+    const html =
+      '<section class="resume-section resume-availability" id="resume-availability">' +
+      `<p class="resume-availability-text"><span>Availability:</span> ${escapeHtml(value)}</p>` +
+      "</section>";
+    root.insertAdjacentHTML("beforeend", html);
+  }
+
+  function renderSkills(root, skills) {
+    if (!Array.isArray(skills) || skills.length === 0) return;
+    const hasGroupedSkills = skills.some(function (s) {
+      return Array.isArray(s && s.keywords) && s.keywords.length > 0;
+    });
+    let html = '<section class="resume-section" id="resume-skills"><h2>Skills</h2>';
+    if (hasGroupedSkills) {
+      html += '<div class="resume-skill-groups">';
+      skills.forEach(function (s) {
+        const groupName = s && s.name ? s.name : "";
+        const keywords = Array.isArray(s && s.keywords) ? s.keywords : [];
+        if (!groupName && keywords.length === 0) return;
+        html += '<article class="resume-skill-group">';
+        if (groupName)
+          html += `<h3 class="resume-skill-group-name">${escapeHtml(groupName)}</h3>`;
+        if (keywords.length) {
+          html += '<ul class="resume-skill-keywords">';
+          keywords.forEach(function (keyword) {
+            const text =
+              keyword && keyword.trim ? keyword.trim() : String(keyword);
+            if (text) html += `<li>${escapeHtml(text)}</li>`;
+          });
+          html += "</ul>";
+        }
+        html += "</article>";
+      });
+      html += "</div>";
+    } else {
+      html += '<ul class="resume-skills-list">';
+      skills.forEach(function (s) {
+        const name = s.name || "";
+        if (name) html += `<li>${escapeHtml(name)}</li>`;
+      });
+      html += "</ul>";
+    }
+    html += "</section>";
     root.insertAdjacentHTML("beforeend", html);
   }
 
@@ -304,6 +352,8 @@
     if (data.whyHire && data.whyHire.length) renderWhyHire(root, data.whyHire);
     if (data.selectedImpact && data.selectedImpact.length)
       renderSelectedImpact(root, data.selectedImpact);
+    if (data.bestFit && data.bestFit.length) renderBestFit(root, data.bestFit);
+    if (data.availability) renderAvailability(root, data.availability);
     if (data.work && data.work.length) renderWork(root, data.work);
     if (data.earlierExperience && data.earlierExperience.length)
       renderEarlierExperience(root, data.earlierExperience);

@@ -127,7 +127,9 @@ body.resume-page {
 .resume-job-summary,
 .resume-job-stack,
 .resume-job-highlights,
-.resume-selected-impact-list {
+.resume-selected-impact-list,
+.resume-availability-text,
+.resume-skill-keywords {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -175,6 +177,25 @@ body.resume-page {
   left: 0;
   color: var(--accent-primary);
   font-weight: 500;
+}
+
+.resume-availability {
+  margin-top: -0.25rem;
+}
+
+.resume-availability-text {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  border: 1px solid rgba(34, 197, 94, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(17, 21, 28, 0.25);
+}
+
+.resume-availability-text span {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* Experience */
@@ -246,6 +267,42 @@ body.resume-page {
 }
 
 /* Skills */
+.resume-skill-groups {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.resume-skill-group {
+  border: 1px solid rgba(34, 197, 94, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.8rem;
+  background: rgba(17, 21, 28, 0.3);
+}
+
+.resume-skill-group-name {
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.resume-skill-keywords {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.resume-skill-keywords li {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.14);
+  background: rgba(34, 197, 94, 0.06);
+}
+
 .resume-skills-list {
   display: flex;
   flex-wrap: wrap;
@@ -357,7 +414,8 @@ body.resume-page {
   .resume-job-summary,
   .resume-job-stack,
   .resume-selected-impact-list li,
-  .resume-job-highlights {
+  .resume-job-highlights,
+  .resume-skill-keywords li {
     font-size: 0.85rem;
   }
 }
@@ -466,6 +524,8 @@ body.resume-page {
   .resume-job-stack,
   .resume-selected-impact-list li,
   .resume-job-highlights,
+  .resume-availability-text,
+  .resume-skill-keywords li,
   .resume-skills-list li,
   .resume-edu-meta,
   .resume-awards-list li {

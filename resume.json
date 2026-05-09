@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Joe Pegler",
-    "label": "Staff Infrastructure Engineer · Low-Latency Execution Systems and Reliability",
+    "label": "Staff Infrastructure Engineer · Transaction Execution, SDKs and Reliability",
     "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Staff-level infrastructure engineer focused on transaction execution systems, production reliability, and developer platforms. Designs and operates low-latency execution pipelines, simulation systems, and developer tooling across EVM and Solana. Strong in failure handling, operational debugging, and systems that hold up under real-world production conditions.",
+    "summary": "Staff-level infrastructure engineer focused on transaction execution systems, production reliability, SDK architecture, and developer platforms across EVM and Solana. Designs execution pipelines with simulation, retries, fallback handling, sponsorship flows, typed SDKs, and structured operational errors. Strong in failure analysis, production debugging, and turning complex on-chain execution paths into reliable product infrastructure.",
     "website": "https://peglerweb.services",
     "profiles": [
       { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
@@ -13,19 +13,28 @@
     ]
   },
   "selectedImpact": [
-    "Designed a trusted ERC-4337 bundler architecture that reduced transaction latency versus existing provider flows through parallelized simulation and execution paths.",
-    "Hardened production transaction orchestration with retries, simulation, and ABI-backed error decoding for sponsored and gasless flows.",
-    "Unified multi-provider execution routing across EVM and Solana, replacing chain-specific integrations with one execution surface.",
-    "Architected core TypeScript SDKs for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
-    "Architected Biconomy's flagship TypeScript SDK and led API design for smart-account and multi-chain execution.",
-    "Personal project: open-sourced Statecraft (https://github.com/joepegler/statecraft), a TypeScript SDK for deterministic Ethereum integration testing with typed fixtures, pinned state, and isolated runtimes.",
-    "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support for keyless and gasless transaction UX."
+    "Designed a trusted ERC-4337 transaction orchestration architecture with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
+    "Hardened sponsored and gasless transaction execution with retries, simulation, fallback handling, ABI/Sourcify-backed error decoding, and structured operational errors.",
+    "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed execution surface.",
+    "Led SDK architecture for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
+    "Architected Biconomy's flagship TypeScript SDK for smart accounts, modular clients, batching, signing, and multi-chain execution.",
+    "Built Statecraft, a TypeScript-first Ethereum integration testing framework for deterministic scenario-based tests with typed fixtures, forked state, and isolated runtimes.",
+    "Implemented EIP-712, EIP-1271, ERC-6492-style compatibility flows, and P-256/passkey-related signing support for smart-account UX."
   ],
   "whyHire": [
-    "Solves hard execution infrastructure problems where reliability and latency both matter.",
-    "Designs transaction pipelines with simulation, retries, fallback logic, and structured error handling.",
-    "Reduces execution failures and integration complexity for product and backend teams."
+    "Turns unreliable blockchain execution paths into production-grade infrastructure.",
+    "Designs transaction systems with simulation, retries, fallback logic, typed errors, and operational debugging built in.",
+    "Bridges protocol complexity and product delivery through SDKs, execution services, and developer tooling."
   ],
+  "bestFit": [
+    "Protocol infrastructure",
+    "Wallet and account abstraction teams",
+    "Cross-chain execution products",
+    "SDK and developer platform teams",
+    "Reliability-heavy backend systems",
+    "Early-stage teams needing senior ownership across architecture and implementation"
+  ],
+  "availability": "Open to full-time, long-term contract, or high-leverage fractional work in infrastructure, protocol, SDK, reliability, and developer tooling.",
   "work": [
     {
       "name": "defi.app",
@@ -34,10 +43,11 @@
       "url": "https://defi.app",
       "website": "https://defi.app",
       "startDate": "2025-05-01",
+      "endDate": "2026-04-01",
       "location": "Canada",
-      "isCurrentRole": true,
+      "isCurrentRole": false,
       "start": { "year": 2025, "month": 5 },
-      "end": {},
+      "end": { "year": 2026, "month": 4 },
       "techStack": [
         "TypeScript",
         "Node.js",
@@ -47,11 +57,12 @@
         "PostgreSQL",
         "NestJS"
       ],
-      "summary": "Lead transaction infrastructure and developer tooling for a unified cross-chain DeFi product.",
+      "summary": "Owned transaction infrastructure, sponsorship flows, execution reliability, and developer tooling for a unified cross-chain DeFi product.",
       "highlights": [
-        "Designed a trusted transaction orchestration architecture (bundler) that reduced latency versus provider-managed flows through parallelized simulation and execution, while improving reliability with ABI-backed error decoding.",
-        "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one integration surface.",
-        "Standardized the TypeScript SDK layer (RouteClient and ExecutionManager) used by frontend and backend teams for transaction execution.",
+        "Designed an internal ERC-4337 transaction orchestration system with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
+        "Improved execution reliability with retries, fallback handling, EntryPoint v7 simulation, ABI/Sourcify-backed error decoding, and structured operational errors.",
+        "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed integration surface.",
+        "Standardized TypeScript SDK execution surfaces including RouteClient and ExecutionManager for frontend and backend teams.",
         "Architected EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
       ]
     },
@@ -79,10 +90,10 @@
       ],
       "summary": "Led the core developer SDK for smart accounts and multi-chain transaction execution.",
       "highlights": [
-        "Architected the flagship TypeScript SDK from zero and led API design for account abstraction execution flows.",
-        "Implemented EIP-712 and EIP-1271 signing with P-256 passkey support for keyless and gasless user flows.",
-        "Standardized viem-based modular clients with Safe support to reduce integration complexity for account and bundler systems.",
-        "Hardened production readiness with typed errors, composable batching, and CI coverage using Vitest, Bun, GitHub Actions, and Codecov."
+        "Architected Biconomy's flagship TypeScript SDK from zero and led API design for account abstraction execution flows.",
+        "Implemented EIP-712, EIP-1271, ERC-6492-style account compatibility, and P-256/passkey-related signing flows for smart-account UX.",
+        "Standardized viem-based modular clients with Safe support to reduce integration complexity across account and bundler systems.",
+        "Hardened production readiness with typed errors, composable batching, Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
@@ -105,11 +116,11 @@
         "Solidity",
         "React"
       ],
-      "summary": "Led 0 to 1 delivery of Enso's client dApp and transaction execution stack.",
+      "summary": "Led 0 to 1 delivery of Enso's dApp, on-chain data infrastructure, and transaction execution surfaces.",
       "highlights": [
-        "Orchestrated end-to-end delivery of Enso's primary Ethereum dApp, from frontend product experience to backend execution services.",
-        "Engineered and maintained the Graph-based indexing pipeline used by both product and backend systems for on-chain data.",
-        "Extended intents and solver infrastructure for decentralized trade execution."
+        "Led end-to-end delivery of Enso's primary Ethereum dApp, spanning frontend architecture, backend execution services, and production rollout.",
+        "Built and maintained Graph-based indexing pipelines used by product and backend systems for on-chain data.",
+        "Worked on intents and solver infrastructure for decentralized trade execution."
       ]
     },
     {
@@ -132,10 +143,10 @@
         "GitHub Actions",
         "React Native"
       ],
-      "summary": "Led the trading interface and deployment system for the live exchange product.",
+      "summary": "Led trading interface architecture and release infrastructure for a live exchange product.",
       "highlights": [
-        "Led delivery of the platform's trading UI, owning frontend architecture, core feature rollout, and engineering standards.",
-        "Automated CI/CD for the interface stack, reducing release risk and increasing shipping velocity on a live trading product."
+        "Led delivery of the trading interface, owning frontend architecture, core feature rollout, and engineering standards for a live exchange product.",
+        "Automated CI/CD for the interface stack, reducing release risk and improving deployment consistency."
       ]
     }
   ],
@@ -159,13 +170,74 @@
     }
   ],
   "skills": [
-    { "name": "Low-latency transaction execution and reliability engineering", "level": "Expert", "rating": 5 },
-    { "name": "SDK architecture and developer tooling", "level": "Expert", "rating": 5 },
-    { "name": "Smart accounts / account abstraction", "level": "Expert", "rating": 5 },
-    { "name": "Transaction simulation and production debugging", "level": "Expert", "rating": 5 },
-    { "name": "Multi-provider execution routing (EVM + Solana)", "level": "Advanced", "rating": 4 },
-    { "name": "TypeScript / Node.js / viem / ethers.js", "level": "Expert", "rating": 5 },
-    { "name": "NestJS / PostgreSQL / Redis", "level": "Advanced", "rating": 4 },
-    { "name": "CI/CD (GitHub Actions, Vitest, Bun)", "level": "Advanced", "rating": 4 }
+    {
+      "name": "Execution infrastructure",
+      "keywords": [
+        "ERC-4337",
+        "bundlers",
+        "sponsorship",
+        "gasless flows",
+        "simulation",
+        "retries",
+        "fallback handling"
+      ]
+    },
+    {
+      "name": "SDK and developer platforms",
+      "keywords": [
+        "TypeScript",
+        "viem",
+        "typed APIs",
+        "modular clients",
+        "error models",
+        "developer tooling"
+      ]
+    },
+    {
+      "name": "Smart accounts and signing",
+      "keywords": [
+        "EIP-712",
+        "EIP-1271",
+        "ERC-6492",
+        "Safe",
+        "P-256",
+        "passkeys"
+      ]
+    },
+    {
+      "name": "Cross-chain execution",
+      "keywords": [
+        "EVM",
+        "Solana",
+        "LiFi",
+        "Jupiter",
+        "1inch",
+        "Odos",
+        "Mayan",
+        "LayerZero",
+        "Relay"
+      ]
+    },
+    {
+      "name": "Reliability and testing",
+      "keywords": [
+        "Vitest",
+        "Bun",
+        "GitHub Actions",
+        "Anvil",
+        "forked state",
+        "CI/CD",
+        "structured debugging"
+      ]
+    },
+    {
+      "name": "Backend systems",
+      "keywords": [
+        "Node.js",
+        "NestJS",
+        "PostgreSQL",
+        "Redis"
+      ]
+    }
   ]
 }
