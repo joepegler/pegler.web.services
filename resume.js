@@ -114,6 +114,13 @@
     return div.innerHTML;
   }
 
+  function formatWorkLocation(entry) {
+    if (entry.workMode === "remote") {
+      return entry.companyHq ? `Remote · ${entry.companyHq}` : "Remote";
+    }
+    return entry.location || "";
+  }
+
   function renderBasics(root, basics) {
     if (!basics) return;
     const name = basics.name || "";
@@ -256,7 +263,7 @@
         ? `<a href="${escapeHtml(url.startsWith("http") ? url : "https://" + url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(company)}</a>`
         : escapeHtml(company);
       const dateRange = formatDateRange(entry);
-      const location = entry.location || "";
+      const location = formatWorkLocation(entry);
       const summary = entry.summary || "";
       const techStack = Array.isArray(entry.techStack) ? entry.techStack : [];
       const highlights = entry.highlights || [];
