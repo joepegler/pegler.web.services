@@ -2,7 +2,7 @@
 title: From simulateHandleOp Revert Bytes to Stable SDK Execution Codes
 date: 2026-05-28
 summary: How a production ERC-4337 bundler turns nested simulation and submission failures into typed, SDK-safe execution codes with replay-grade debug context.
-slug: simulatehandleop-revert-bytes-to-stable-sdk-execution-codes
+slug: from-simulatehandleop-revert-bytes-to-stable-sdk-execution-codes
 ---
 
 # From simulateHandleOp Revert Bytes to Stable SDK Execution Codes

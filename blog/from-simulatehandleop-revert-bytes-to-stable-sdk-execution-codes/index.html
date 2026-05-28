@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How a production ERC-4337 bundler turns nested simulation and submission failures into typed, SDK-safe execution codes with replay-grade debug context.">
+    <title>From simulateHandleOp Revert Bytes to Stable SDK Execution Codes | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="From simulateHandleOp Revert Bytes to Stable SDK Execution Codes">
+    <meta property="og:description" content="How a production ERC-4337 bundler turns nested simulation and submission failures into typed, SDK-safe execution codes with replay-grade debug context.">
+    <meta property="og:url" content="https://peglerweb.services/blog/from-simulatehandleop-revert-bytes-to-stable-sdk-execution-codes/">
+    <link rel="canonical" href="https://peglerweb.services/blog/from-simulatehandleop-revert-bytes-to-stable-sdk-execution-codes/">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../../" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Blog</a></li>
+                    <li><a href="../../resume/">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">From simulateHandleOp Revert Bytes to Stable SDK Execution Codes</h1>
+                        <time class="blog-post-date" datetime="2026-05-28T00:00:00.000Z">28 May 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<h1>From simulateHandleOp Revert Bytes to Stable SDK Execution Codes</h1>
+<p><a href="https://github.com/eth-infinitism/account-abstraction/pull/321">AA-173 / PR #321</a><br>
+<a href="https://raw.githubusercontent.com/eth-infinitism/account-abstraction/develop/contracts/interfaces/IEntryPointSimulations.sol">IEntryPointSimulations.sol</a><br>
+<a href="https://raw.githubusercontent.com/eth-infinitism/account-abstraction/develop/test/entrypointsimulations.test.ts">entrypointsimulations.test.ts</a></p>
+<h2>Opening</h2>
+<p>A UserOperation fails in simulation.</p>
+<p>The wallet UI says &quot;transaction failed.&quot;<br>
+The bundler logs contain a revert payload, nested inside provider error wrappers, with just enough information to diagnose the root cause if someone manually parses it.</p>
+<p>That gap is where many ERC-4337 systems lose reliability.</p>
+<p>Not at quote time.<br>
+Not at <code>eth_sendUserOperation</code> call time.<br>
+At failure translation time.</p>
+<p>In production, a bundler is not a thin relay. It is a policy engine that has to answer three questions, consistently:</p>
+<ul>
+<li>What failed?</li>
+<li>Is retry safe?</li>
+<li>What stable error code should the SDK get?</li>
+</ul>
+<p>This deep dive focuses on that exact boundary: <strong>revert decoding -&gt; typed execution errors -&gt; retry/quarantine behavior</strong>.</p>
+<h2>Local architecture snapshot</h2>
+<p>In this backend, <code>BundlerService.eth_sendUserOperation</code> does more than submit <code>handleOps</code>:</p>
+<ul>
+<li>acquires a bundler wallet from a pooled/quarantinable resource set</li>
+<li>verifies sponsorship</li>
+<li>estimates gas</li>
+<li>simulates the UserOp</li>
+<li>submits <code>handleOps</code> with retry and nonce mitigation</li>
+</ul>
+<p>Simulation is performed with <code>eth_call</code> + <code>stateOverride</code> against EntryPoint, injecting <code>ENTRYPOINT_V7_SIMULATIONS_BYTECODE</code>, then decoding <code>simulateHandleOp</code> return data.</p>
+<p>Core simulation branch:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">decodedResult</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">decodeFunctionResult</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">  abi: </span><span style="color: #79C0FF">ENTRYPOINT_V7_SIMULATIONS_ABI</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  functionName: </span><span style="color: #A5D6FF">'simulateHandleOp'</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  data: simulateHandleOpResult.data </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Hex</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">});</span></div><div class='line'></div><div class='line'><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">decodedResult.targetSuccess) {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (decodedResult.targetResult </span><span style="color: #FF7B72">===</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'0x'</span><span style="color: #C9D1D9">) {</span></div><div class='line'><span style="color: #C9D1D9">    </span><span style="color: #FF7B72">throw</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">new</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">SilentSimulationError</span><span style="color: #C9D1D9">();</span></div><div class='line'><span style="color: #C9D1D9">  }</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">throw</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">new</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">ContractFunctionRevertedError</span><span style="color: #C9D1D9">({</span></div><div class='line'><span style="color: #C9D1D9">    abi: [</span><span style="color: #FF7B72">...</span><span style="color: #C9D1D9">simulationErrors],</span></div><div class='line'><span style="color: #C9D1D9">    functionName: </span><span style="color: #A5D6FF">'simulateHandleOp'</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">    data: decodedResult.targetResult </span><span style="color: #FF7B72">as</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Hex</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  });</span></div><div class='line'><span style="color: #C9D1D9">}</span></div></code></div></pre>
+<p>The important part is not only failure detection. It is what happens next.</p>
+<h2>Decode pipeline deep dive</h2>
+<p>A single decode strategy is fragile in real traffic. This implementation uses a staged pipeline.</p>
+<h3>1) Extract raw revert from nested provider errors</h3>
+<p><code>extractRawRevert()</code> walks viem <code>BaseError</code> chains and captures:</p>
+<ul>
+<li><code>raw</code> revert bytes if present</li>
+<li>selector</li>
+<li>provider summary</li>
+<li>traversal trail (<code>walkTrail</code>) for forensics</li>
+</ul>
+<h3>2) Decode against known ABI</h3>
+<p><code>decodeWithKnownAbi()</code> attempts deterministic decoding against curated <code>simulationErrors</code> (e.g. <code>FailedOp</code>, <code>FailedOpWithRevert</code>, <code>ERC20InsufficientAllowance</code>, <code>ReturnAmountIsNotEnough</code>).</p>
+<h3>3) Sourcify 4byte fallback (cached)</h3>
+<p>If known ABI decode fails, <code>resolveViaSourcifyCached()</code> looks up selector signatures and caches result (<code>BUNDLER_SOURCIFY_DECODE</code>) to avoid repeated network-dependent misses.</p>
+<h3>4) String-pattern fallback</h3>
+<p>If ABI-level decoding is incomplete/unknown, message heuristics classify common failure classes:</p>
+<ul>
+<li>allowance (<code>transfer amount exceeds allowance</code>, permit expiry/signature variants)</li>
+<li>balance (<code>insufficient balance</code> variants)</li>
+<li>slippage (<code>min return not reached</code>, selector markers)</li>
+<li>AA-formatted messages (<code>AA20</code>, <code>AA23</code>, <code>AA25</code>, etc.)</li>
+</ul>
+<h3>5) Map to typed errors + execution codes</h3>
+<p><code>mapDecodedToError()</code> converts decoded/fallback context into <code>BundlerHttpError</code> subclasses with stable <code>ExecutionErrorCodes</code>.</p>
+<p>Example fallback branch:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">decoded) {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">fallbackMapped</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">mapMessageToKnownError</span><span style="color: #C9D1D9">(options.fallbackMessage, debug, extra);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (fallbackMapped) </span><span style="color: #FF7B72">return</span><span style="color: #C9D1D9"> fallbackMapped;</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (options.fallbackMessage) extra.reason </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> options.fallbackMessage;</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">return</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">new</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">UnknownBundlerError</span><span style="color: #C9D1D9">(debug, </span><span style="color: #79C0FF">undefined</span><span style="color: #C9D1D9">, ExecutionErrorCodes.</span><span style="color: #79C0FF">UNKNOWN_SIMULATION_ERROR</span><span style="color: #C9D1D9">);</span></div><div class='line'><span style="color: #C9D1D9">}</span></div></code></div></pre>
+<p>This is what keeps the external contract stable when decode confidence is not.</p>
+<h2>Typed error surface as product contract</h2>
+<p><code>BundlerHttpError</code> is the boundary object exposed to clients (HTTP 516 in this service).</p>
+<p>It carries:</p>
+<ul>
+<li><code>type</code> (internal bundler class)</li>
+<li><code>code</code> (<code>ExecutionErrorCodes</code>, SDK-facing stability layer)</li>
+<li><code>userMessage</code> (safe, opinionated message)</li>
+<li><code>reason</code> (best available technical cause)</li>
+<li><code>debug</code> (structured forensic payload)</li>
+</ul>
+<p>Representative mappings:</p>
+<ul>
+<li><code>ReturnAmountIsNotEnough</code> -&gt; <code>SLIPPAGE_EXCEEDS_THRESHOLD</code></li>
+<li><code>ERC20InsufficientAllowance</code> -&gt; <code>INSUFFICIENT_ALLOWANCE</code></li>
+<li><code>FailedOp</code> / <code>FailedOpWithRevert</code> / AA messages -&gt; <code>AA_VALIDATION_ERROR</code></li>
+<li>silent/decode-failure paths -&gt; unknown simulation categories</li>
+</ul>
+<p>This is not &quot;better logs.&quot; It is an API contract.<br>
+SDK behavior, UX copy, and retry behavior all depend on it.</p>
+<h2>Retry, quarantine, and nonce mitigation (separate concern)</h2>
+<p>Simulation classification and submission recovery are related but distinct.</p>
+<p>Submission failures (<code>handleOps</code>) are handled with explicit retry policy:</p>
+<ul>
+<li>message-matched retriable errors (<code>nonce too low/high</code>, timeout/network, underpriced)</li>
+<li>gas error refresh path</li>
+<li>balance-related send failures that trigger wallet quarantine + recursive resubmission</li>
+<li>depth and retry limits (<code>MAX_RETRIES</code>, <code>MAX_RECURSION</code>)</li>
+<li>request timeout guard (<code>RequestTimeoutError</code>)</li>
+</ul>
+<p>Nonce handling includes parsing node-provided hints:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #C9D1D9">private </span><span style="color: #D2A8FF">parseNextNonceFromWriteErrorMessage</span><span style="color: #C9D1D9">(writeErrorMessage: string): number </span><span style="color: #FF7B72">|</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">undefined</span><span style="color: #C9D1D9"> {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">match</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> writeErrorMessage.</span><span style="color: #D2A8FF">match</span><span style="color: #C9D1D9">(</span><span style="color: #A5D6FF">/next nonce</span><span style="color: #79C0FF">\s</span><span style="color: #FF7B72">+</span><span style="color: #A5D6FF">(</span><span style="color: #79C0FF">\d</span><span style="color: #FF7B72">+</span><span style="color: #A5D6FF">)/</span><span style="color: #FF7B72">i</span><span style="color: #C9D1D9">);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (</span><span style="color: #FF7B72">!</span><span style="color: #C9D1D9">match) </span><span style="color: #FF7B72">return</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">undefined</span><span style="color: #C9D1D9">;</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">parsed</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">Number</span><span style="color: #C9D1D9">(match[</span><span style="color: #79C0FF">1</span><span style="color: #C9D1D9">]);</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">return</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">Number</span><span style="color: #C9D1D9">.</span><span style="color: #D2A8FF">isFinite</span><span style="color: #C9D1D9">(parsed) </span><span style="color: #FF7B72">?</span><span style="color: #C9D1D9"> parsed </span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">undefined</span><span style="color: #C9D1D9">;</span></div><div class='line'><span style="color: #C9D1D9">}</span></div></code></div></pre>
+<p>And using hint-aware planning rather than blind increment:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (retryError </span><span style="color: #FF7B72">===</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'nonce too low'</span><span style="color: #C9D1D9">) {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">candidate</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span></div><div class='line'><span style="color: #C9D1D9">    nextNonceFromError </span><span style="color: #FF7B72">!==</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">undefined</span></div><div class='line'><span style="color: #C9D1D9">      </span><span style="color: #FF7B72">?</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">Math</span><span style="color: #C9D1D9">.</span><span style="color: #79C0FF">max</span><span style="color: #C9D1D9">(nextNonceFromError, lastAttempted </span><span style="color: #FF7B72">+</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">1</span><span style="color: #C9D1D9">)</span></div><div class='line'><span style="color: #C9D1D9">      </span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> lastAttempted </span><span style="color: #FF7B72">+</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">1</span><span style="color: #C9D1D9">;</span></div><div class='line'><span style="color: #C9D1D9">  hint </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> candidate;</span></div><div class='line'><span style="color: #C9D1D9">}</span></div></code></div></pre>
+<p>That behavior is directly tested in <code>bundler.test.ts</code>.</p>
+<h2>Spec vs Reality: EntryPoint simulation interface and production decode pipeline</h2>
+<p>Upstream semantics are clear in <code>IEntryPointSimulations</code>:</p>
+<ul>
+<li><code>simulateValidation(...)</code></li>
+<li><code>simulateHandleOp(...)</code></li>
+<li><code>ExecutionResult</code> with <code>targetSuccess</code> and <code>targetResult</code></li>
+</ul>
+<p>PR #321 (AA-173) matters because it formalized simulation/view separation from execution EntryPoint concerns, including explicit discussion of simulation behavior and gas-parity safety concerns between simulation and execution pathways.</p>
+<h3>What upstream gives you</h3>
+<ul>
+<li>canonical interface semantics</li>
+<li>structured simulation result shape</li>
+<li>AA failure class expectations demonstrated in upstream tests (AA20, AA23, AA25, AA3x behavior)</li>
+</ul>
+<h3>What production still has to solve locally</h3>
+<ul>
+<li>nested provider error extraction</li>
+<li>decode miss handling under imperfect ABI coverage</li>
+<li>signature lookup caching/fallback behavior</li>
+<li>stable SDK error taxonomies</li>
+<li>retry/quarantine resource management</li>
+<li>replay-grade observability and confidentiality boundaries</li>
+</ul>
+<p>A common overclaim is &quot;spec-compliant simulation&quot; meaning &quot;production-safe error reporting.&quot;<br>
+Spec alignment is necessary. It is not sufficient for production error reporting quality.</p>
+<h2>Testing strategy: local + upstream evidence</h2>
+<p>This system's confidence comes from two layers:</p>
+<h3>Local bundler tests</h3>
+<ul>
+<li><code>bundler-simulation.test.ts</code>: deterministic mapping tests for slippage/allowance/balance/AA-pattern paths, fallback behavior, Sourcify decode behavior.</li>
+<li><code>bundler.test.ts</code>: lock/quarantine behavior and nonce mitigation regression tests.</li>
+</ul>
+<h3>Upstream simulation tests</h3>
+<ul>
+<li><code>entrypointsimulations.test.ts</code>: canonical AA simulation semantics and expected failure classes (<code>AA20</code>, <code>AA23</code>, <code>AA25</code>, AA3x variants), including validation/simulation intent in reference implementation.</li>
+</ul>
+<p>Use both: upstream for protocol semantics, local for product behavior.</p>
+<h2>What most teams get wrong</h2>
+<ul>
+<li>treating decode as one stage instead of a fallback chain</li>
+<li>collapsing simulation failures and <code>handleOps</code> send failures into one &quot;unknown&quot;</li>
+<li>retrying nonce errors without parsing node-provided next nonce hints</li>
+<li>not releasing/quarantining bundler wallets correctly during recursive retries</li>
+<li>returning provider messages directly to clients instead of typed stable codes</li>
+<li>claiming full spec parity while relying on local heuristics/custom bytecode</li>
+<li>keeping only <code>userOpHash</code> and missing replay-critical context like block number and packed user op</li>
+</ul>
+<h2>Failure-path flow</h2>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class='code-container'><code>flowchart TD
+    clientReq[Client_sendUserOperation] --&gt; simCall[simulateUserOp_eth_call_stateOverride]
+    simCall --&gt; execDecode[decode_ExecutionResult]
+    execDecode --&gt;|"targetSuccess=true"| submitOps[submit_handleOps]
+    execDecode --&gt;|"targetSuccess=false"| rawExtract[extractRawRevert]
+    rawExtract --&gt; knownDecode[decodeWithKnownAbi]
+    knownDecode --&gt;|"miss"| sourcifyDecode[resolveViaSourcifyCached]
+    sourcifyDecode --&gt;|"miss"| patternFallback[mapMessageToKnownError]
+    patternFallback --&gt; typedError[BundlerHttpError_ExecutionErrorCodes]
+    typedError --&gt; sdkContract[stable_SDK_error_surface]</code></div></pre><!-- Note from shiki-twoslash: the language mermaid was not set up for Shiki to use, and so there is no code highlighting -->
+<h2>Closing</h2>
+<p>The hardest part of ERC-4337 backend work is not calling EntryPoint correctly.<br>
+It is making failures legible, classifiable, retry-safe, and consistent for downstream clients.</p>
+<p>When a bundler can explain <em>why</em> an op failed, decide <em>if</em> it should retry, and emit a stable execution code with replay context, it stops being a transport shim and becomes real infrastructure.</p>
+<p>That is where reliability starts.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>
