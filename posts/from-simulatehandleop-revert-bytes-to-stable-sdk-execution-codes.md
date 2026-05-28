@@ -226,21 +226,6 @@ Use both: upstream for protocol semantics, local for product behavior.
 - claiming full spec parity while relying on local heuristics/custom bytecode
 - keeping only `userOpHash` and missing replay-critical context like block number and packed user op
 
-## Failure-path flow
-
-```mermaid
-flowchart TD
-    clientReq[Client_sendUserOperation] --> simCall[simulateUserOperation_via_eth_call_stateOverride]
-    simCall --> execDecode[decode_execution_result]
-    execDecode -->|"targetSuccess=true"| submitOps[submit_handleOps]
-    execDecode -->|"targetSuccess=false"| rawExtract[extract_raw_revert]
-    rawExtract --> knownDecode[decode_with_known_abi]
-    knownDecode -->|"miss"| signatureFallback[selector_signature_lookup]
-    signatureFallback -->|"miss"| patternFallback[message_pattern_classification]
-    patternFallback --> typedError[typed_error_with_stable_execution_code]
-    typedError --> sdkContract[stable_sdk_error_surface]
-```
-
 ## Closing
 
 The hardest part of ERC-4337 backend work is not calling EntryPoint correctly.  
