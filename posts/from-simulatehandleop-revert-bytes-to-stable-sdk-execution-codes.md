@@ -34,7 +34,7 @@ This deep dive focuses on that exact boundary: **revert decoding -> typed execut
 
 ## Local architecture snapshot
 
-In this backend, `BundlerService.eth_sendUserOperation` does more than submit `handleOps`:
+In my production setup, the bundler `eth_sendUserOperation` path does more than submit `handleOps`:
 
 - acquires a bundler wallet from a pooled/quarantinable resource set
 - verifies sponsorship
@@ -42,25 +42,25 @@ In this backend, `BundlerService.eth_sendUserOperation` does more than submit `h
 - simulates the UserOp
 - submits `handleOps` with retry and nonce mitigation
 
-Simulation is performed with `eth_call` + `stateOverride` against EntryPoint, injecting `ENTRYPOINT_V7_SIMULATIONS_BYTECODE`, then decoding `simulateHandleOp` return data.
+Simulation is performed with `eth_call` plus `stateOverride` against EntryPoint, then by decoding `simulateHandleOp` return data.
 
-Core simulation branch:
+A simplified simulation branch:
 
 ```ts
-const decodedResult = decodeFunctionResult({
-  abi: ENTRYPOINT_V7_SIMULATIONS_ABI,
+const decoded = decodeFunctionResult({
+  abi: simulationAbi,
   functionName: 'simulateHandleOp',
-  data: simulateHandleOpResult.data as Hex,
+  data: simulationResult.data as Hex,
 });
 
-if (!decodedResult.targetSuccess) {
-  if (decodedResult.targetResult === '0x') {
-    throw new SilentSimulationError();
+if (!decoded.targetSuccess) {
+  if (decoded.targetResult === '0x') {
+    throw new SilentSimulationFailure();
   }
-  throw new ContractFunctionRevertedError({
-    abi: [...simulationErrors],
+  throw new DecodedSimulationFailure({
+    abi: knownSimulationErrors,
     functionName: 'simulateHandleOp',
-    data: decodedResult.targetResult as Hex,
+    data: decoded.targetResult as Hex,
   });
 }
 ```
@@ -73,7 +73,7 @@ A single decode strategy is fragile in real traffic. This implementation uses a 
 
 ### 1) Extract raw revert from nested provider errors
 
-`extractRawRevert()` walks viem `BaseError` chains and captures:
+A raw-revert extractor walks provider/client error chains and captures:
 
 - `raw` revert bytes if present
 - selector
@@ -82,11 +82,11 @@ A single decode strategy is fragile in real traffic. This implementation uses a 
 
 ### 2) Decode against known ABI
 
-`decodeWithKnownAbi()` attempts deterministic decoding against curated `simulationErrors` (e.g. `FailedOp`, `FailedOpWithRevert`, `ERC20InsufficientAllowance`, `ReturnAmountIsNotEnough`).
+A known-ABI decoder attempts deterministic decoding against curated simulation errors (for example `FailedOp`, `FailedOpWithRevert`, token allowance errors, and slippage-style errors).
 
 ### 3) Sourcify 4byte fallback (cached)
 
-If known ABI decode fails, `resolveViaSourcifyCached()` looks up selector signatures and caches result (`BUNDLER_SOURCIFY_DECODE`) to avoid repeated network-dependent misses.
+If known ABI decode fails, a selector-signature fallback (for example Sourcify/4byte style lookup) attempts recovery and caches results to avoid repeated network-dependent misses.
 
 ### 4) String-pattern fallback
 
@@ -99,16 +99,16 @@ If ABI-level decoding is incomplete/unknown, message heuristics classify common 
 
 ### 5) Map to typed errors + execution codes
 
-`mapDecodedToError()` converts decoded/fallback context into `BundlerHttpError` subclasses with stable `ExecutionErrorCodes`.
+A mapper converts decoded/fallback context into typed transport errors with stable execution codes.
 
 Example fallback branch:
 
 ```ts
 if (!decoded) {
-  const fallbackMapped = mapMessageToKnownError(options.fallbackMessage, debug, extra);
+  const fallbackMapped = classifyMessageFallback(options.fallbackMessage, debug, extra);
   if (fallbackMapped) return fallbackMapped;
   if (options.fallbackMessage) extra.reason = options.fallbackMessage;
-  return new UnknownBundlerError(debug, undefined, ExecutionErrorCodes.UNKNOWN_SIMULATION_ERROR);
+  return new UnknownSimulationFailure(debug, undefined, StableExecutionCodes.UNKNOWN_SIMULATION_ERROR);
 }
 ```
 
@@ -116,12 +116,12 @@ This is what keeps the external contract stable when decode confidence is not.
 
 ## Typed error surface as product contract
 
-`BundlerHttpError` is the boundary object exposed to clients (HTTP 516 in this service).
+The typed bundler error object is the boundary exposed to clients.
 
 It carries:
 
-- `type` (internal bundler class)
-- `code` (`ExecutionErrorCodes`, SDK-facing stability layer)
+- `type` (internal failure class)
+- `code` (SDK-facing stability layer)
 - `userMessage` (safe, opinionated message)
 - `reason` (best available technical cause)
 - `debug` (structured forensic payload)
@@ -145,13 +145,13 @@ Submission failures (`handleOps`) are handled with explicit retry policy:
 - message-matched retriable errors (`nonce too low/high`, timeout/network, underpriced)
 - gas error refresh path
 - balance-related send failures that trigger wallet quarantine + recursive resubmission
-- depth and retry limits (`MAX_RETRIES`, `MAX_RECURSION`)
+- depth and retry limits
 - request timeout guard (`RequestTimeoutError`)
 
 Nonce handling includes parsing node-provided hints:
 
 ```ts
-private parseNextNonceFromWriteErrorMessage(writeErrorMessage: string): number | undefined {
+function parseNextNonceHint(writeErrorMessage: string): number | undefined {
   const match = writeErrorMessage.match(/next nonce\s+(\d+)/i);
   if (!match) return undefined;
   const parsed = Number(match[1]);
@@ -171,7 +171,7 @@ if (retryError === 'nonce too low') {
 }
 ```
 
-That behavior is directly tested in `bundler.test.ts`.
+That behavior should be covered by targeted retry regression tests.
 
 ## Spec vs Reality: EntryPoint simulation interface and production decode pipeline
 
@@ -207,12 +207,12 @@ This system's confidence comes from two layers:
 
 ### Local bundler tests
 
-- `bundler-simulation.test.ts`: deterministic mapping tests for slippage/allowance/balance/AA-pattern paths, fallback behavior, Sourcify decode behavior.
-- `bundler.test.ts`: lock/quarantine behavior and nonce mitigation regression tests.
+- Deterministic mapping tests that cover common failure paths (slippage, allowance, balance, and AA-pattern classes), plus decoder fallback behavior.
+- Concurrency and retry regression tests that validate lock/quarantine lifecycle and nonce mitigation behavior.
 
 ### Upstream simulation tests
 
-- `entrypointsimulations.test.ts`: canonical AA simulation semantics and expected failure classes (`AA20`, `AA23`, `AA25`, AA3x variants), including validation/simulation intent in reference implementation.
+- Protocol-reference simulation tests that confirm canonical AA failure semantics (`AA20`, `AA23`, `AA25`, and related AA3x variants), including the intended boundary between validation and simulation errors.
 
 Use both: upstream for protocol semantics, local for product behavior.
 
@@ -230,15 +230,15 @@ Use both: upstream for protocol semantics, local for product behavior.
 
 ```mermaid
 flowchart TD
-    clientReq[Client_sendUserOperation] --> simCall[simulateUserOp_eth_call_stateOverride]
-    simCall --> execDecode[decode_ExecutionResult]
+    clientReq[Client_sendUserOperation] --> simCall[simulateUserOperation_via_eth_call_stateOverride]
+    simCall --> execDecode[decode_execution_result]
     execDecode -->|"targetSuccess=true"| submitOps[submit_handleOps]
-    execDecode -->|"targetSuccess=false"| rawExtract[extractRawRevert]
-    rawExtract --> knownDecode[decodeWithKnownAbi]
-    knownDecode -->|"miss"| sourcifyDecode[resolveViaSourcifyCached]
-    sourcifyDecode -->|"miss"| patternFallback[mapMessageToKnownError]
-    patternFallback --> typedError[BundlerHttpError_ExecutionErrorCodes]
-    typedError --> sdkContract[stable_SDK_error_surface]
+    execDecode -->|"targetSuccess=false"| rawExtract[extract_raw_revert]
+    rawExtract --> knownDecode[decode_with_known_abi]
+    knownDecode -->|"miss"| signatureFallback[selector_signature_lookup]
+    signatureFallback -->|"miss"| patternFallback[message_pattern_classification]
+    patternFallback --> typedError[typed_error_with_stable_execution_code]
+    typedError --> sdkContract[stable_sdk_error_surface]
 ```
 
 ## Closing
