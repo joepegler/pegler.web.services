@@ -1,12 +1,14 @@
 # Joe Pegler
 
-Staff-level infrastructure engineer focused on transaction execution systems, SDK architecture, and production reliability across EVM and Solana.
+Web3 infrastructure engineer focused on ERC-4337 execution systems, smart accounts, and cross-chain SDK architecture across EVM and Solana.
 
-I build execution infrastructure that turns complex, failure-prone on-chain workflows into reliable product surfaces for users and developers.
+I build reliable transaction infrastructure from simulation to production execution, turning failure-prone on-chain workflows into dependable product systems.
 
 - Website: [peglerweb.services](https://peglerweb.services)
 - GitHub: [@joepegler](https://github.com/joepegler)
 - LinkedIn: [joe-pegler](https://linkedin.com/in/joe-pegler)
+- Resume: [gitconnected profile](https://gitconnected.com/joepegler/resume)
+- X: [@joepegler](https://x.com/joepegler)
 
 ## Impact At A Glance
 
@@ -24,6 +26,18 @@ I build execution infrastructure that turns complex, failure-prone on-chain work
 - Typed TypeScript SDKs for account abstraction and cross-chain workflows
 - Reliability-focused backend infrastructure and operational debugging tooling
 - Multi-provider routing systems across EVM and Solana
+
+## Currently
+
+- Building transaction execution infrastructure and reliability systems at defi.app
+- Working on simulation-first ERC-4337 and cross-chain execution paths
+- Open-sourcing tooling that improves deterministic testing and developer confidence
+
+## Open To
+
+- Staff and senior infrastructure roles across protocol, wallet, and execution products
+- Full-time, long-term contract, or selective fractional engagements
+- Teams that need ownership from architecture through production reliability
 
 ## Systems I Have Worked On
 

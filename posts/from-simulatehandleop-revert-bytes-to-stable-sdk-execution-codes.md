@@ -1,236 +1,219 @@
 ---
-title: From simulateHandleOp Revert Bytes to Stable SDK Execution Codes
+title: Turning ERC-4337 Simulation Failures Into Useful SDK Errors
 date: 2026-05-28
-summary: How a production ERC-4337 bundler turns nested simulation and submission failures into typed, SDK-safe execution codes with replay-grade debug context.
+summary: Why production ERC-4337 bundlers need a reliability layer that translates messy simulation and submission failures into stable SDK-facing execution codes.
 slug: from-simulatehandleop-revert-bytes-to-stable-sdk-execution-codes
 ---
 
-# From simulateHandleOp Revert Bytes to Stable SDK Execution Codes
+# Turning ERC-4337 Simulation Failures Into Useful SDK Errors
 
-[AA-173 / PR #321](https://github.com/eth-infinitism/account-abstraction/pull/321)  
-[IEntryPointSimulations.sol](https://raw.githubusercontent.com/eth-infinitism/account-abstraction/develop/contracts/interfaces/IEntryPointSimulations.sol)  
-[entrypointsimulations.test.ts](https://raw.githubusercontent.com/eth-infinitism/account-abstraction/develop/test/entrypointsimulations.test.ts)
+## The problem users actually see
 
-## Opening
+A user tries to swap, bridge, or approve through a smart account flow.  
+The action fails.  
+The wallet says: "transaction failed."
 
-A UserOperation fails in simulation.
+That message is not useful for anyone:
 
-The wallet UI says "transaction failed."  
-The bundler logs contain a revert payload, nested inside provider error wrappers, with just enough information to diagnose the root cause if someone manually parses it.
+- not for the user, who needs to know what to fix
+- not for the SDK, which needs a stable programmatic error
+- not for support, which needs enough context to debug quickly
 
-That gap is where many ERC-4337 systems lose reliability.
+The real cause might be:
 
-Not at quote time.  
-Not at `eth_sendUserOperation` call time.  
-At failure translation time.
+- insufficient token allowance
+- insufficient balance
+- slippage threshold not met
+- account validation failure
+- paymaster rejection
+- nonce mismatch
+- gas or RPC/provider behavior
 
-In production, a bundler is not a thin relay. It is a policy engine that has to answer three questions, consistently:
+In many ERC-4337 stacks, these all collapse into one vague failure because the raw backend error is too low-level to expose directly.
 
-- What failed?
-- Is retry safe?
-- What stable error code should the SDK get?
+This post is about the production layer that fixes that.
 
-This deep dive focuses on that exact boundary: **revert decoding -> typed execution errors -> retry/quarantine behavior**.
+## ERC-4337 context, only what we need
 
-## Local architecture snapshot
+At a high level:
 
-In my production setup, the bundler `eth_sendUserOperation` path does more than submit `handleOps`:
+- users submit `UserOperation` objects, not normal L1/L2 transactions
+- a bundler receives these operations
+- the bundler simulates first, then decides whether to submit
 
-- acquires a bundler wallet from a pooled/quarantinable resource set
-- verifies sponsorship
-- estimates gas
-- simulates the UserOp
-- submits `handleOps` with retry and nonce mitigation
+Why simulate first? Because submitting obviously invalid operations wastes gas, burns time, and creates noisy failure states.
 
-Simulation is performed with `eth_call` plus `stateOverride` against EntryPoint, then by decoding `simulateHandleOp` return data.
+So simulation is not a nice-to-have. It is the first reliability gate.
 
-A simplified simulation branch:
+## Why simulation failures are messy in real systems
 
-```ts
-const decoded = decodeFunctionResult({
-  abi: simulationAbi,
-  functionName: 'simulateHandleOp',
-  data: simulationResult.data as Hex,
-});
+In a clean toy environment, a simulation failure can look straightforward. In production, it usually is not.
 
-if (!decoded.targetSuccess) {
-  if (decoded.targetResult === '0x') {
-    throw new SilentSimulationFailure();
-  }
-  throw new DecodedSimulationFailure({
-    abi: knownSimulationErrors,
-    functionName: 'simulateHandleOp',
-    data: decoded.targetResult as Hex,
-  });
-}
+What I see in real traffic:
+
+- provider clients wrap errors inside multiple nested objects
+- useful payloads are often raw ABI-encoded revert bytes
+- known ABI coverage is never complete
+- sometimes I only get a selector and no friendly signature
+- sometimes I only get string fragments, including `AAxx` style messages
+- different RPC providers shape the same underlying failure differently
+
+So "just decode the revert" is not a production strategy. It is one step in a chain.
+
+## The decode pipeline that holds up in production
+
+I use a staged pipeline so decode quality can vary without breaking the SDK contract:
+
+```txt
+raw provider error
+  -> extract revert bytes
+  -> decode known ABI errors
+  -> fallback selector lookup
+  -> fallback message-pattern classification
+  -> map to typed SDK error code
 ```
 
-The important part is not only failure detection. It is what happens next.
+### 1) Extract revert data from wrappers
 
-## Decode pipeline deep dive
+First, walk nested provider errors and extract whatever canonical signal exists:
 
-A single decode strategy is fragile in real traffic. This implementation uses a staged pipeline.
-
-### 1) Extract raw revert from nested provider errors
-
-A raw-revert extractor walks provider/client error chains and captures:
-
-- `raw` revert bytes if present
+- raw revert bytes
 - selector
-- provider summary
-- traversal trail (`walkTrail`) for forensics
+- provider error summary
+- traversal trail for debugging
 
-### 2) Decode against known ABI
+Without this step, downstream decode logic never sees the real payload.
 
-A known-ABI decoder attempts deterministic decoding against curated simulation errors (for example `FailedOp`, `FailedOpWithRevert`, token allowance errors, and slippage-style errors).
+### 2) Decode known ABI errors
 
-### 3) Sourcify 4byte fallback (cached)
+Try deterministic ABI decode first for errors I expect to be common, like:
 
-If known ABI decode fails, a selector-signature fallback (for example Sourcify/4byte style lookup) attempts recovery and caches results to avoid repeated network-dependent misses.
+- allowance failures
+- slippage-style failures
+- known `FailedOp` patterns
 
-### 4) String-pattern fallback
+When this works, the mapping is clean and confidence is high.
 
-If ABI-level decoding is incomplete/unknown, message heuristics classify common failure classes:
+### 3) Fallback on selector signatures
 
-- allowance (`transfer amount exceeds allowance`, permit expiry/signature variants)
-- balance (`insufficient balance` variants)
-- slippage (`min return not reached`, selector markers)
-- AA-formatted messages (`AA20`, `AA23`, `AA25`, etc.)
+If ABI decode misses, look up the selector signature and cache the result.  
+This catches cases where payload shape is valid but local ABI coverage is incomplete.
 
-### 5) Map to typed errors + execution codes
+### 4) Fallback on message patterns
 
-A mapper converts decoded/fallback context into typed transport errors with stable execution codes.
+If structured decode still fails, classify based on resilient patterns:
 
-Example fallback branch:
+- allowance-related message variants
+- balance-related variants
+- slippage variants
+- `AA20` / `AA23` / `AA25` style patterns
+
+This is less precise, but still better than returning "unknown" for everything.
+
+### 5) Emit typed errors with stable codes
+
+No matter which decode stage succeeds, the output to SDKs stays stable:
 
 ```ts
-if (!decoded) {
-  const fallbackMapped = classifyMessageFallback(options.fallbackMessage, debug, extra);
-  if (fallbackMapped) return fallbackMapped;
-  if (options.fallbackMessage) extra.reason = options.fallbackMessage;
-  return new UnknownSimulationFailure(debug, undefined, StableExecutionCodes.UNKNOWN_SIMULATION_ERROR);
+if (!decodedSignal) {
+  return {
+    code: "UNKNOWN_SIMULATION_ERROR",
+    reason: fallbackMessage ?? "simulation failed",
+  };
+}
+
+return mapDecodedSignalToStableCode(decodedSignal);
+```
+
+The internal decode strategy can evolve. The external API contract should not.
+
+## Stable SDK codes are the product boundary
+
+This is the core point: stable execution codes are not log decoration. They are the product boundary between bundler infrastructure and every downstream consumer.
+
+I treat these codes as contract-level outputs, for example:
+
+- `INSUFFICIENT_ALLOWANCE`
+- `INSUFFICIENT_BALANCE`
+- `SLIPPAGE_EXCEEDS_THRESHOLD`
+- `AA_VALIDATION_ERROR`
+- `NONCE_TOO_LOW`
+- `UNKNOWN_SIMULATION_ERROR`
+
+Why this matters:
+
+- SDKs can drive deterministic UI copy
+- clients can choose retry vs no-retry safely
+- analytics can track real failure classes over time
+- support can triage without digging through raw RPC payloads
+
+If the code surface is unstable, every integration becomes fragile.
+
+## Keep simulation classification separate from submission recovery
+
+These are related, but they are not the same problem.
+
+Simulation classification answers: "Is this operation valid enough to submit?"
+
+Submission recovery answers: "Submission failed, now what?"
+
+I keep the policies separate:
+
+- do not retry deterministic user-state failures like allowance/slippage
+- do retry selected operational failures like transient RPC timeouts
+- treat nonce errors as a hint-driven retry path, not blind increment
+- quarantine unhealthy bundler wallets and retry with guardrails
+- enforce strict retry depth and timeout limits
+
+A small example of nonce hint extraction:
+
+```ts
+function parseNextNonceHint(message: string): number | undefined {
+  const m = message.match(/next nonce\s+(\d+)/i);
+  if (!m) return undefined;
+  const n = Number(m[1]);
+  return Number.isFinite(n) ? n : undefined;
 }
 ```
 
-This is what keeps the external contract stable when decode confidence is not.
+That is a reliability control, not a convenience feature.
 
-## Typed error surface as product contract
+## What production adds beyond spec compliance
 
-The typed bundler error object is the boundary exposed to clients.
+Spec alignment is required. It is not enough.
 
-It carries:
+A spec-compliant bundler can still produce bad operational outcomes if it lacks:
 
-- `type` (internal failure class)
-- `code` (SDK-facing stability layer)
-- `userMessage` (safe, opinionated message)
-- `reason` (best available technical cause)
-- `debug` (structured forensic payload)
+- robust provider-wrapper extraction
+- decode fallback layering
+- stable SDK-facing taxonomy
+- explicit retry and quarantine policy
+- structured observability with safe debug context
 
-Representative mappings:
+In other words, passing interface-level checks does not automatically make failures legible to real users and real SDKs.
 
-- `ReturnAmountIsNotEnough` -> `SLIPPAGE_EXCEEDS_THRESHOLD`
-- `ERC20InsufficientAllowance` -> `INSUFFICIENT_ALLOWANCE`
-- `FailedOp` / `FailedOpWithRevert` / AA messages -> `AA_VALIDATION_ERROR`
-- silent/decode-failure paths -> unknown simulation categories
+## Testing this layer properly
 
-This is not "better logs." It is an API contract.  
-SDK behavior, UX copy, and retry behavior all depend on it.
+I want deterministic coverage for both classification and recovery behavior. The minimum serious set looks like:
 
-## Retry, quarantine, and nonce mitigation (separate concern)
+- allowance failure maps to `INSUFFICIENT_ALLOWANCE`
+- balance failure maps to `INSUFFICIENT_BALANCE`
+- slippage failure maps to `SLIPPAGE_EXCEEDS_THRESHOLD`
+- AA validation failures map consistently
+- unknown selectors still map to stable unknown categories
+- nonce hints parse correctly and guide retry behavior
+- wallet quarantine exits cleanly and does not loop forever
+- retry paths stop at hard limits
 
-Simulation classification and submission recovery are related but distinct.
+Without these tests, reliability regressions show up in production first.
 
-Submission failures (`handleOps`) are handled with explicit retry policy:
+## Main takeaway
 
-- message-matched retriable errors (`nonce too low/high`, timeout/network, underpriced)
-- gas error refresh path
-- balance-related send failures that trigger wallet quarantine + recursive resubmission
-- depth and retry limits
-- request timeout guard (`RequestTimeoutError`)
+A bundler is not just a relay.
 
-Nonce handling includes parsing node-provided hints:
+In production, it is a reliability layer that translates low-level execution failures into stable, actionable outputs for SDKs, wallets, UIs, support, and operators.
 
-```ts
-function parseNextNonceHint(writeErrorMessage: string): number | undefined {
-  const match = writeErrorMessage.match(/next nonce\s+(\d+)/i);
-  if (!match) return undefined;
-  const parsed = Number(match[1]);
-  return Number.isFinite(parsed) ? parsed : undefined;
-}
-```
+Calling simulation correctly is table stakes.  
+Turning messy simulation and submission failures into stable execution codes is the hard part.
 
-And using hint-aware planning rather than blind increment:
-
-```ts
-if (retryError === 'nonce too low') {
-  const candidate =
-    nextNonceFromError !== undefined
-      ? Math.max(nextNonceFromError, lastAttempted + 1)
-      : lastAttempted + 1;
-  hint = candidate;
-}
-```
-
-That behavior should be covered by targeted retry regression tests.
-
-## Spec vs Reality: EntryPoint simulation interface and production decode pipeline
-
-Upstream semantics are clear in `IEntryPointSimulations`:
-
-- `simulateValidation(...)`
-- `simulateHandleOp(...)`
-- `ExecutionResult` with `targetSuccess` and `targetResult`
-
-PR #321 (AA-173) matters because it formalized simulation/view separation from execution EntryPoint concerns, including explicit discussion of simulation behavior and gas-parity safety concerns between simulation and execution pathways.
-
-### What upstream gives you
-
-- canonical interface semantics
-- structured simulation result shape
-- AA failure class expectations demonstrated in upstream tests (AA20, AA23, AA25, AA3x behavior)
-
-### What production still has to solve locally
-
-- nested provider error extraction
-- decode miss handling under imperfect ABI coverage
-- signature lookup caching/fallback behavior
-- stable SDK error taxonomies
-- retry/quarantine resource management
-- replay-grade observability and confidentiality boundaries
-
-A common overclaim is "spec-compliant simulation" meaning "production-safe error reporting."  
-Spec alignment is necessary. It is not sufficient for production error reporting quality.
-
-## Testing strategy: local + upstream evidence
-
-This system's confidence comes from two layers:
-
-### Local bundler tests
-
-- Deterministic mapping tests that cover common failure paths (slippage, allowance, balance, and AA-pattern classes), plus decoder fallback behavior.
-- Concurrency and retry regression tests that validate lock/quarantine lifecycle and nonce mitigation behavior.
-
-### Upstream simulation tests
-
-- Protocol-reference simulation tests that confirm canonical AA failure semantics (`AA20`, `AA23`, `AA25`, and related AA3x variants), including the intended boundary between validation and simulation errors.
-
-Use both: upstream for protocol semantics, local for product behavior.
-
-## What most teams get wrong
-
-- treating decode as one stage instead of a fallback chain
-- collapsing simulation failures and `handleOps` send failures into one "unknown"
-- retrying nonce errors without parsing node-provided next nonce hints
-- not releasing/quarantining bundler wallets correctly during recursive retries
-- returning provider messages directly to clients instead of typed stable codes
-- claiming full spec parity while relying on local heuristics/custom bytecode
-- keeping only `userOpHash` and missing replay-critical context like block number and packed user op
-
-## Closing
-
-The hardest part of ERC-4337 backend work is not calling EntryPoint correctly.  
-It is making failures legible, classifiable, retry-safe, and consistent for downstream clients.
-
-When a bundler can explain *why* an op failed, decide *if* it should retry, and emit a stable execution code with replay context, it stops being a transport shim and becomes real infrastructure.
-
-That is where reliability starts.
+That translation layer is core transaction infrastructure.
