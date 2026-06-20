@@ -7,7 +7,7 @@ I build reliable transaction infrastructure from simulation to production execut
 - Website: [peglerweb.services](https://peglerweb.services)
 - GitHub: [@joepegler](https://github.com/joepegler)
 - LinkedIn: [joe-pegler](https://linkedin.com/in/joe-pegler)
-- Resume: [gitconnected profile](https://gitconnected.com/joepegler/resume)
+- Resume: [peglerweb.services/resume](https://peglerweb.services/resume/)
 - X: [@joepegler](https://x.com/joepegler)
 
 ## Impact At A Glance
