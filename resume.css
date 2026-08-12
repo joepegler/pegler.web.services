@@ -379,7 +379,7 @@ body.resume-page {
 }
 
 /* Responsive: stack header, tighten spacing, prevent overflow */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   body.resume-page {
     padding-top: 8.25rem;
   }
@@ -447,7 +447,7 @@ body.resume-page {
   }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   body.resume-page {
     padding-top: 8.8rem;
   }
@@ -470,7 +470,7 @@ body.resume-page {
   }
 }
 
-@media (max-width: 400px) {
+@media screen and (max-width: 400px) {
   .resume-main .container {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -557,6 +557,7 @@ body.resume-page {
   .resume-name,
   .resume-job-company,
   .resume-job-company a,
+  .resume-skill-group-name,
   .resume-edu-institution {
     color: #1a1a1a !important;
   }
