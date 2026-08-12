@@ -125,7 +125,9 @@
     if (!basics) return;
     const name = basics.name || "";
     const label = basics.label || "";
+    const specialties = basics.specialties || "";
     const summary = basics.summary || "";
+    const location = basics.location || "";
     const email = basics.email || "";
     const website = basics.url || basics.website || "";
     const profiles = basics.profiles || [];
@@ -138,8 +140,12 @@
     html += '<div class="resume-header-text">';
     html += `<h1 class="resume-name">${escapeHtml(name)}</h1>`;
     if (label) html += `<p class="resume-label">${escapeHtml(label)}</p>`;
+    if (specialties)
+      html += `<p class="resume-specialties">${escapeHtml(specialties)}</p>`;
     if (summary) html += `<p class="resume-summary">${escapeHtml(summary)}</p>`;
-    html += '<div class="resume-contact">';
+    html += '<div class="resume-contact" aria-label="Contact details">';
+    if (location)
+      html += `<span class="resume-contact-location">${escapeHtml(location)}</span>`;
     if (email)
       html +=
         '<a href="mailto:' +
@@ -154,7 +160,7 @@
           website.startsWith("http") ? website : "https://" + website,
         ) +
         '" target="_blank" rel="noopener noreferrer">' +
-        escapeHtml(website) +
+        escapeHtml(website.replace(/^https?:\/\//, "").replace(/\/$/, "")) +
         "</a>";
     profiles.forEach(function (p) {
       if (p.url)
@@ -173,40 +179,6 @@
       if (t) html += `<li>${escapeHtml(t)}</li>`;
     });
     html += "</ul></section>";
-    root.insertAdjacentHTML("beforeend", html);
-  }
-
-  function renderWhyHire(root, items) {
-    if (!Array.isArray(items) || items.length === 0) return;
-    let html =
-      '<section class="resume-section resume-why-hire" id="resume-why-hire"><h2>Why Hire This Person</h2><ul class="resume-selected-impact-list">';
-    items.forEach(function (text) {
-      const t = text && text.trim ? text.trim() : String(text);
-      if (t) html += `<li>${escapeHtml(t)}</li>`;
-    });
-    html += "</ul></section>";
-    root.insertAdjacentHTML("beforeend", html);
-  }
-
-  function renderBestFit(root, items) {
-    if (!Array.isArray(items) || items.length === 0) return;
-    let html =
-      '<section class="resume-section resume-best-fit" id="resume-best-fit"><h2>Best Fit</h2><ul class="resume-selected-impact-list">';
-    items.forEach(function (text) {
-      const t = text && text.trim ? text.trim() : String(text);
-      if (t) html += `<li>${escapeHtml(t)}</li>`;
-    });
-    html += "</ul></section>";
-    root.insertAdjacentHTML("beforeend", html);
-  }
-
-  function renderAvailability(root, text) {
-    const value = text && text.trim ? text.trim() : String(text || "");
-    if (!value) return;
-    const html =
-      '<section class="resume-section resume-availability" id="resume-availability">' +
-      `<p class="resume-availability-text"><span>Availability:</span> ${escapeHtml(value)}</p>` +
-      "</section>";
     root.insertAdjacentHTML("beforeend", html);
   }
 
@@ -265,9 +237,11 @@
       const dateRange = formatDateRange(entry);
       const location = formatWorkLocation(entry);
       const summary = entry.summary || "";
-      const techStack = Array.isArray(entry.techStack) ? entry.techStack : [];
       const highlights = entry.highlights || [];
 
+      if (entry.pageBreakBefore)
+        html +=
+          '<h2 class="resume-experience-continuation">Experience continued</h2>';
       html += '<article class="resume-job resume-job-card">';
       html += `<h3 class="resume-job-company">${companyDisplay}</h3>`;
       let metaParts = [escapeHtml(position)];
@@ -276,17 +250,6 @@
       html += `<p class="resume-job-meta">${metaParts.join(" · ")}</p>`;
       if (summary)
         html += `<p class="resume-job-summary">${escapeHtml(summary)}</p>`;
-      if (techStack.length) {
-        const stack = techStack
-          .map(function (item) {
-            return item && item.trim ? item.trim() : String(item);
-          })
-          .filter(Boolean)
-          .map(escapeHtml)
-          .join(" · ");
-        if (stack)
-          html += `<p class="resume-job-stack"><strong>Tech Stack:</strong> ${stack}</p>`;
-      }
       if (highlights.length) {
         html += '<ul class="resume-job-highlights">';
         highlights.forEach(function (h) {
@@ -356,11 +319,8 @@
     root.innerHTML = "";
 
     if (data.basics) renderBasics(root, data.basics);
-    if (data.whyHire && data.whyHire.length) renderWhyHire(root, data.whyHire);
     if (data.selectedImpact && data.selectedImpact.length)
       renderSelectedImpact(root, data.selectedImpact);
-    if (data.bestFit && data.bestFit.length) renderBestFit(root, data.bestFit);
-    if (data.availability) renderAvailability(root, data.availability);
     if (data.work && data.work.length) renderWork(root, data.work);
     if (data.earlierExperience && data.earlierExperience.length)
       renderEarlierExperience(root, data.earlierExperience);

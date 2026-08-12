@@ -2,245 +2,179 @@
   "basics": {
     "name": "Joe Pegler",
     "location": "Cork, Ireland",
-    "label": "Web3 Infrastructure Engineer · ERC-4337 Execution, Smart Accounts, and Cross-Chain SDKs",
-    "image": "https://avatars3.githubusercontent.com/u/4627587?v=4",
+    "label": "Staff / Senior Infrastructure Engineer",
+    "specialties": "Blockchain Execution · SDKs · Smart Accounts · Cross-Chain Systems",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Web3 infrastructure engineer focused on ERC-4337 execution systems, smart accounts, and cross-chain SDK architecture across EVM and Solana. I design simulation-first execution pipelines with retries, fallback handling, sponsorship flows, typed SDKs, and structured operational errors that improve reliability in production.",
-    "website": "https://peglerweb.services",
+    "summary": "Senior infrastructure engineer building production blockchain transaction and execution systems across EVM and Solana. I own backend architecture, typed SDKs, smart-account and cross-chain workflows, with deep ERC-4337 expertise and a focus on simulation, observability, reliability, and developer experience. Comfortable owning architecture and implementation in small, senior teams.",
     "profiles": [
-      { "network": "GitHub", "username": "joepegler", "url": "https://github.com/joepegler" },
-      { "network": "LinkedIn", "username": "joe-pegler", "url": "https://linkedin.com/in/joe-pegler" },
-      { "network": "X", "username": "joepegler", "url": "https://x.com/joepegler" },
-      { "network": "Resume", "username": "joepegler", "url": "https://peglerweb.services/resume/" }
+      {
+        "network": "GitHub",
+        "username": "joepegler",
+        "url": "https://github.com/joepegler"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "joe-pegler",
+        "url": "https://linkedin.com/in/joe-pegler"
+      }
     ]
   },
   "selectedImpact": [
-    "Designed an internal ERC-4337 transaction orchestration architecture with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
-    "Hardened sponsored and gasless transaction execution with retries, simulation, fallback handling, ABI/Sourcify-backed error decoding, and structured operational errors.",
-    "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed execution surface.",
-    "Led SDK architecture for smart-account, quote, and transaction execution workflows used across frontend and backend teams.",
-    "Built @biconomy/abstractjs from scratch: architected the viem-inspired TypeScript SDK (modular clients, abstractions, entities), wrote the developer documentation, and shipped a package averaging ~5.2k weekly npm downloads for smart-account and cross-chain execution.",
-    "Built and open-sourced Statecraft, a TypeScript-first Ethereum integration testing framework for deterministic scenario-based tests with typed fixtures, forked state, and isolated runtimes.",
-    "Implemented EIP-712, EIP-1271, ERC-6492-style compatibility flows, and P-256/passkey-related signing support for smart-account UX."
+    "Designed and operated internal ERC-4337 transaction orchestration and bundler infrastructure at defi.app, supporting 5k to 7k swaps per day at approximately 95% success and 20 to 40% faster execution than ZeroDev.",
+    "Built @biconomy/abstractjs from scratch as a viem-inspired TypeScript SDK for smart accounts and multi-chain execution, growing it to approximately 5.2k weekly npm downloads.",
+    "Unified execution and routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind typed SDK surfaces shared by frontend and backend teams.",
+    "Built EVM and Solana simulation, sponsorship, and transaction-safety infrastructure, including EntryPoint v7 and Jito-aware validation.",
+    "Improved production reliability through retries, fallback handling, structured errors, ABI-backed failure decoding, and debugging of nonce races, RPC lag, and simulation mismatches."
   ],
-  "whyHire": [
-    "Turns unreliable blockchain execution paths into production-grade infrastructure.",
-    "Designs transaction systems with simulation, retries, fallback logic, typed errors, and operational debugging built in.",
-    "Bridges protocol complexity and product delivery through SDKs, execution services, and developer tooling."
-  ],
-  "bestFit": [
-    "Protocol infrastructure",
-    "Wallet and account abstraction teams",
-    "Cross-chain execution products",
-    "SDK and developer platform teams",
-    "Reliability-heavy backend systems",
-    "Early-stage teams needing senior ownership across architecture and implementation"
-  ],
-  "availability": "Open to full-time, long-term contract, or selective fractional work across protocol infrastructure, transaction execution, SDKs, reliability, and developer tooling.",
   "work": [
     {
-      "name": "defi.app",
       "company": "defi.app",
       "position": "Web3 Infrastructure Engineer",
       "url": "https://defi.app",
-      "website": "https://defi.app",
       "startDate": "2025-04-01",
-      "endDate": "2026-05-01",
+      "endDate": "2026-04-01",
       "workMode": "remote",
       "isCurrentRole": false,
-      "start": { "year": 2025, "month": 4 },
-      "end": { "year": 2026, "month": 5 },
-      "techStack": [
-        "TypeScript",
-        "Node.js",
-        "viem",
-        "EVM",
-        "Solana",
-        "PostgreSQL",
-        "NestJS"
-      ],
-      "summary": "Owned transaction infrastructure, sponsorship flows, execution reliability, and developer tooling for a unified cross-chain DeFi product.",
+      "start": {
+        "year": 2025,
+        "month": 4
+      },
+      "end": {
+        "year": 2026,
+        "month": 4
+      },
+      "summary": "Owned backend and SDK architecture for production transaction execution across EVM and Solana, from route selection and simulation through sponsorship and submission.",
       "highlights": [
-        "Designed an internal ERC-4337 transaction orchestration system with parallelized fee lookup, nonce handling, sponsorship, simulation, and execution paths to reduce latency versus provider-managed flows.",
-        "Improved execution reliability with retries, fallback handling, EntryPoint v7 simulation, ABI/Sourcify-backed error decoding, and structured operational errors.",
-        "Unified multi-provider quote and execution routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind one typed integration surface.",
-        "Standardized TypeScript SDK execution surfaces including RouteClient and ExecutionManager for frontend and backend teams.",
-        "Built EVM and Solana simulation and sponsorship infrastructure, including Jito-aware validation for sponsored transaction safety."
+        "Designed and operated an internal ERC-4337 bundler coordinating wallet pools, nonces, fees, sponsorship policy, simulation, and submission; supported 5k to 7k swaps per day at approximately 95% success and 20 to 40% faster execution than ZeroDev.",
+        "Engineered the reliability layer around EntryPoint v7 simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors for product and production debugging.",
+        "Built EVM and Solana simulation and sponsorship infrastructure, including Jito-aware safety validation, while diagnosing nonce contention, RPC lag, slippage, and simulation-to-execution mismatches.",
+        "Unified LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind typed routing and execution APIs, including RouteClient and ExecutionManager surfaces used across frontend and backend teams."
       ]
     },
     {
-      "name": "biconomy",
-      "company": "biconomy",
+      "company": "Biconomy",
       "position": "Lead SDK Engineer",
       "url": "https://biconomy.io",
-      "website": "https://biconomy.io",
       "startDate": "2023-12-01",
       "endDate": "2025-05-01",
       "workMode": "remote",
       "companyHq": "Dubai",
       "isCurrentRole": false,
-      "start": { "year": 2023, "month": 12 },
-      "end": { "year": 2025, "month": 5 },
-      "techStack": [
-        "TypeScript",
-        "Node.js",
-        "viem",
-        "Safe",
-        "ERC-4337",
-        "EIP-1271",
-        "Vitest",
-        "Bun"
-      ],
-      "summary": "Led architecture and development of @biconomy/abstractjs, Biconomy's core TypeScript SDK for smart accounts and multi-chain transaction execution.",
+      "start": {
+        "year": 2023,
+        "month": 12
+      },
+      "end": {
+        "year": 2025,
+        "month": 5
+      },
+      "summary": "Owned architecture and implementation of @biconomy/abstractjs, Biconomy's TypeScript developer platform for ERC-4337 smart accounts and multi-chain execution.",
       "highlights": [
-        "Built @biconomy/abstractjs from scratch: viem-inspired abstractions and entities, modular clients, batching, and account abstraction APIs; wrote the SDK documentation and examples.",
-        "Shipped a widely adopted developer package averaging ~5.2k weekly npm downloads, used by teams building gasless and account-abstracted product flows.",
-        "Implemented EIP-712, EIP-1271, ERC-6492-style account compatibility, and P-256/passkey-related signing flows for smart-account UX.",
-        "Hardened production readiness with typed errors, composable batching, Vitest, Bun, GitHub Actions, and Codecov."
+        "Built the SDK from scratch around viem-inspired abstractions, modular clients, typed APIs, composable batching, and account-agnostic execution flows.",
+        "Grew the package to approximately 5.2k weekly npm downloads and wrote the documentation and examples used by product teams integrating gasless and smart-account journeys.",
+        "Implemented Safe, EIP-712, EIP-1271, ERC-6492, P-256, and passkey compatibility, with production safeguards backed by Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
-      "name": "enso",
-      "company": "enso.finance",
+      "company": "Enso Finance",
       "position": "Lead Frontend Engineer",
       "url": "https://www.enso.build",
-      "website": "https://www.enso.build",
+      "pageBreakBefore": true,
       "startDate": "2021-06-01",
       "endDate": "2023-11-01",
       "workMode": "remote",
       "companyHq": "Zurich",
       "isCurrentRole": false,
-      "start": { "year": 2021, "month": 6 },
-      "end": { "year": 2023, "month": 11 },
-      "techStack": [
-        "TypeScript",
-        "Node.js",
-        "EVM",
-        "Graph Protocol",
-        "Solidity",
-        "React"
-      ],
-      "summary": "Lead Frontend Engineer at Enso Finance. Shipped the primary Ethereum dApp from early product stages through production, with focus on client architecture, execution-related user flows, and integration surfaces for DeFi execution workflows.",
+      "start": {
+        "year": 2021,
+        "month": 6
+      },
+      "end": {
+        "year": 2023,
+        "month": 11
+      },
+      "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, connecting DeFi execution workflows to protocol, API, and indexing systems.",
       "highlights": [
-        "Built and maintained frontend and client-side systems for Enso's primary Ethereum dApp—architecture, execution-related user flows, and production rollout—collaborating with backend and protocol engineers on integration boundaries, API contracts, and execution UX.",
-        "Contributed to Graph Protocol–based indexing used by the product for on-chain data, with clear integration boundaries to backend consumers and the client surface.",
-        "Contributed to intent/routing-adjacent product surfaces for decentralized trade execution, in collaboration with backend and protocol engineering."
+        "Led the application from early product stages through production, defining integration boundaries and API contracts with protocol and backend engineers for transaction and execution workflows.",
+        "Built Graph Protocol indexing and intent/routing-adjacent product surfaces, with ownership of execution UX, operational quality, and release delivery."
       ]
     },
     {
-      "name": "coinflex",
-      "company": "coinflex",
+      "company": "CoinFLEX",
       "position": "Head of UI/UX Engineering",
       "url": "https://coinflex.io",
-      "website": "https://coinflex.io",
       "startDate": "2019-07-01",
       "endDate": "2021-06-01",
       "workMode": "on-site",
       "location": "London",
       "isCurrentRole": false,
-      "start": { "year": 2019, "month": 7 },
-      "end": { "year": 2021, "month": 6 },
-      "techStack": [
-        "TypeScript",
-        "React",
-        "Node.js",
-        "CI/CD",
-        "GitHub Actions",
-        "React Native"
-      ],
-      "summary": "Led trading interface architecture and release infrastructure for a live exchange product.",
+      "start": {
+        "year": 2019,
+        "month": 7
+      },
+      "end": {
+        "year": 2021,
+        "month": 6
+      },
+      "summary": "Led engineering delivery for a live trading product, owning interface architecture, team standards, core feature rollout, and release infrastructure.",
       "highlights": [
-        "Led delivery of the trading interface, owning frontend architecture, core feature rollout, and engineering standards for a live exchange product.",
-        "Automated CI/CD for the interface stack, reducing release risk and improving deployment consistency."
+        "Automated CI/CD for the interface stack, improving deployment consistency and reducing release risk in a production trading environment."
       ]
     }
   ],
   "earlierExperience": [
-    "GameAnalytics - Lead Frontend Developer (2016 to 2019): led a team of five, defined frontend architecture and quality standards, and won company MVP 2018/19.",
-    "FSI, Healthcare 21, and Nixatel (2013 to 2016): built cross-platform enterprise applications and delivered 0 to 1 mobile and web products in small teams."
-  ],
-  "education": [
-    {
-      "institution": "University College Cork",
-      "url": "https://www.ucc.ie/en",
-      "website": "https://www.ucc.ie/en",
-      "area": "Computer Science (First Class Honours)",
-      "studyType": "Masters",
-      "startDate": "2012-09-01",
-      "endDate": "2014-09-01",
-      "score": "",
-      "gpa": "1st",
-      "start": { "year": 2012, "month": 9 },
-      "end": { "year": 2014, "month": 9 }
-    }
-  ],
-  "references": [
-    {
-      "name": "Ajdin Kahrovic",
-      "position": "Engineering Manager",
-      "company": "defi.app",
-      "profiles": [
-        {
-          "network": "Telegram",
-          "username": "ajdin_kahrovic",
-          "url": "https://t.me/ajdin_kahrovic"
-        }
-      ]
-    },
-    {
-      "name": "Mislav",
-      "position": "VP Product",
-      "company": "biconomy",
-      "profiles": [
-        {
-          "network": "Telegram",
-          "username": "oxshaman",
-          "url": "https://t.me/oxshaman"
-        }
-      ]
-    }
+    "GameAnalytics · Lead Frontend Developer (2016 to 2019): led a team of five, defined architecture and quality standards, and received the company MVP award for 2018/19.",
+    "FSI, Healthcare 21, and Nixatel (2013 to 2016): delivered enterprise, mobile, and web products in small engineering teams."
   ],
   "skills": [
     {
-      "name": "Execution infrastructure",
+      "name": "Infrastructure & Backend",
       "keywords": [
+        "TypeScript",
+        "Node.js",
+        "NestJS",
+        "PostgreSQL",
+        "Redis",
+        "distributed systems"
+      ]
+    },
+    {
+      "name": "Blockchain Execution",
+      "keywords": [
+        "EVM",
+        "Solana",
         "ERC-4337",
         "bundlers",
         "sponsorship",
-        "gasless flows",
         "simulation",
-        "retries",
-        "fallback handling"
+        "transaction orchestration"
       ]
     },
     {
-      "name": "SDK and developer platforms",
+      "name": "Smart Accounts & Signing",
       "keywords": [
-        "TypeScript",
-        "viem",
-        "typed APIs",
-        "modular clients",
-        "error models",
-        "developer tooling"
-      ]
-    },
-    {
-      "name": "Smart accounts and signing",
-      "keywords": [
+        "Safe",
         "EIP-712",
         "EIP-1271",
         "ERC-6492",
-        "Safe",
         "P-256",
         "passkeys"
       ]
     },
     {
-      "name": "Cross-chain execution",
+      "name": "SDK & Developer Platform",
       "keywords": [
-        "EVM",
-        "Solana",
+        "viem",
+        "typed APIs",
+        "modular clients",
+        "SDK architecture",
+        "developer tooling"
+      ]
+    },
+    {
+      "name": "Cross-Chain",
+      "keywords": [
         "LiFi",
         "Jupiter",
         "1inch",
@@ -251,25 +185,33 @@
       ]
     },
     {
-      "name": "Reliability and testing",
+      "name": "Reliability & Testing",
       "keywords": [
+        "Anvil",
         "Vitest",
         "Bun",
         "GitHub Actions",
-        "Anvil",
-        "forked state",
-        "CI/CD",
+        "retries",
+        "fallback handling",
         "structured debugging"
       ]
-    },
+    }
+  ],
+  "education": [
     {
-      "name": "Backend systems",
-      "keywords": [
-        "Node.js",
-        "NestJS",
-        "PostgreSQL",
-        "Redis"
-      ]
+      "institution": "University College Cork",
+      "area": "Computer Science (First Class Honours)",
+      "studyType": "Masters",
+      "startDate": "2012-09-01",
+      "endDate": "2014-09-01",
+      "start": {
+        "year": 2012,
+        "month": 9
+      },
+      "end": {
+        "year": 2014,
+        "month": 9
+      }
     }
   ]
 }
