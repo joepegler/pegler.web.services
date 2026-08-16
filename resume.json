@@ -6,7 +6,7 @@
     "specialties": "Blockchain Execution · SDKs · Smart Accounts · Cross-Chain Systems",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Senior infrastructure engineer building production blockchain transaction and execution systems across EVM and Solana. My work spans backend architecture, typed SDKs, smart-account and cross-chain workflows, with deep ERC-4337 expertise and a focus on simulation, observability, reliability, and developer experience. Experienced owning architecture and implementation in small, senior teams.",
+    "summary": "Senior infrastructure engineer building production blockchain transaction and execution systems across EVM and Solana. My work spans backend architecture, typed SDKs, smart-account and cross-chain workflows, translating product requirements and developer journeys into reliable execution systems and APIs. Experienced owning technical verticals from problem definition and architecture through implementation, production rollout, and iteration, balancing reliability, latency, UX, complexity, and time-to-market with product, founder, and engineering stakeholders.",
     "profiles": [
       {
         "network": "GitHub",
@@ -21,9 +21,9 @@
     ]
   },
   "selectedImpact": [
-    "Designed and operated internal ERC-4337 transaction orchestration and bundler infrastructure at defi.app, powering $100M+ daily trading volume with ~95% swap success and 20–40% faster execution than ZeroDev.",
-    "Built @biconomy/abstractjs from scratch as a viem-inspired TypeScript SDK for smart accounts and multi-chain execution; grew it to ~5.2k weekly npm downloads.",
-    "Unified cross-chain execution and routing across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay, with EVM and Solana simulation, sponsorship, and transaction-safety infrastructure behind typed SDK surfaces shared by frontend and backend teams."
+    "Designed and operated internal ERC-4337 transaction orchestration and bundler infrastructure at defi.app to improve transaction success, execution latency, gasless UX, and lifecycle control; powered $100M+ daily trading volume with ~95% swap success and 20–40% faster execution than ZeroDev.",
+    "Designed and built @biconomy/abstractjs from scratch as a viem-inspired TypeScript developer product, simplifying smart-account and multi-chain workflows through typed APIs, composable abstractions, documentation, and examples; reached ~5.2k weekly npm downloads.",
+    "Standardized cross-chain routing and execution across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay, placing EVM and Solana simulation, sponsorship, and transaction safety behind a consistent typed surface shared by frontend and backend teams."
   ],
   "work": [
     {
@@ -42,12 +42,12 @@
         "year": 2026,
         "month": 4
       },
-      "summary": "Owned backend and SDK architecture for production transaction execution across EVM and Solana, from route selection and simulation through sponsorship and submission.",
+      "summary": "Owned transaction execution as a product capability across EVM and Solana, translating product journeys into backend and SDK architecture from route selection and simulation through sponsorship, submission, and production iteration.",
       "highlights": [
         "Designed and operated an internal ERC-4337 bundler coordinating wallet pools, nonces, fees, sponsorship policy, simulation, and submission; powered $100M+ daily volume (~5k–7k swaps/day) at ~95% success and 20–40% faster execution than ZeroDev.",
-        "Engineered the reliability layer around EntryPoint v7 simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors for product and production debugging.",
-        "Built EVM and Solana simulation and sponsorship infrastructure, including Jito-aware safety validation, while diagnosing nonce contention, RPC lag, slippage, and simulation-to-execution mismatches.",
-        "Unified LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind typed routing and execution APIs, including RouteClient and ExecutionManager surfaces used across frontend and backend teams."
+        "Shaped the reliability layer around EntryPoint v7 simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors, balancing simulation safety and execution speed while improving product and production debugging.",
+        "Owned EVM and Solana simulation and sponsorship through production, including Jito-aware safety validation; diagnosed nonce contention, RPC lag, slippage, and simulation-to-execution mismatches, then fed findings back into architecture and execution behaviour.",
+        "Standardized LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind RouteClient and ExecutionManager APIs, preserving provider-specific capabilities within a consistent execution surface used by frontend and backend teams."
       ]
     },
     {
@@ -67,10 +67,10 @@
         "year": 2025,
         "month": 4
       },
-      "summary": "Owned architecture and implementation of @biconomy/abstractjs, Biconomy's TypeScript developer platform for ERC-4337 smart accounts and multi-chain execution.",
+      "summary": "Owned @biconomy/abstractjs as a developer product, taking Biconomy's TypeScript platform for ERC-4337 smart accounts and multi-chain execution from integration complexity through API design, implementation, documentation, and adoption.",
       "highlights": [
-        "Built the SDK from scratch around viem-inspired abstractions, modular clients, typed APIs, composable batching, and account-agnostic execution flows.",
-        "Grew the package to approximately 5.2k weekly npm downloads and wrote the documentation and examples used by product teams integrating gasless and smart-account journeys.",
+        "Designed and built the SDK from scratch, defining viem-inspired abstraction boundaries, modular clients, typed APIs, composable batching, and account-agnostic flows that reduced protocol complexity for application developers.",
+        "Took the package through production with documentation and examples for teams integrating gasless and smart-account journeys; grew adoption to approximately 5.2k weekly npm downloads.",
         "Implemented Safe, EIP-712, EIP-1271, ERC-6492, P-256, and passkey compatibility, with production safeguards backed by Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
@@ -92,10 +92,10 @@
         "year": 2023,
         "month": 11
       },
-      "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, connecting DeFi execution workflows to protocol, API, and indexing systems.",
+      "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, translating execution journeys into product flows connected to protocol, API, and indexing systems.",
       "highlights": [
-        "Led the application from early product stages through production, defining integration boundaries and API contracts with protocol and backend engineers for transaction and execution workflows.",
-        "Built Graph Protocol indexing and intent/routing-adjacent product surfaces, with ownership of execution UX, operational quality, and release delivery."
+        "Led the application from early product definition through production, shaping execution UX and defining integration boundaries and API contracts with product, protocol, and backend teams.",
+        "Delivered Graph Protocol indexing and intent/routing-adjacent product surfaces, balancing protocol constraints, operational quality, and release delivery."
       ]
     },
     {
