@@ -147,6 +147,10 @@ async function main() {
   const md = new MarkdownIt({ html: true });
   md.use(shiki);
 
+  md.renderer.rules.table_open = () =>
+    '<div class="table-scroll" role="region" aria-label="Scrollable data table" tabindex="0"><table>';
+  md.renderer.rules.table_close = () => "</table></div>";
+
   if (fs.existsSync(BLOG_OUT)) fs.rmSync(BLOG_OUT, { recursive: true, force: true });
   fs.mkdirSync(BLOG_OUT, { recursive: true });
 
