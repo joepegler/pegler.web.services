@@ -9,6 +9,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const BLOG_OUT = path.join(ROOT, "blog");
 const POSTS_DIR = path.join(ROOT, "posts");
+const SITE_ORIGIN = "https://peglerweb.services";
+const DEFAULT_OG_IMAGE = "/assets/og.png";
+const DEFAULT_OG_IMAGE_ALT = "Joe Pegler, Staff Infrastructure Engineer";
+const OG_IMAGE_WIDTH = "1200";
+const OG_IMAGE_HEIGHT = "630";
 const POSTS_SOURCES = fs.existsSync(POSTS_DIR)
   ? fs
       .readdirSync(POSTS_DIR)
@@ -16,8 +21,45 @@ const POSTS_SOURCES = fs.existsSync(POSTS_DIR)
       .filter((p) => p.endsWith(".md"))
   : [];
 
+function absoluteUrl(pathOrUrl) {
+  if (!pathOrUrl) return SITE_ORIGIN;
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  return `${SITE_ORIGIN}${pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`}`;
+}
+
+function socialMeta({ title, description, urlPath, image, imageAlt, ogType = "article" }) {
+  const imageUrl = absoluteUrl(image || DEFAULT_OG_IMAGE);
+  const alt = imageAlt || title || DEFAULT_OG_IMAGE_ALT;
+  return `    <meta property="og:type" content="${escapeHtml(ogType)}">
+    <meta property="og:title" content="${escapeHtml(title)}">
+    <meta property="og:description" content="${escapeHtml(description)}">
+    <meta property="og:url" content="${escapeHtml(absoluteUrl(urlPath))}">
+    <meta property="og:site_name" content="Joe Pegler">
+    <meta property="og:locale" content="en_IE">
+    <meta property="og:image" content="${escapeHtml(imageUrl)}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="${OG_IMAGE_WIDTH}">
+    <meta property="og:image:height" content="${OG_IMAGE_HEIGHT}">
+    <meta property="og:image:alt" content="${escapeHtml(alt)}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@joepegler">
+    <meta name="twitter:title" content="${escapeHtml(title)}">
+    <meta name="twitter:description" content="${escapeHtml(description)}">
+    <meta name="twitter:image" content="${escapeHtml(imageUrl)}">
+    <meta name="twitter:image:alt" content="${escapeHtml(alt)}">`;
+}
+
 function layout(options) {
-  const { title, description, content, isIndex = false, urlPath = "/" } = options;
+  const {
+    title,
+    description,
+    content,
+    isIndex = false,
+    urlPath = "/",
+    image,
+    imageAlt,
+    ogType = "article",
+  } = options;
   const base = isIndex ? "../" : "../../"; // posts now live in blog/<slug>/index.html
   const blogHref = isIndex ? "./" : "../";
   return `<!DOCTYPE html>
@@ -27,11 +69,8 @@ function layout(options) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)} | Joe Pegler</title>
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="${escapeHtml(title)}">
-    <meta property="og:description" content="${escapeHtml(description)}">
-    <meta property="og:url" content="https://peglerweb.services${escapeHtml(urlPath)}">
-    <link rel="canonical" href="https://peglerweb.services${escapeHtml(urlPath)}">
+${socialMeta({ title, description, urlPath, image, imageAlt, ogType })}
+    <link rel="canonical" href="${escapeHtml(absoluteUrl(urlPath))}">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
     <link rel="stylesheet" href="${base}styles.css">
@@ -101,6 +140,8 @@ ${listHtml}
                 </div>`,
     isIndex: true,
     urlPath: "/blog/",
+    ogType: "website",
+    imageAlt: "Joe Pegler blog",
   });
 }
 
@@ -162,6 +203,8 @@ async function main() {
     const title = data.title || slug;
     const date = data.date || null;
     const summary = data.summary || "";
+    const image = data.image || DEFAULT_OG_IMAGE;
+    const imageAlt = data.imageAlt || title;
     const bodyHtml = md.render(content);
     const fullHtml = layout({
       title,
@@ -178,6 +221,8 @@ ${bodyHtml}
                 </article>`,
       isIndex: false,
       urlPath: `/blog/${slug}/`,
+      image,
+      imageAlt,
     });
     const postOutDir = path.join(BLOG_OUT, slug);
     fs.mkdirSync(postOutDir, { recursive: true });

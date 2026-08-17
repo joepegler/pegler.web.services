@@ -3,6 +3,8 @@ title: EIP-7702 Did Its Job. Portable Sessions Are Still Waiting
 date: 2026-08-17
 summary: Session keys expose the gap between making EOAs programmable and giving dapps a portable way to use them.
 slug: eip-7702-dapp-interoperability
+image: /assets/blog/eip-7702/og.png
+imageAlt: EIP-7702 Did Its Job. Portable Sessions Are Still Waiting
 ---
 
 Session keys expose the gap between giving an EOA smart-account code and giving applications a portable way to use it.
@@ -346,6 +348,8 @@ Wallets do not need to delegate every user to the same contract. They do need co
 
 EIP-7702 made EOAs programmable for wallets. It has not yet made session capabilities portable for dapps. A dapp still cannot rely on one cross-wallet way to request, scope, redeem and revoke a session over the address a user already controls.
 
-A wallet capability becomes a dapp capability only when the dapp can depend on it across wallets.
+So yes, EIP-7702 can fairly be called a success. Batching moved the EOA experience forward, and the unfinished session layer does not erase that achievement. My own application-layer bar is higher. I use [“session keys are the JWTs of Web3”](https://docs.zerodev.app/blog/session-keys-are-the-jwts-of-web3) as shorthand for bounded credentials that let applications act without holding a user's root authority.
 
-So yes, EIP-7702 can fairly be called a success. Batching moved the EOA experience forward, and the unfinished session layer does not erase that achievement. My own application-layer bar is higher. I use [“session keys are the JWTs of Web3”](https://docs.zerodev.app/blog/session-keys-are-the-jwts-of-web3) as shorthand for bounded credentials that let applications act without holding a user's root authority. If programmable EOAs cannot eventually offer that capability through a portable wallet interface, meaningful protocol progress will still have stopped short of the destination I care about most.
+Session keys may also be a proxy for a broader class of smart-account capabilities. The next useful feature may emerge before its interface and security model are mature enough to standardize. Wallets will reasonably experiment within accounts they control, constrain implementations while they are audited, and arrive at different early designs. From the dapp side, however, that capability becomes broadly useful only when enough wallets converge on a consistent way to discover, request and use it.
+
+That may be the recurring challenge of programmable EOAs. EIP-7702 creates room for wallet innovation immediately, but each new capability must still cross a separate interoperability threshold before dapps can treat it as part of the platform. Programmability creates possibilities. Audited, interoperable interfaces turn those possibilities into dapp capabilities.

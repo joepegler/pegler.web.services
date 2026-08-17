@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#7dd3a8" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="78%" cy="12%" r="55%">
+      <stop offset="0%" stop-color="#7dd3a8" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#7dd3a8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#10151d"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="8" height="630" fill="#7dd3a8"/>
+  <text x="80" y="230" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#7dd3a8" letter-spacing="3">JOE PEGLER</text>
+  <rect x="80" y="250" width="56" height="3" rx="1.5" fill="#7dd3a8"/>
+  <text x="80" y="340" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#edf2f7">Staff Infrastructure Engineer</text>
+  <text x="80" y="410" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" fill="#8290a0">Transaction execution, smart accounts, and production reliability.</text>
+  <text x="80" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#b8c1cc">peglerweb.services</text>
+</svg>

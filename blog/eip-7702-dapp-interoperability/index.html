@@ -9,6 +9,19 @@
     <meta property="og:title" content="EIP-7702 Did Its Job. Portable Sessions Are Still Waiting">
     <meta property="og:description" content="Session keys expose the gap between making EOAs programmable and giving dapps a portable way to use them.">
     <meta property="og:url" content="https://peglerweb.services/blog/eip-7702-dapp-interoperability/">
+    <meta property="og:site_name" content="Joe Pegler">
+    <meta property="og:locale" content="en_IE">
+    <meta property="og:image" content="https://peglerweb.services/assets/blog/eip-7702/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="EIP-7702 Did Its Job. Portable Sessions Are Still Waiting">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@joepegler">
+    <meta name="twitter:title" content="EIP-7702 Did Its Job. Portable Sessions Are Still Waiting">
+    <meta name="twitter:description" content="Session keys expose the gap between making EOAs programmable and giving dapps a portable way to use them.">
+    <meta name="twitter:image" content="https://peglerweb.services/assets/blog/eip-7702/og.png">
+    <meta name="twitter:image:alt" content="EIP-7702 Did Its Job. Portable Sessions Are Still Waiting">
     <link rel="canonical" href="https://peglerweb.services/blog/eip-7702-dapp-interoperability/">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
@@ -358,8 +371,9 @@
 </ol>
 <p>Wallets do not need to delegate every user to the same contract. They do need compatible semantics if dapps are expected to treat their accounts as one platform.</p>
 <p>EIP-7702 made EOAs programmable for wallets. It has not yet made session capabilities portable for dapps. A dapp still cannot rely on one cross-wallet way to request, scope, redeem and revoke a session over the address a user already controls.</p>
-<p>A wallet capability becomes a dapp capability only when the dapp can depend on it across wallets.</p>
-<p>So yes, EIP-7702 can fairly be called a success. Batching moved the EOA experience forward, and the unfinished session layer does not erase that achievement. My own application-layer bar is higher. I use <a href="https://docs.zerodev.app/blog/session-keys-are-the-jwts-of-web3">“session keys are the JWTs of Web3”</a> as shorthand for bounded credentials that let applications act without holding a user's root authority. If programmable EOAs cannot eventually offer that capability through a portable wallet interface, meaningful protocol progress will still have stopped short of the destination I care about most.</p>
+<p>So yes, EIP-7702 can fairly be called a success. Batching moved the EOA experience forward, and the unfinished session layer does not erase that achievement. My own application-layer bar is higher. I use <a href="https://docs.zerodev.app/blog/session-keys-are-the-jwts-of-web3">“session keys are the JWTs of Web3”</a> as shorthand for bounded credentials that let applications act without holding a user's root authority.</p>
+<p>Session keys may also be a proxy for a broader class of smart-account capabilities. The next useful feature may emerge before its interface and security model are mature enough to standardize. Wallets will reasonably experiment within accounts they control, constrain implementations while they are audited, and arrive at different early designs. From the dapp side, however, that capability becomes broadly useful only when enough wallets converge on a consistent way to discover, request and use it.</p>
+<p>That may be the recurring challenge of programmable EOAs. EIP-7702 creates room for wallet innovation immediately, but each new capability must still cross a separate interoperability threshold before dapps can treat it as part of the platform. Programmability creates possibilities. Audited, interoperable interfaces turn those possibilities into dapp capabilities.</p>
 
                     </div>
                 </article>
