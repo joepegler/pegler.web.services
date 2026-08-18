@@ -85,9 +85,6 @@ coverage/
 *.lcov
 .jest/
 
-# Tailored job-application resumes (PDF/HTML/MD); generated locally
-tailored-resumes/
-
 # Misc
 *.bak
 *.orig
@@ -95,6 +92,9 @@ tailored-resumes/
 *.min.js.map
 *.min.css.map
 
-.cursor/skills/*
-!.cursor/skills/resume-tailor-jd/
-!.cursor/skills/resume-tailor-jd/**
+# Job-search kit (lives in private pegler.job.search repo)
+.cursor/
+work-history/
+projects/
+PROFILE_CONSISTENCY_KIT.md
+GITHUB_PROFILE_README.md
