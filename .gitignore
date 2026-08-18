@@ -95,4 +95,6 @@ tailored-resumes/
 *.min.js.map
 *.min.css.map
 
-.cursor/skills
+.cursor/skills/*
+!.cursor/skills/resume-tailor-jd/
+!.cursor/skills/resume-tailor-jd/**

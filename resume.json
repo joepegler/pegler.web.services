@@ -2,11 +2,11 @@
   "basics": {
     "name": "Joe Pegler",
     "location": "Cork, Ireland",
-    "label": "Staff-level Infrastructure Engineer",
-    "specialties": "Blockchain Execution · SDKs · Smart Accounts · Cross-Chain Systems",
+    "label": "Staff-level Blockchain Infrastructure Engineer",
+    "specialties": "Transaction Systems · EVM + Solana · Protocol Integrations · SDKs",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Senior infrastructure engineer building production blockchain transaction and execution systems across EVM and Solana. My work spans backend architecture, typed SDKs, smart-account and cross-chain workflows, translating product requirements and developer journeys into reliable execution systems and APIs. Experienced owning technical verticals from problem definition and architecture through implementation, production rollout, and iteration, balancing reliability, latency, UX, complexity, and time-to-market with product, founder, and engineering stakeholders.",
+    "summary": "Staff-level blockchain backend and infrastructure engineer designing and operating production transaction systems across EVM and Solana. My work covers execution infrastructure, protocol integrations, multi-chain routing, RPC and simulation paths, and typed SDKs, with particularly deep experience in smart accounts and ERC-4337. I own technical verticals from problem definition and architecture through production rollout, balancing reliability, latency, developer experience, and time-to-market with product and engineering stakeholders.",
     "profiles": [
       {
         "network": "GitHub",
@@ -21,9 +21,9 @@
     ]
   },
   "selectedImpact": [
-    "Designed and operated internal ERC-4337 transaction orchestration and bundler infrastructure at defi.app to improve transaction success, execution latency, gasless UX, and lifecycle control; powered $100M+ daily trading volume with ~95% swap success and 20–40% faster execution than ZeroDev.",
-    "Designed and built @biconomy/abstractjs from scratch as a viem-inspired TypeScript developer product, simplifying smart-account and multi-chain workflows through typed APIs, composable abstractions, documentation, and examples; reached ~5.2k weekly npm downloads.",
-    "Standardized cross-chain routing and execution across LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay, placing EVM and Solana simulation, sponsorship, and transaction safety behind a consistent typed surface shared by frontend and backend teams."
+    "Identified execution latency as a production bottleneck at defi.app and replaced third-party transaction infrastructure with an in-house ERC-4337 execution path; powered $100M+ daily trading volume with ~95% swap success and 20–40% faster execution than ZeroDev.",
+    "Designed and built @biconomy/abstractjs from scratch as a viem-inspired TypeScript developer product, simplifying wallet, signing, and multi-chain execution through typed APIs, composable abstractions, documentation, and examples; reached ~5.2k weekly npm downloads.",
+    "Standardized routing and execution across heterogeneous DEX, bridge, and solver providers (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay), placing EVM and Solana simulation and transaction safety behind a consistent typed surface used by frontend and backend teams."
   ],
   "work": [
     {
@@ -42,12 +42,13 @@
         "year": 2026,
         "month": 4
       },
-      "summary": "Owned transaction execution as a product capability across EVM and Solana, translating product journeys into backend and SDK architecture from route selection and simulation through sponsorship, submission, and production iteration.",
+      "summary": "Owned production transaction infrastructure across EVM and Solana as a product capability, from route selection and RPC simulation through execution, monitoring, and iteration, translating product journeys into backend systems, APIs, and SDKs.",
       "highlights": [
-        "Designed and operated an internal ERC-4337 bundler coordinating wallet pools, nonces, fees, sponsorship policy, simulation, and submission; powered $100M+ daily volume (~5k–7k swaps/day) at ~95% success and 20–40% faster execution than ZeroDev.",
-        "Shaped the reliability layer around EntryPoint v7 simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors, balancing simulation safety and execution speed while improving product and production debugging.",
-        "Owned EVM and Solana simulation and sponsorship through production, including Jito-aware safety validation; diagnosed nonce contention, RPC lag, slippage, and simulation-to-execution mismatches, then fed findings back into architecture and execution behaviour.",
-        "Standardized LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, and Relay behind RouteClient and ExecutionManager APIs, preserving provider-specific capabilities within a consistent execution surface used by frontend and backend teams."
+        "Identified execution latency as a production bottleneck and replaced third-party transaction infrastructure with an in-house ERC-4337 bundler, reducing unnecessary simulation and gas-estimation round trips while coordinating wallet pools, nonces, fees, sponsorship, and submission; powered $100M+ daily volume (~5k–7k swaps/day) at ~95% success and 20–40% faster execution than ZeroDev.",
+        "Built the reliability and observability layer around pre-submission simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors, including EntryPoint v7 paths; balanced simulation safety against execution speed while improving production debugging and incident response.",
+        "Owned EVM and Solana transaction simulation and sponsorship through production, including Jito-aware Jupiter paths and ATA/CPI safety checks; diagnosed nonce contention, RPC lag, slippage, and simulation-to-execution mismatches, then fed findings back into architecture.",
+        "Standardized DEX, bridge, and solver integrations (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay) behind RouteClient and ExecutionManager APIs, so frontend and backend teams executed across heterogeneous EVM and Solana protocols through one typed surface.",
+        "Automated operational blockchain flows for referral revenue payouts and on-chain claims, and added production outage alerting for execution-path incidents."
       ]
     },
     {
@@ -67,11 +68,11 @@
         "year": 2025,
         "month": 4
       },
-      "summary": "Owned @biconomy/abstractjs as a developer product, taking Biconomy's TypeScript platform for ERC-4337 smart accounts and multi-chain execution from integration complexity through API design, implementation, documentation, and adoption.",
+      "summary": "Owned @biconomy/abstractjs as a developer product for wallet, signing, and multi-chain execution, taking a TypeScript SDK from integration complexity through API design, implementation, documentation, and adoption, with deep ERC-4337 and smart-account coverage.",
       "highlights": [
-        "Designed and built the SDK from scratch, defining viem-inspired abstraction boundaries, modular clients, typed APIs, composable batching, and account-agnostic flows that reduced protocol complexity for application developers.",
-        "Took the package through production with documentation and examples for teams integrating gasless and smart-account journeys; grew adoption to approximately 5.2k weekly npm downloads.",
-        "Implemented Safe, EIP-712, EIP-1271, ERC-6492, P-256, and passkey compatibility, with production safeguards backed by Vitest, Bun, GitHub Actions, and Codecov."
+        "Designed and built the SDK from scratch, defining viem-inspired abstraction boundaries, modular clients, typed APIs, composable batching, and account-agnostic execution flows that reduced protocol complexity for application developers.",
+        "Took the package through production with documentation and examples for teams integrating gasless and sponsored execution; grew adoption to approximately 5.2k weekly npm downloads.",
+        "Implemented wallet and signing infrastructure covering Safe, passkeys/P-256, EIP-712, EIP-1271, ERC-6492, and modular session permissions (ERC-7579), with production safeguards backed by Vitest, Bun, GitHub Actions, and Codecov."
       ]
     },
     {
@@ -92,10 +93,10 @@
         "year": 2023,
         "month": 11
       },
-      "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, translating execution journeys into product flows connected to protocol, API, and indexing systems.",
+      "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, connecting execution UX to protocol routing, GraphQL APIs, and indexing systems.",
       "highlights": [
         "Led the application from early product definition through production, shaping execution UX and defining integration boundaries and API contracts with product, protocol, and backend teams.",
-        "Delivered Graph Protocol indexing and intent/routing-adjacent product surfaces, balancing protocol constraints, operational quality, and release delivery."
+        "Built a GraphQL routing API for token-to-token execution paths, alongside Graph Protocol indexing and intent/routing product surfaces, connecting application flows to protocol and blockchain state."
       ]
     },
     {
@@ -142,15 +143,16 @@
       "keywords": [
         "EVM",
         "Solana",
-        "ERC-4337",
-        "bundlers",
-        "sponsorship",
+        "transaction execution",
         "simulation",
-        "transaction orchestration"
+        "RPC",
+        "sponsorship",
+        "ERC-4337",
+        "bundlers"
       ]
     },
     {
-      "name": "Smart Accounts & Signing",
+      "name": "Wallet & Signing",
       "keywords": [
         "Safe",
         "EIP-712",
@@ -171,7 +173,7 @@
       ]
     },
     {
-      "name": "Cross-Chain",
+      "name": "Protocol Integration",
       "keywords": [
         "LiFi",
         "Jupiter",
@@ -191,7 +193,7 @@
         "GitHub Actions",
         "retries",
         "fallback handling",
-        "structured debugging"
+        "observability"
       ]
     }
   ],
