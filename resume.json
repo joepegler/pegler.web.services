@@ -6,7 +6,7 @@
     "specialties": "Transaction Systems · EVM + Solana · Protocol Integrations · SDKs",
     "email": "pegler.web.services@gmail.com",
     "url": "https://peglerweb.services",
-    "summary": "Staff-level blockchain backend and infrastructure engineer designing and operating production transaction systems across EVM and Solana. My work covers execution infrastructure, protocol integrations, multi-chain routing, RPC and simulation paths, and typed SDKs, with particularly deep experience in smart accounts and ERC-4337. I own technical verticals from problem definition and architecture through production rollout, balancing reliability, latency, developer experience, and time-to-market with product and engineering stakeholders.",
+    "summary": "Staff-level blockchain backend and infrastructure engineer designing and operating production transaction systems across EVM and Solana. My work covers execution infrastructure, protocol integrations, multi-chain routing, RPC and simulation paths, and typed SDKs, with particularly deep experience in smart accounts and ERC-4337. I own technical verticals from problem definition and architecture through production rollout, balancing reliability, latency, developer experience, and time-to-market with product and engineering stakeholders. I use AI-assisted workflows for codebase exploration, implementation, testing, debugging, and review while retaining ownership of architecture, correctness, and production decisions.",
     "profiles": [
       {
         "network": "GitHub",
@@ -194,6 +194,14 @@
         "retries",
         "fallback handling",
         "observability"
+      ]
+    },
+    {
+      "name": "AI-Assisted Engineering",
+      "keywords": [
+        "agentic coding workflows",
+        "codebase exploration",
+        "implementation/review loops"
       ]
     }
   ],
