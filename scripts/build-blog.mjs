@@ -119,12 +119,13 @@ function layoutIndex(posts) {
   const listHtml = posts
     .map(
       (p) => `
-                <article class="blog-card glass-card">
-                    <h2 class="blog-card-title"><a href="${escapeHtml(p.slug)}/">${escapeHtml(p.title)}</a></h2>
-                    <time class="blog-card-date" datetime="${escapeHtml(toIsoDate(p.date))}">${formatDate(p.date)}</time>
-                    <p class="blog-card-summary">${escapeHtml(p.summary || "")}</p>
-                    <a href="${escapeHtml(p.slug)}/" class="blog-card-link">Read more</a>
-                </article>`
+                <li class="blog-index-item">
+                    <time class="blog-index-date" datetime="${escapeHtml(toIsoDate(p.date))}">${formatDate(p.date)}</time>
+                    <div class="blog-index-item-body">
+                        <h2 class="blog-card-title"><a href="${escapeHtml(p.slug)}/">${escapeHtml(p.title)}</a></h2>
+                        <p class="blog-card-summary">${escapeHtml(p.summary || "")}</p>
+                    </div>
+                </li>`
     )
     .join("\n");
   return layout({
@@ -135,9 +136,9 @@ function layoutIndex(posts) {
                     <h1>Blog</h1>
                     <p class="blog-index-intro">Technical notes on transaction infrastructure, bundlers, and execution.</p>
                 </header>
-                <div class="blog-index-list">
+                <ul class="blog-index-list">
 ${listHtml}
-                </div>`,
+                </ul>`,
     isIndex: true,
     urlPath: "/blog/",
     ogType: "website",
@@ -180,6 +181,20 @@ function formatDate(iso) {
   return d.toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" });
 }
 
+function dateValue(d) {
+  if (!d) return 0;
+  const t = d instanceof Date ? d.getTime() : Date.parse(d);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function removeDuplicateTitle(content, title) {
+  const leadingHeading = content.match(
+    /^[ \t\r\n]*#[ \t]+([^\r\n]+?)[ \t]*(?:#+[ \t]*)?(?:\r?\n|$)/
+  );
+  if (!leadingHeading || leadingHeading[1].trim() !== String(title).trim()) return content;
+  return content.slice(leadingHeading[0].length);
+}
+
 async function main() {
   const shiki = await markdownItShikiTwoslashSetup({
     theme: "github-dark",
@@ -205,7 +220,7 @@ async function main() {
     const summary = data.summary || "";
     const image = data.image || DEFAULT_OG_IMAGE;
     const imageAlt = data.imageAlt || title;
-    const bodyHtml = md.render(content);
+    const bodyHtml = md.render(removeDuplicateTitle(content, title));
     const fullHtml = layout({
       title,
       description: summary || title,
@@ -231,7 +246,7 @@ ${bodyHtml}
     posts.push({ slug, title, date, summary });
   }
 
-  posts.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+  posts.sort((a, b) => dateValue(b.date) - dateValue(a.date));
 
   const indexHtml = layoutIndex(posts);
   fs.writeFileSync(path.join(BLOG_OUT, "index.html"), indexHtml, "utf-8");
