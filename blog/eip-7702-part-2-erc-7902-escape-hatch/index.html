@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wallets do not need to agree on one smart account if dapps can request a reviewed execution environment that wallets are willing to authorize.">
+    <title>EIP-7702 Part 2: The ERC-7902 Escape Hatch | Joe Pegler</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="EIP-7702 Part 2: The ERC-7902 Escape Hatch">
+    <meta property="og:description" content="Wallets do not need to agree on one smart account if dapps can request a reviewed execution environment that wallets are willing to authorize.">
+    <meta property="og:url" content="https://peglerweb.services/blog/eip-7702-part-2-erc-7902-escape-hatch/">
+    <meta property="og:site_name" content="Joe Pegler">
+    <meta property="og:locale" content="en_IE">
+    <meta property="og:image" content="https://peglerweb.services/assets/blog/eip-7702-part-2/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="EIP-7702 Part 2: The ERC-7902 Escape Hatch">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@joepegler">
+    <meta name="twitter:title" content="EIP-7702 Part 2: The ERC-7902 Escape Hatch">
+    <meta name="twitter:description" content="Wallets do not need to agree on one smart account if dapps can request a reviewed execution environment that wallets are willing to authorize.">
+    <meta name="twitter:image" content="https://peglerweb.services/assets/blog/eip-7702-part-2/og.png">
+    <meta name="twitter:image:alt" content="EIP-7702 Part 2: The ERC-7902 Escape Hatch">
+    <link rel="canonical" href="https://peglerweb.services/blog/eip-7702-part-2-erc-7902-escape-hatch/">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L20 9.083v5.834L12 19.764 4 14.917V9.083L12 4.236zm2 4.264v3h-4v-3h4z'/></svg>">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="blog-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="../../" title="Home"><h1>Joe Pegler</h1></a>
+                <span>Cork, Ireland</span>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Blog</a></li>
+                    <li><a href="../../resume/">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-main">
+        <div class="container">
+            <div class="blog-content-wrap">
+
+                <article class="blog-post">
+                    <header class="blog-post-header">
+                        <h1 class="blog-post-title">EIP-7702 Part 2: The ERC-7902 Escape Hatch</h1>
+                        <time class="blog-post-date" datetime="2026-08-23T00:00:00.000Z">23 August 2026</time>
+                    </header>
+                    <div class="blog-content prose">
+<p>Wallets do not need to agree on one smart account. ERC-7902 matters because it could let them disagree without making that disagreement every dapp's integration problem.</p>
+<p>In <a href="https://peglerweb.services/blog/eip-7702-dapp-interoperability/">part one</a>, I argued that EIP-7702 can reasonably be considered a success for wallets while still falling short of the interoperability dapps need for sessions.</p>
+<p>The problem is simple. A wallet can make an existing EOA programmable through 7702, but a dapp still gets whatever wallet and account implementation the user happens to bring. If a useful capability exists only inside one implementation, it has not yet become a dependable capability of the wider wallet platform.</p>
+<p><a href="https://eips.ethereum.org/EIPS/eip-7902">ERC-7902</a> offers an escape hatch. Through an EIP-5792 capability called <code>eip7702Auth</code>, a dapp can request that an EOA delegate to a particular account implementation, while the wallet decides which implementations it is prepared to authorize.</p>
+<p>That is a smaller coordination problem than asking every wallet to adopt the same account. It is also something the ecosystem can try with today's protocol stack. EIP-7702 is already live and EIP-5792 already provides the wallet capability surface. ERC-7902 remains a Draft and major external wallets do not broadly expose it today, but another Ethereum hard fork is not the blocker for this path.</p>
+<h2>What success looks like for a dapp</h2>
+<p>Imagine I run supercooldapp.xyz.</p>
+<p>A user arrives with whateverWalletShowedUp. Perhaps 60% of my users arrive through MetaMask and the remaining 40% through Rabby, Ambire or something else. This is an illustrative split, not a wallet-market-share estimate. The exact split is not important. I cannot choose which wallet arrives.</p>
+<p>If the experience only works through MetaMask, I am degrading it for the other 40%, turning those users away or asking them to adopt a different account model first.</p>
+<p>For sessions, the experience I want is:</p>
+<ol>
+<li>The user connects their existing EOA through whateverWalletShowedUp.</li>
+<li>My dapp generates a narrowly scoped session key.</li>
+<li>Their wallet shows what that key may do, including targets, functions, spending limits and expiry.</li>
+<li>The user approves the session once using their existing wallet.</li>
+<li>supercooldapp.xyz can now act within those limits without summoning whateverWalletShowedUp for every interaction.</li>
+</ol>
+<p>I want to implement that once against a shared interface and have it work regardless of which major external wallet arrives. There should be no companion account or separate pool of funds. The dapp should hold only the restricted session key, while the external wallet remains the root authorization, recovery and revocation boundary.</p>
+<p>Sessions are a useful test because they can do for onchain interactions something like Amazon's one-click purchase did for checkout: turn repeated friction into one bounded authorization. A trading application might let one router spend up to 50 USDC per day for a week; a game might allow low-value moves without another confirmation; an automation might act while the user is offline. The user authorizes once, then the dapp acts only inside that envelope.</p>
+<p>That gives me a concrete interoperability test:</p>
+<blockquote>
+<p>Can a dapp request, receive and use the same scoped session permission over an existing EOA across the major external wallets?</p>
+</blockquote>
+<p>ERC-7902 is not that final session interface. It is useful in the gap before such interfaces converge: the dapp can request an execution environment whose session model it already understands.</p>
+<h2>What ERC-7902 adds</h2>
+<p>EIP-7702 lets an EOA delegate its execution to deployed smart-account code. <a href="https://eips.ethereum.org/EIPS/eip-5792">EIP-5792</a> gives dapps a common API for discovering wallet capabilities and submitting calls. ERC-7902 adds account-abstraction capabilities to that 5792 surface, including <code>eip7702Auth</code>.</p>
+<p>In simplified form:</p>
+<pre class="shiki github-dark" style="background-color: #0d1117; color: #c9d1d9"><div class="language-id">ts</div><div class='code-container'><code><div class='line'><span style="color: #FFA657">eip7702Auth</span><span style="color: #C9D1D9">: {</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FFA657">account</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">"0xUserEOA"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">  </span><span style="color: #FFA657">delegation</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">"0xReviewedImplementation"</span><span style="color: #C9D1D9">,</span></div><div class='line'><span style="color: #C9D1D9">}</span></div></code></div></pre>
+<p>The dapp names the EOA and the implementation it wants. If the wallet supports the capability and accepts that implementation, it supplies the corresponding EIP-7702 authorization.</p>
+<p>ERC-7902 says wallets should maintain a strict shortlist of well-known, publicly audited account implementations rather than sign arbitrary delegation addresses supplied by websites. The application can participate in account selection, but the wallet keeps the veto.</p>
+<p>For dapps, the useful property is overlap. MetaMask, Rabby and Ambire could keep different account implementations as their defaults while independently approving one mature session-capable implementation for <code>eip7702Auth</code>. supercooldapp.xyz could then build one session path against that implementation and request it when any of those wallets arrives.</p>
+<p>Several serious account stacks already provide versions of the capability we care about. <a href="https://docs.zerodev.app/get-started/eip-7702/quickstart">Kernel's EIP-7702 flow</a> can attach Kernel functionality to an EOA and support session keys. <a href="https://docs.biconomy.io/sdk-reference/sessions">Biconomy's Smart Sessions</a> provide fine-grained policies with EIP-7702 delegate mode for Nexus-based accounts. <a href="https://docs.metamask.io/smart-accounts-kit/guides/advanced-permissions/execute-on-metamask-users-behalf/">MetaMask's Delegation Framework</a> provides another sophisticated permission model.</p>
+<p>A wallet reviewing one of these would need to approve a particular deployment, audit scope, upgrade model and migration path rather than a brand name. If several wallets independently approved the same mature implementation, the dapp could build against one known environment while the user kept the EOA they already own.</p>
+<p>Longer term, standards such as <a href="https://eips.ethereum.org/EIPS/eip-7715">ERC-7715</a> and <a href="https://eips.ethereum.org/EIPS/eip-7710">ERC-7710</a> aim closer to the interface the dapp actually wants: request a permission through the wallet and redeem it through a common onchain surface. If wallets converge on useful permission semantics, the dapp should stop caring whether Kernel, Nexus, Delegator or something else sits underneath.</p>
+<p>ERC-7902 is interesting during the interval before that convergence.</p>
+<h2>Wallets can disagree. They still have to cooperate.</h2>
+<p>The coordination problem may be smaller, but coordination is not automatic.</p>
+<p>Kernel, Nexus, MetaMask's Delegator framework and other account systems make different choices around validation, recovery, upgrades, permissions and trust assumptions. Wallet teams have invested heavily in those systems and the products built around them. Even if another delegate can be supported safely, making account implementations interchangeable may offer the wallet little direct upside.</p>
+<p>ERC-7902 itself is useful evidence here. Its authors, Yoav Weiss, Alex Forshtat, Dror Tirosh and Shahaf Nacson, are all co-authors of <a href="https://eips.ethereum.org/EIPS/eip-4337">ERC-4337</a>, and all four are also among the authors of <a href="https://eips.ethereum.org/EIPS/eip-8141">EIP-8141</a>. Yet, as of August 2026, I could not verify a public <code>eip7702Auth</code> surface across the major independent consumer wallets discussed in part one.</p>
+<p>There are reasonable explanations. ERC-7902 remains a Draft. Wallets may be waiting for specification stability, audits, migration tooling and evidence of demand. <a href="https://www.alchemy.com/docs/wallets/transactions/using-eip-7702">Alchemy's Wallet APIs</a> already show that the capability can coexist with a strict allowlist: they expose <code>eip7702Auth</code> while currently accepting only Alchemy's own Modular Account v2 delegation address.</p>
+<p>That may also be the privately rational shape for a wallet. If I already have a delegate with my own session, recovery and sponsorship stack, approving several external implementations means taking on security and support costs while making the account layer I built less differentiated. Supporting only my own implementation is safer, simpler and preserves the wallet's differentiation around those features.</p>
+<p>A wallet does not need to be hostile to interoperability for the incentives to point that way. The plumbing can exist while the useful overlap never appears.</p>
+<h2>Redelegation has a real cost</h2>
+<p>There is also a good technical reason for wallets to prefer the simpler path.</p>
+<p>An EOA has one active 7702 delegation on a chain. If the account currently points to the wallet's implementation and the user authorizes Kernel, Nexus or another implementation, the new authorization replaces that pointer. Wallet-native batching, sponsorship, recovery or permissions may depend on the implementation being replaced, and switching back is another security-sensitive transition.</p>
+<p>Persistent storage makes this harder. Delegated code executes in the EOA's context, so changing the delegate does not remove state written by the previous implementation. EIP-7702 treats changing delegation as security-critical because unrelated storage layouts can collide.</p>
+<p><a href="https://eips.ethereum.org/EIPS/eip-7779">ERC-7779</a> gives delegated accounts machinery to identify themselves, report the storage namespaces they have used and optionally prepare for redelegation. That can make an approved transition less opaque and gives implementations a common way to cooperate with migration tooling.</p>
+<p>But 7779 also illustrates how large a can of worms a wallet is volunteering to open. Cleanup is best-effort, some state may be difficult or impossible to remove, and the wallet still needs to understand the implementations and transitions it supports. <a href="https://eips.ethereum.org/EIPS/eip-7702">EIP-7702</a> adds another awkward edge: a processed delegation is not rolled back merely because later transaction execution fails, so the wallet must handle cases where the new delegate is installed but its intended initialization or session setup is not.</p>
+<p>For a wallet, the comparison can therefore be stark. It can review, simulate, explain and support migrations among several dapp-requested implementations, or authorize only the delegate it already knows and controls. ERC-7779 makes redelegation more tractable; it does not make the first option strategically attractive.</p>
+<h2>What happens without overlap</h2>
+<p>If a shared session surface has not arrived and wallet shortlists do not overlap, supercooldapp.xyz has three familiar options:</p>
+<ol>
+<li>Support one wallet's permission model and give only those users the full experience.</li>
+<li>Integrate several account and session systems independently.</li>
+<li>Introduce a companion or application-controlled smart account whose behaviour the dapp can depend on.</li>
+</ol>
+<p>The first fragments the product. The second fragments the engineering. The third fragments the user's account.</p>
+<p>The integration matrix quickly grows beyond a set of wallet logos:</p>
+<p><code>wallet × version × chain × delegate × permission model × relayer path</code></p>
+<p>Those paths can differ in capability discovery, policy encoding, signatures, execution, revocation, simulation and failure modes. Because they ultimately control user funds, each path becomes security-sensitive infrastructure that has to be maintained.</p>
+<p>A companion account restores consistency, but at the cost of another account boundary. Assets or allowances may need to move into it, the dapp may need deployment and sponsorship infrastructure, and the product then has to explain or hide the additional address underneath the experience.</p>
+<p>That engineering can be worthwhile. It is still an odd outcome when the user's existing EOA has already been made programmable by the protocol. Much of the application-layer work ends up recreating consistency around a second programmable account because the dapp cannot depend on the programmability of the first one.</p>
+<h2>Just because the ecosystem could coordinate does not mean it will</h2>
+<p>There is a slightly uncomfortable game-theory problem underneath all of this.</p>
+<p>Wallet teams are rationally incentivized to make their own account stack excellent. Approving interchangeable third-party delegates adds audit, migration and support costs, and can commoditize features the wallet has spent years building.</p>
+<p>Dapp teams are rationally incentivized to reach as much of the market as possible. A beautiful session flow that works for only part of the wallet market is often less useful than a worse interaction that works for everyone. Until wallet coverage exists, the dapp has good reason to fall back to another signature, multiple adapters or an account it controls.</p>
+<p>Protocol developers face the mirror image of the same problem. Ethereum should be cautious about embedding today's preferred wallet semantics into consensus. <a href="https://eips.ethereum.org/EIPS/eip-8141">EIP-8141</a>, for example, provides powerful native account-abstraction primitives while leaving account behaviour, including the shape of session policies, largely to higher layers. That restraint reduces the risk of ossifying the wrong abstraction, but it also pushes the developer-experience coordination problem upward.</p>
+<p>Users cannot solve any of this. They choose a wallet, arrive at a dapp and get whatever intersection of capabilities the other actors happened to produce.</p>
+<p>None of those decisions are unreasonable. Taken together, though, they can produce an equilibrium in which the EOA is programmable, sophisticated permission systems exist, and the user still clicks through another wallet prompt because nobody has sufficient individual incentive to make the capability portable.</p>
+<p>This is why the lack of broad <code>eip7702Auth</code> adoption is interesting rather than merely disappointing. The protocol plumbing exists. The standard exists. Serious account implementations exist. ERC-7779 is addressing some of the redelegation machinery. Another hard fork is not required to try this route.</p>
+<p>What remains is coordination, and coordination has to survive the incentives of the people being asked to do the work.</p>
+<p>Charlie Munger's line applies neatly here: <strong>&quot;Show me the incentive and I will show you the outcome.&quot;</strong></p>
+<p>EIP-8130 and EIP-8141 take different approaches to how much of account abstraction should be made explicit at the protocol layer, particularly around restricted authority and sessions. That comparison deserves a separate article. For ERC-7902, the more immediate lesson is simpler: just because the ecosystem could expose an interoperable capability does not mean the ecosystem will.</p>
+<p>EIP-7702 made the EOA programmable. Whether applications can depend on that programmability may ultimately have as much to do with incentives as with protocol design.</p>
+
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; <span class="current-year"></span> Joe Pegler. All rights reserved. | Cork, Ireland</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    </script>
+</body>
+</html>
