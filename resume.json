@@ -96,7 +96,8 @@
       "summary": "Owned application architecture and production delivery for Enso's primary Ethereum dApp, connecting execution UX to protocol routing, GraphQL APIs, and indexing systems.",
       "highlights": [
         "Led the application from early product definition through production, shaping execution UX and defining integration boundaries and API contracts with product, protocol, and backend teams.",
-        "Built a GraphQL routing API for token-to-token execution paths, alongside Graph Protocol indexing and intent/routing product surfaces, connecting application flows to protocol and blockchain state."
+        "Built a GraphQL routing API for token-to-token execution paths, alongside Graph Protocol indexing and intent/routing product surfaces, connecting application flows to protocol and blockchain state.",
+        "Built the Shortcuts TypeScript SDK covering wallet simulation, balances, and transfer and withdrawal flows, giving application and integration surfaces a typed path into protocol execution."
       ]
     },
     {
@@ -118,6 +119,7 @@
       },
       "summary": "Led engineering delivery for a live trading product, owning interface architecture, team standards, core feature rollout, and release infrastructure.",
       "highlights": [
+        "Defined interface architecture and engineering standards for the markets and trader UI, guiding feature delivery and team practices on a live exchange product.",
         "Automated CI/CD for the interface stack, improving deployment consistency and reducing release risk in a production trading environment."
       ]
     }
