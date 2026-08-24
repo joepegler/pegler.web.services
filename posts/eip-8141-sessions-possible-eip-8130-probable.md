@@ -24,11 +24,11 @@ I entered this comparison attached to neither architecture, armed only with one 
 
 ## The disagreement in one exchange
 
-A recent exchange between [Chris Hunter](https://x.com/_chunter/status/2090848665812242635), the author of EIP-8130, and [lightclient](https://x.com/lightclients), one of the authors of EIP-8141, captures the philosophical split.
+A recent exchange between [Chris Hunter](https://x.com/_chunter/status/2090848665812242635), the author of EIP-8130, and [lightclient](https://x.com/lightclients/status/2090862398928552188), one of the authors of EIP-8141, captures the philosophical split.
 
 Hunter argues that a native account-abstraction standard should be judged by whether it serves chains, wallets, apps and users together. Portability and a common account model are explicit design goals.
 
-Lightclient's objection is that "half of 8130 is application-layer specifics that shouldn't be defined in the protocol." EIP-8141 instead preserves permissionless innovation by allowing wallets and users to supply arbitrary validation logic.
+Lightclient's objection is that "half of 8130 is application-layer specifics that shouldn't be defined in the protocol." EIP-8141, in this view, supports permissionless innovation and does not force wallets and users into specific use patterns, because the protocol cannot assume its authors will always be around to tweak the account system.
 
 Both identify a real risk. EIP-8130 could enshrine account concepts prematurely. EIP-8141 could leave the critical compatibility boundary undefined and hope that wallets later converge.
 
@@ -55,13 +55,15 @@ EIP-8141 introduces frame transactions. `VERIFY` frames run validation and may a
 
 Somebody must still define how that key is installed, where its authority lives, how its limits and revocation are encoded, and how a wallet requests and displays the grant. EIP-8141 supplies the execution machinery, not a shared session model.
 
+Its attraction is as a self-extending design: enshrine a sufficiently general transaction mechanism once, then let EVM code absorb future validation schemes without repeatedly changing consensus. That allows the protocol to wash its hands of choosing future account models. The danger is that it may also wash its hands of interoperability, leaving wallets to make choices their incentives have already shown will diverge.
+
 Approval of execution is valid only when the approving frame resolves to the sender account. A standalone app policy contract cannot simply approve arbitrary calls for somebody else's EOA. The sender's own execution context must issue the approval. That can be the account's code, its EIP-7702 delegate, or helper logic entered with `DELEGATECALL`; an independently called module cannot approve for it.
 
 An app can put custom policy logic in its own contract when all activity terminates there. That does not by itself let a dapp-held key make arbitrary `SENDER` calls as the EOA. The sender's validation path still needs a common way to trust that policy. If sender approval during the public-mempool validation prefix depends on an external registry, it is ineligible for public propagation because that prefix may not read storage outside `tx.sender`. This restriction does not apply after payment approval or to private and local mempools.
 
 The likely wallet response is rational divergence. MetaMask can adapt its Delegator contracts and caveat system. Ambire and other account teams can adapt their own validators and modules. At the protocol level, this is success. At the dapp level, it can mean different grant requests, policy encodings, discovery methods and revocation paths behind the same frame transaction.
 
-EIP-7702 is the relevant precedent, not because it failed, but because it permits each wallet to select its own account implementation and prominent wallets have incentives to build around implementations they control. EIP-8141 removes none of those incentives. The answer cannot simply be that wallets remain free to coordinate. They were free to coordinate after 7702 too.
+EIP-7702 is the relevant precedent, not because it failed, but because wallets responded exactly as their incentives suggested. They selected account implementations they controlled and understood. EIP-8141 removes none of those incentives. The answer cannot simply be that wallets remain free to coordinate. They were free to coordinate after 7702 too.
 
 > EIP-8141 standardises how an authorised transaction executes. What makes the meaning of that authorisation interoperable?
 
@@ -71,7 +73,7 @@ EIP-8130 moves the coordination point earlier. An account authorises actors in a
 
 That standardises much of the actor lifecycle: installation, expiry, revocation, replay protection and binding to a policy manager. It does not yet standardise the wallet-facing grant request, a common permission vocabulary or a caller-preserving policy executor.
 
-The current draft's `POLICY` gate confines an actor's top-level calls to one manager, which enforces and carries out the approved action. With an ordinary external manager contract, downstream calls come from that manager rather than the user's EOA.
+The current draft's `POLICY` gate confines an actor's top-level calls to one manager, which enforces and carries out the approved action. With an ordinary manager contract, downstream calls come from that manager rather than the user's EOA.
 
 In a discussion with me about this use case, Hunter described a possible canonical policy precompile that could validate the commitment and make approved downstream calls as the account, without routing through or replacing the wallet's existing 7702 delegate. That is a contemplated extension, not part of the current specification, but it shows how the model could pass the `whateverWalletShowedUp` test:
 
@@ -85,9 +87,11 @@ This changes the likely equilibrium. Wallet implementations may still differ, bu
 
 > EIP-8141 gives the EVM an authorization hook. EIP-8130 gives the ecosystem an authorization object.
 
-## A stripped-back EIP-8130, not a souped-up EIP-8141
+## An EIP-8130-shaped layer, not EIP-8141 alone
 
 To be precise, I am not arguing that every mechanism in the current EIP-8130 draft belongs in Ethereum's permanent protocol surface. I am arguing that its actor and configuration substrate identifies the minimum coordination object EIP-8141 lacks.
+
+That coordination object need not live in consensus on every chain. I would keep EIP-8141 as the transaction mechanism, then standardise the relevant actor, permission and session interfaces in companion ERCs. A wallet could fulfil the same account-configuration request through Frames on Ethereum and through native EIP-8130 on an adopting chain such as Base. The dapp would configure keys, permissions and transactions through one interface. The wallet would map them onto the chain's native mechanism.
 
 The strongest objection remains ossification. Wallet design will evolve, and every consensus rule adds maintenance. EIP-8141 responds by enshrining a general mechanism while leaving validation programmable, avoiding commitment to one permission model.
 
@@ -95,7 +99,7 @@ But non-enshrinement is not neutral at the product layer. It transfers decisions
 
 The choice is not enshrinement versus none. EIP-8141 already makes durable choices about frames, approval scopes, default account behaviour and expiry. The question is which additional concepts are stable enough to create more interoperability than ossification risk. For a dapp, the ideal boundary looks like retaining the smallest durable part of EIP-8130, not adding every permission to EIP-8141.
 
-The canonical substrate should define:
+The common authorization standard, whether native or implemented through a companion ERC, should define:
 
 - actor identity and authorization by the account's root authority;
 - installation, expiry, revocation and replay protection;
@@ -109,6 +113,8 @@ Separate ERCs can define:
 - wallet RPC, discovery and human-readable presentation.
 
 [ERC-7715](https://eips.ethereum.org/EIPS/eip-7715) demonstrates the separation principle by defining wallet methods for permissions while leaving new permission and rule types to additional ERCs. Its current redemption path is not a transport-neutral answer for either proposal, but the layering is sound.
+
+This cannot be only a common RPC envelope. If each wallet assigns different meaning to the actor, policy or revocation behind the same method name, the fragmentation has merely been hidden. The interface must standardise enough of the authorization object that a dapp can depend on the same grant across wallets and execution systems.
 
 Concrete permissions should be allowed to evolve. The session lifecycle should not have to be rediscovered by every wallet.
 
@@ -132,11 +138,11 @@ This is why I keep arriving at the same shorthand:
 
 > EIP-8141 makes proper interoperable sessions possible. EIP-8130 makes them probable.
 
-Under EIP-8141 alone, that outcome still depends on wallets, module authors and RPC standards converging after the protocol ships. Under an appropriately scoped EIP-8130, the protocol creates a focal point around which that remaining coordination can happen.
+Under EIP-8141 alone, that outcome still depends on wallets, module authors and RPC standards converging after the protocol ships. A native EIP-8130 implementation, or an EIP-8130-shaped ERC adopted alongside Frames, would create a focal point around which that remaining coordination could happen.
 
 That difference changes what I would actually build. For a dapp that needs arbitrary calls across tokens and protocols, after EIP-8141 alone I would still expect an embedded smart account with a separate asset boundary to be the simplest dependable session experience across `whateverWalletShowedUp`. The dapp gains one account and permission model, even though users may need to move assets or establish allowances across that boundary.
 
-If a stripped-back EIP-8130 delivers the shared actor lifecycle and common policy path described above, I would no longer expect to need that fallback. The dapp could offer the same bounded session directly over the user's existing EOA, regardless of which compatible wallet arrived.
+If a stripped-back EIP-8130-shaped standard delivers the shared actor lifecycle and common policy path described above, I would no longer expect to need that fallback. The dapp could offer the same bounded session directly over the user's existing EOA, regardless of which compatible wallet arrived.
 
 ## Follow the incentives
 
@@ -152,7 +158,7 @@ If I am Base or Coinbase, the EIP-8130 direction is understandable. A portable c
 
 Wallets with less sunk cost in a permission stack may be more agnostic. But MetaMask is not the only incumbent at the account layer. Ambire and others also have implementations and security assumptions they will rationally preserve. The dividing line is between wallets with an established account model and those still choosing one.
 
-None of these positions are irrational. The architecture decides whose costs are solved and whose are exported.
+None of these positions is irrational. The architecture decides whose costs are solved and whose are exported.
 
 ## My prediction: EIP-8141 wins
 
@@ -168,18 +174,22 @@ That makes the responsibility on EIP-8141's supporters greater, not smaller. If 
 
 The call is not to enshrine every permission. It is to standardise the minimum joint the market has already shown it will not standardise by itself. Choose EIP-8141 if it is the better transaction architecture, but pair it with a credible route to shared actors, grants and revocation before wallet-specific implementations ossify.
 
-If EIP-8141 wins without that layer, fragmented sessions should not later be described as an unforeseen higher-layer failure. They will be the predictable result of the incentives the protocol chose to leave in place.
-
 ## My conclusion
 
-I did not start from a preference for EIP-8130. The `supercooldapp.xyz` test put me there. From the dapp and user perspective, I would choose a stripped-back EIP-8130-shaped actor layer over EIP-8141 alone. The architectural ideas need not be mutually exclusive: a future specification could combine an EIP-8130-shaped actor and configuration layer with EIP-8141 frame transactions. The two current drafts are separate transaction designs and do not compose this way without additional protocol work.
+I did not start from a preference for EIP-8130. The `supercooldapp.xyz` test put me at a shared actor and authorization layer, but not necessarily at every mechanism in EIP-8130 or at one native-AA implementation for every chain.
 
-EIP-8141's supporters therefore need to answer one question:
+The most credible compromise is to stop treating EIP-8130 and EIP-8141 as mutually exclusive. Ethereum could adopt EIP-8141 as its Core transaction mechanism, while the interoperable parts of EIP-8130 become one or more companion ERCs defining actors, grants, expiry, revocation, policy binding and the wallet-facing methods around them. A wallet could satisfy that interface through Frames on Ethereum and through the native EIP-8130 Keystore on an adopting chain such as Base.
+
+That would give chains implementation freedom while giving `supercooldapp.xyz` one authorization model. The dapp would configure the account, submit the session transaction and interpret the result without needing to know which native mechanism sat underneath.
+
+But this compromise is not an excuse to ship EIP-8141 and gesture towards future standardisation. It relocates the coordination problem rather than removing it. Wallets still have to implement the adapters, and those companion ERCs must standardise semantics rather than merely placing different permission systems behind one RPC method. If that work begins only after wallets have shipped their own Frame-based session systems, the ecosystem will be trying to standardise around another installed base of incompatible implementations.
+
+Its supporters therefore need to answer one question:
 
 > If rational wallet incentives produced divergent account and session implementations after EIP-7702, what mechanism causes those same wallets to converge after EIP-8141?
 
-The answer could be a companion actor standard, a canonical validator or an EIP-8130-inspired configuration layer around frames. But if EIP-8141 requires a later stack of optional standards for actors, grants, expiry, revocation, policy binding and wallet RPC, it has not escaped EIP-8130's coordination layer. It has postponed it until wallets are already shipping incompatible implementations. Hope is not a coordination mechanism.
+The answer could be this companion authorization standard, backed by native EIP-8130 on some chains and Frames on Ethereum. But it must be treated as part of the route to interoperable AA, not as optional cleanup for later. Without it, EIP-8141 has not escaped EIP-8130's coordination layer. It has postponed it until wallets are already shipping incompatible implementations. Hope is not a coordination mechanism.
 
 > EIP-8141 alone makes wallet-specific sessions easier. An EIP-8130-shaped minimum makes interoperable sessions likely.
 
-That is where Munger's line leads. EIP-8141's incentives point wallets towards systems they control. EIP-8130's shared actor substrate lets them compete around a session object dapps can recognise. Ethereum is choosing not merely a mechanism, but the equilibrium that follows.
+That is where Munger's line leads. EIP-8141's incentives point wallets towards systems they control. An EIP-8130-shaped actor standard lets them compete around a session object dapps can recognise. Ethereum is choosing not merely a mechanism, but the equilibrium that follows.
