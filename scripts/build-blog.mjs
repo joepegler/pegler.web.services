@@ -10,6 +10,17 @@ const ROOT = path.resolve(__dirname, "..");
 const BLOG_OUT = path.join(ROOT, "blog");
 const POSTS_DIR = path.join(ROOT, "posts");
 const SITE_ORIGIN = "https://peglerweb.services";
+const GTM_HEAD = `    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NL7FG7BZ');</script>
+    <!-- End Google Tag Manager -->`;
+const GTM_BODY = `    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NL7FG7BZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->`;
 const DEFAULT_OG_IMAGE = "/assets/og.png";
 const DEFAULT_OG_IMAGE_ALT = "Joe Pegler, Staff Infrastructure Engineer";
 const OG_IMAGE_WIDTH = "1200";
@@ -65,6 +76,7 @@ function layout(options) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+${GTM_HEAD}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="${escapeHtml(description)}">
@@ -81,6 +93,7 @@ ${socialMeta({ title, description, urlPath, image, imageAlt, ogType })}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="blog-page">
+${GTM_BODY}
     <header class="site-header">
         <div class="container">
             <div class="logo">
@@ -150,12 +163,14 @@ function legacyRedirectHtml(urlPath) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+${GTM_HEAD}
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url=${escapeHtml(urlPath)}">
     <link rel="canonical" href="https://peglerweb.services${escapeHtml(urlPath)}">
     <title>Redirecting to ${escapeHtml(urlPath)}</title>
 </head>
 <body>
+${GTM_BODY}
     <p>Redirecting to <a href="${escapeHtml(urlPath)}">${escapeHtml(urlPath)}</a>...</p>
 </body>
 </html>`;
@@ -243,7 +258,7 @@ ${bodyHtml}
     fs.mkdirSync(postOutDir, { recursive: true });
     fs.writeFileSync(path.join(postOutDir, "index.html"), fullHtml, "utf-8");
     fs.writeFileSync(path.join(BLOG_OUT, `${slug}.html`), legacyRedirectHtml(`/blog/${slug}/`), "utf-8");
-    posts.push({ slug, title, date, summary });
+    if (data.listed !== false) posts.push({ slug, title, date, summary });
   }
 
   posts.sort((a, b) => dateValue(b.date) - dateValue(a.date));

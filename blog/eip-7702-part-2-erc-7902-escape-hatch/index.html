@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NL7FG7BZ');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Wallets do not need to agree on one smart account if dapps can request a reviewed execution environment that wallets are willing to authorize.">
@@ -33,6 +40,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="blog-page">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NL7FG7BZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <header class="site-header">
         <div class="container">
             <div class="logo">
@@ -89,9 +100,9 @@
 <p>The dapp names the EOA and the implementation it wants. If the wallet supports the capability and accepts that implementation, it supplies the corresponding EIP-7702 authorization.</p>
 <p>ERC-7902 says wallets should maintain a strict shortlist of well-known, publicly audited account implementations rather than sign arbitrary delegation addresses supplied by websites. The application can participate in account selection, but the wallet keeps the veto.</p>
 <p>For dapps, the useful property is overlap. MetaMask, Rabby and Ambire could keep different account implementations as their defaults while independently approving one mature session-capable implementation for <code>eip7702Auth</code>. supercooldapp.xyz could then build one session path against that implementation and request it when any of those wallets arrives.</p>
-<p>Several serious account stacks already provide versions of the capability we care about. <a href="https://docs.zerodev.app/get-started/eip-7702/quickstart">Kernel's EIP-7702 flow</a> can attach Kernel functionality to an EOA and support session keys. <a href="https://docs.biconomy.io/sdk-reference/sessions">Biconomy's Smart Sessions</a> provide fine-grained policies with EIP-7702 delegate mode for Nexus-based accounts. <a href="https://docs.metamask.io/smart-accounts-kit/guides/advanced-permissions/execute-on-metamask-users-behalf/">MetaMask's Delegation Framework</a> provides another sophisticated permission model.</p>
-<p>A wallet reviewing one of these would need to approve a particular deployment, audit scope, upgrade model and migration path rather than a brand name. If several wallets independently approved the same mature implementation, the dapp could build against one known environment while the user kept the EOA they already own.</p>
-<p>Longer term, standards such as <a href="https://eips.ethereum.org/EIPS/eip-7715">ERC-7715</a> and <a href="https://eips.ethereum.org/EIPS/eip-7710">ERC-7710</a> aim closer to the interface the dapp actually wants: request a permission through the wallet and redeem it through a common onchain surface. If wallets converge on useful permission semantics, the dapp should stop caring whether Kernel, Nexus, Delegator or something else sits underneath.</p>
+<p>Several mature smart-account implementations already provide versions of the capability we care about. <a href="https://docs.zerodev.app/get-started/eip-7702/quickstart">Kernel's EIP-7702 flow</a> can attach Kernel account functionality to an EOA and support session keys. <a href="https://docs.biconomy.io/sdk-reference/sessions">Biconomy's Smart Sessions</a> provide fine-grained policies for Nexus accounts, including an EIP-7702 delegate mode. <a href="https://docs.metamask.io/smart-accounts-kit/guides/advanced-permissions/execute-on-metamask-users-behalf/">MetaMask's Delegation Framework</a> is a wallet-owned account stack offering another sophisticated permission model.</p>
+<p>For an external wallet to permit delegation to Kernel, Nexus or another implementation, it would need to approve a particular deployment, audit scope, upgrade model and migration path rather than merely trust a brand name. If several wallets independently approved the same mature implementation, a dapp could build against one known account environment while users retained their existing EOAs and wallets.</p>
+<p>Longer term, standards such as <a href="https://eips.ethereum.org/EIPS/eip-7715">ERC-7715</a> and <a href="https://eips.ethereum.org/EIPS/eip-7710">ERC-7710</a> aim closer to the interface the dapp actually wants: request a permission through the wallet and redeem it through a common onchain surface. If wallets converge on useful permission semantics, the dapp should stop caring whether Kernel, Nexus, MetaMask Delegator or another account implementation sits underneath.</p>
 <p>ERC-7902 is interesting during the interval before that convergence.</p>
 <h2>Wallets can disagree. They still have to cooperate.</h2>
 <p>The coordination problem may be smaller, but coordination is not automatic.</p>
