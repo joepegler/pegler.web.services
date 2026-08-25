@@ -15,8 +15,8 @@
   <text x="80" y="105" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#7dd3a8" letter-spacing="3">JOE PEGLER</text>
   <rect x="80" y="125" width="56" height="3" rx="1.5" fill="#7dd3a8"/>
   <text x="80" y="220" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="48" font-weight="700" fill="#edf2f7">THE SESSION-KEY FORK</text>
-  <text x="80" y="310" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="38" font-weight="700" fill="#edf2f7">EIP-8141 makes interoperability possible.</text>
-  <text x="80" y="366" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="38" font-weight="700" fill="#edf2f7">EIP-8130 makes it probable.</text>
-  <text x="80" y="458" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" fill="#8290a0">Flexible execution versus a shared session lifecycle.</text>
+  <text x="80" y="300" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#edf2f7">EIP-8141 makes interoperable sessions possible.</text>
+  <text x="80" y="350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#edf2f7">EIP-8130 makes them probable.</text>
+  <text x="80" y="458" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" fill="#8290a0">Transaction machinery versus a shared authority mapping.</text>
   <text x="80" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#b8c1cc">peglerweb.services</text>
 </svg>
