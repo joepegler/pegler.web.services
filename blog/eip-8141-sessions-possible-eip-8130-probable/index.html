@@ -119,7 +119,7 @@
 </blockquote>
 <h2>What cannot be pushed into an ERC</h2>
 <p>Not every mechanism in EIP-8130 belongs in Ethereum's permanent protocol surface. Permission languages should evolve. But the actor and authority mapping is not merely an application interface. It is the minimum shared object EIP-8141 lacks.</p>
-<p>An ERC layered over Frames could make grants look similar to dapps. It could not make authority visible to clients or remove EIP-8141's code-mediated validation. Wallets would still need to agree that their different implementations gave the interface the same meaning. An ERC could hide fragmentation without eliminating it.</p>
+<p>An ERC layered over Frames could make grants look similar to dapps. It could not give clients protocol-level visibility into authority or remove EIP-8141's code-mediated validation. Wallets would still need to agree that their different implementations gave the interface the same meaning. An ERC could hide fragmentation without eliminating it.</p>
 <p>The ossification objection still matters. Wallet design will evolve, and every consensus rule adds maintenance. The task is to find the smallest durable authority layer that creates more interoperability than ossification risk.</p>
 <p>Non-enshrinement is not neutral at the product layer. It transfers decisions to wallet teams with rational reasons to diverge. Protocol optionality becomes dapp complexity.</p>
 <p>The choice is not enshrinement versus none. EIP-8141 already makes durable choices about Frames, approval scopes, default-account behaviour and expiry. A better boundary is a stripped-back EIP-8130-shaped authority mapping in Core, with changing permission semantics above it.</p>
@@ -154,7 +154,7 @@
 <p>If I am MetaMask, EIP-8141 is the natural fit. It can adapt its <a href="https://docs.metamask.io/smart-accounts-kit/">Delegation Framework</a>, caveat enforcers and Delegator contracts without surrendering its permission model as a point of differentiation.</p>
 <p>If I am a core protocol developer, EIP-8141 is also easier to prefer. It offers a general EVM mechanism and avoids deciding which account concepts deserve permanent consensus status. The product coordination lands with wallets, while the extra integrations land in dapp backlogs.</p>
 <p>If I am Base or Coinbase, EIP-8130 is understandable. A portable configuration layer can spread a common application experience beyond one wallet or chain without requiring the same account code everywhere.</p>
-<p>Wallets with less sunk cost may be more agnostic. MetaMask is not the only incumbent, though. Rabby and others also have account models and security assumptions they will rationally preserve.</p>
+<p>Wallets with less sunk cost may be more agnostic. MetaMask is not the only incumbent, though. Rabby and others also have established wallet experiences and security assumptions they will rationally preserve.</p>
 <p>None of these positions is irrational. The architecture decides whose costs are solved and whose are exported.</p>
 <h2>My prediction: EIP-8141 wins</h2>
 <p>If the choice is framed as EIP-8130 or EIP-8141, I expect EIP-8141 to become the de facto winner.</p>
@@ -163,7 +163,7 @@
 <p>The replacement of EIP-3074 by EIP-7702 is the recent precedent. It does not prove EIP-8141 is right. It shows how EIP-8130 could better pass the dapp test and still lose the L1 transaction contest.</p>
 <p>If core developers prefer the cleaner primitive, they should also account for its predictable ecosystem cost. Protocol minimalism can export a known coordination problem to actors whose incentives point away from solving it.</p>
 <h2>My conclusion</h2>
-<p>The <code>supercooldapp.xyz</code> test leaves me with a clear boundary. Execution can remain wallet-defined and permission languages can evolve through ERCs, but the actor-authority mapping must be shared. Companion ERCs can improve EIP-8141's surface without giving clients visibility into authority or removing code-mediated validation.</p>
+<p>The <code>supercooldapp.xyz</code> test leaves me with a clear boundary. Execution can remain wallet-defined and permission languages can evolve through ERCs, but the actor-authority mapping must be shared. Companion ERCs can improve EIP-8141's surface without giving clients protocol-level visibility into authority or removing code-mediated validation.</p>
 <p>EIP-8141's supporters therefore need to answer one question:</p>
 <blockquote>
 <p>If rational wallet incentives produced divergent account and session implementations after EIP-7702, what mechanism causes those same wallets to converge after EIP-8141?</p>
