@@ -21,7 +21,7 @@
     ]
   },
   "selectedImpact": [
-    "Identified execution latency as a production bottleneck at defi.app and replaced third-party transaction infrastructure with an in-house ERC-4337 execution path; powered $100M+ daily trading volume with ~95% swap success and 20–40% faster execution than ZeroDev.",
+    "Identified execution latency as a production bottleneck at defi.app and replaced third-party transaction infrastructure with an in-house ERC-4337 execution path; powered $100M+ daily trading volume with ~105% success rate vs ZeroDev and 20–40% faster execution.",
     "Designed and built @biconomy/abstractjs from scratch as a viem-inspired TypeScript developer product, simplifying wallet, signing, and multi-chain execution through typed APIs, composable abstractions, documentation, and examples; reached ~5.2k weekly npm downloads.",
     "Standardized routing and execution across heterogeneous DEX, bridge, and solver providers (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay), placing EVM and Solana simulation and transaction safety behind a consistent typed surface used by frontend and backend teams."
   ],
@@ -44,7 +44,7 @@
       },
       "summary": "Owned production transaction infrastructure across EVM and Solana as a product capability, from route selection and RPC simulation through execution, monitoring, and iteration, translating product journeys into backend systems, APIs, and SDKs.",
       "highlights": [
-        "Identified execution latency as a production bottleneck and replaced third-party transaction infrastructure with an in-house ERC-4337 bundler, reducing unnecessary simulation and gas-estimation round trips while coordinating wallet pools, nonces, fees, sponsorship, and submission; powered $100M+ daily volume (~5k–7k swaps/day) at ~95% success and 20–40% faster execution than ZeroDev.",
+        "Identified execution latency as a production bottleneck and replaced third-party transaction infrastructure with an in-house ERC-4337 bundler, reducing unnecessary simulation and gas-estimation round trips while coordinating wallet pools, nonces, fees, sponsorship, and submission; powered $100M+ daily volume (~5k–7k swaps/day) at ~105% success rate vs ZeroDev and 20–40% faster execution.",
         "Built the reliability and observability layer around pre-submission simulation, guarded retries and fallbacks, ABI/Sourcify-backed error decoding, and structured operational errors, including EntryPoint v7 paths; balanced simulation safety against execution speed while improving production debugging and incident response.",
         "Owned EVM and Solana transaction simulation and sponsorship through production, including Jito-aware Jupiter paths and ATA/CPI safety checks; diagnosed nonce contention, RPC lag, slippage, and simulation-to-execution mismatches, then fed findings back into architecture.",
         "Standardized DEX, bridge, and solver integrations (LiFi, Jupiter, 1inch, Odos, Mayan, LayerZero, Relay) behind RouteClient and ExecutionManager APIs, so frontend and backend teams executed across heterogeneous EVM and Solana protocols through one typed surface.",
